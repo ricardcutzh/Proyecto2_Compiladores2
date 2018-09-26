@@ -5,26 +5,35 @@
  */
 package GUI;
 
-
-import java.net.URL;
+import GUI.FileTree.FileSystemModel;
+import GUI.TextEditorPanel.WebAssEditor;
+import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
  * @author richard
  */
 public class IDE extends javax.swing.JFrame {
-    
+
     int status = 0;
+    String directorioProyecto = "";
+    String toCreate = "";
+    String SelectedFile = "";
+
     /**
      * Creates new form IDE
      */
     public IDE() {
         initComponents();
-        
+
         ImageIcon img = new ImageIcon(this.getClass().getResource("Iconos/coding.png"));
         this.setIconImage(img.getImage());
-        
+        this.ArbolArchivos.setVisible(false);
+        ActivaLasOpciones(false);
     }
 
     /**
@@ -36,11 +45,16 @@ public class IDE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         BotonCrearArchivo = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         BotonCrearCarpeta = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        DeleteFile = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
+        openFIle = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         BotonAbrirProyecto = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -50,21 +64,23 @@ public class IDE extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ButtonRun = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
-        ButtonDebug = new javax.swing.JButton();
+        BotonDebug = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        DirToCreate = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         jScrollPane4 = new javax.swing.JScrollPane();
+        ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
         EditorTab = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        HideTabs = new javax.swing.JMenu();
+        opc1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IDE Web Assembly");
@@ -81,6 +97,11 @@ public class IDE extends javax.swing.JFrame {
         BotonCrearArchivo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         BotonCrearArchivo.setOpaque(false);
         BotonCrearArchivo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonCrearArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCrearArchivoActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BotonCrearArchivo);
         jToolBar1.add(jSeparator1);
 
@@ -90,7 +111,40 @@ public class IDE extends javax.swing.JFrame {
         BotonCrearCarpeta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonCrearCarpeta.setOpaque(false);
         BotonCrearCarpeta.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonCrearCarpeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCrearCarpetaActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BotonCrearCarpeta);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
+        jToolBar1.add(jLabel4);
+
+        DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/file (1).png"))); // NOI18N
+        DeleteFile.setToolTipText("Eliminar Archivo Seleccionado");
+        DeleteFile.setFocusable(false);
+        DeleteFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        DeleteFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        DeleteFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteFileActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(DeleteFile);
+        jToolBar1.add(jSeparator6);
+
+        openFIle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/opnf.png"))); // NOI18N
+        openFIle.setToolTipText("Abrir Archivo Seleccionado");
+        openFIle.setFocusable(false);
+        openFIle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        openFIle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        openFIle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFIleActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(openFIle);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
         jToolBar1.add(jLabel1);
@@ -100,6 +154,11 @@ public class IDE extends javax.swing.JFrame {
         BotonAbrirProyecto.setFocusable(false);
         BotonAbrirProyecto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonAbrirProyecto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonAbrirProyecto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonAbrirProyectoActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BotonAbrirProyecto);
         jToolBar1.add(jSeparator2);
 
@@ -108,6 +167,11 @@ public class IDE extends javax.swing.JFrame {
         BotonGuardarActual.setFocusable(false);
         BotonGuardarActual.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonGuardarActual.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonGuardarActual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonGuardarActualActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BotonGuardarActual);
         jToolBar1.add(jSeparator3);
 
@@ -116,6 +180,11 @@ public class IDE extends javax.swing.JFrame {
         BotonCerrarActual.setFocusable(false);
         BotonCerrarActual.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonCerrarActual.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonCerrarActual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCerrarActualActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BotonCerrarActual);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
@@ -126,18 +195,31 @@ public class IDE extends javax.swing.JFrame {
         ButtonRun.setFocusable(false);
         ButtonRun.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ButtonRun.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ButtonRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonRunActionPerformed(evt);
+            }
+        });
         jToolBar1.add(ButtonRun);
         jToolBar1.add(jSeparator4);
 
-        ButtonDebug.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/debug.png"))); // NOI18N
-        ButtonDebug.setToolTipText("Debug");
-        ButtonDebug.setFocusable(false);
-        ButtonDebug.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ButtonDebug.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(ButtonDebug);
+        BotonDebug.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/debug.png"))); // NOI18N
+        BotonDebug.setToolTipText("Debug");
+        BotonDebug.setFocusable(false);
+        BotonDebug.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BotonDebug.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BotonDebug.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonDebugActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BotonDebug);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
         jToolBar1.add(jLabel3);
+
+        DirToCreate.setText("Directorio Seleccionado:");
+        jToolBar1.add(DirToCreate);
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTabbedPane1.addTab("Errores", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/cancel.png")), jScrollPane1); // NOI18N
@@ -145,6 +227,13 @@ public class IDE extends javax.swing.JFrame {
         jTabbedPane1.addTab("Tabla de Simbolos", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/table-grid.png")), jScrollPane3); // NOI18N
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("File Explorer"));
+
+        ArbolArchivos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ArbolArchivosMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(ArbolArchivos);
 
         jPanel2.setForeground(new java.awt.Color(204, 204, 204));
         jPanel2.setOpaque(false);
@@ -202,17 +291,18 @@ public class IDE extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Opciones");
+        HideTabs.setText("Opciones");
 
-        jMenuItem3.setText("Pruebas");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        opc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/hide.png"))); // NOI18N
+        opc1.setText("Ocultar Salidas");
+        opc1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                opc1ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        HideTabs.add(opc1);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(HideTabs);
 
         setJMenuBar(jMenuBar1);
 
@@ -230,19 +320,156 @@ public class IDE extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void opc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opc1ActionPerformed
         // TODO add your handling code here:
-        if(status == 1)
-        {
+        if (status == 1) {
             this.jTabbedPane1.setVisible(true);
+            ImageIcon img = new ImageIcon(this.getClass().getResource("Iconos/hide.png"));
+            opc1.setIcon(img);
+            opc1.setText("Ocultar Salidas");
             status = 0;
-        }
-        else
-        {
+        } else {
             this.jTabbedPane1.setVisible(false);
+            ImageIcon img = new ImageIcon(this.getClass().getResource("Iconos/focus.png"));
+            opc1.setIcon(img);
+            opc1.setText("Ver Salidas");
             status = 1;
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_opc1ActionPerformed
+
+    private void ActivaLasOpciones(boolean bandera) {
+        this.BotonCrearArchivo.setEnabled(bandera);
+        this.BotonCrearCarpeta.setEnabled(bandera);
+        this.BotonCerrarActual.setEnabled(bandera);
+        this.BotonDebug.setEnabled(bandera);
+        this.BotonGuardarActual.setEnabled(bandera);
+        this.ButtonRun.setEnabled(bandera);
+        this.DeleteFile.setEnabled(bandera);
+        this.openFIle.setEnabled(bandera);
+    }
+
+    private void BotonCrearArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearArchivoActionPerformed
+        // TODO add your handling code here:
+        if (!this.toCreate.equals("")) {
+            String fileName = JOptionPane.showInputDialog(this, "Ingrese Nombre del Archivo", "Nuevo Archivo", JOptionPane.OK_CANCEL_OPTION);
+            if (!fileName.equals("")) {
+                try {
+                    File nuevo = new File(this.toCreate + "/" + fileName);
+                    if (!nuevo.exists()) {
+                        nuevo.createNewFile();
+                        this.ArbolArchivos.setModel(new FileSystemModel(new File(this.directorioProyecto)));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Este Archivo ya existe en el directorio seleccionado", "Error: Crear Nuevo Archivo", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Ocurrio un Error al crear el archivo en: " + this.toCreate + "/" + fileName + " | Mensaje: " + e.getMessage(), "Error: Crear Nuevo Archivo", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "NO se creo el archivo", "Error: Crear Nuevo Archivo", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No Existe una Ruta Seleccionada", "Error: Crear Nuevo Archivo", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BotonCrearArchivoActionPerformed
+
+    private void BotonCrearCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearCarpetaActionPerformed
+        // TODO add your handling code here:
+        if (!this.toCreate.equals("")) {
+            String folderName = JOptionPane.showInputDialog(this, "Ingrese Nombre del Archivo", "Nuevo Archivo", JOptionPane.OK_CANCEL_OPTION);
+            if (!folderName.equals("")) {
+                try {
+                    File f = new File(this.toCreate + "/" + folderName);
+                    if (!f.exists()) {
+                        f.mkdir();
+                        this.ArbolArchivos.setModel(new FileSystemModel(new File(this.directorioProyecto)));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Este Folder ya existe en el directorio seleccionado", "Error: Crear Nuevo Folder", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Ocurrio un Error al crear el archivo en: " + this.toCreate + "/" + folderName + " | Mensaje: " + e.getMessage(), "Error: Crear Nuevo Folder", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "NO se creo el Directorio", "Error: Crear Nuevo Directorio", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No Existe una Ruta Seleccionada", "Error: Crear Nueva Carpeta", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BotonCrearCarpetaActionPerformed
+
+    private void BotonAbrirProyectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAbrirProyectoActionPerformed
+        // TODO add your handling code here:
+        JFileChooser seleccionar = new JFileChooser();
+        seleccionar.setCurrentDirectory(new File("."));
+        seleccionar.setDialogTitle("Selecciona Un Proyecto (Directorio)");
+        seleccionar.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        seleccionar.setAcceptAllFileFilterUsed(false);
+        if (seleccionar.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            this.ArbolArchivos.setModel(new FileSystemModel(new File(seleccionar.getSelectedFile().toString())));
+            this.directorioProyecto = seleccionar.getSelectedFile().toString();
+            this.DirToCreate.setText("Directorio Seleccionado: " + directorioProyecto);
+            this.toCreate = directorioProyecto;
+            this.ArbolArchivos.setVisible(true);
+            ActivaLasOpciones(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se selecciono Ningun Proyecto", "Sin Seleccion", JOptionPane.OK_OPTION);
+        }
+    }//GEN-LAST:event_BotonAbrirProyectoActionPerformed
+
+    private void BotonGuardarActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonGuardarActualActionPerformed
+
+    private void BotonCerrarActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCerrarActualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonCerrarActualActionPerformed
+
+    private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRunActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonRunActionPerformed
+
+    private void BotonDebugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDebugActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonDebugActionPerformed
+
+    private void ArbolArchivosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ArbolArchivosMouseClicked
+        // TODO add your handling code here:
+        try {
+            String pr = ArbolArchivos.getSelectionPath().toString().replaceAll("[\\[\\]]", "").replace(", ", "/");
+            File f = new File(pr);
+            if (f.exists()) {
+                if (f.isDirectory()) {
+                    this.DirToCreate.setText("Directorio Seleccionado: " + pr);
+                    this.toCreate = pr;
+                }
+                if (f.isFile()) {
+                    this.SelectedFile = pr;
+                }
+            }
+        } catch (Exception e) {
+            
+        }
+
+    }//GEN-LAST:event_ArbolArchivosMouseClicked
+
+    private void DeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFileActionPerformed
+        // TODO add your handling code here:
+        if (!this.SelectedFile.equals("")) {
+
+        } else {
+            JOptionPane.showMessageDialog(this, "No Existe un Archivo Seleccionado!", "Error: Eliminar Archivo", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_DeleteFileActionPerformed
+
+    private void openFIleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFIleActionPerformed
+        // TODO add your handling code here:
+        if (!this.SelectedFile.equals("")) 
+        {
+            WebAssEditor txt = new WebAssEditor(this.SelectedFile);
+            this.EditorTab.addTab(txt.getFileName(), txt);
+        } else {
+            JOptionPane.showMessageDialog(this, "No Existe un Archivo Seleccionado!", "Error: Abrir Archivo", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_openFIleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,25 +507,29 @@ public class IDE extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTree ArbolArchivos;
     private javax.swing.JButton BotonAbrirProyecto;
     private javax.swing.JButton BotonCerrarActual;
     private javax.swing.JButton BotonCrearArchivo;
     private javax.swing.JButton BotonCrearCarpeta;
+    private javax.swing.JButton BotonDebug;
     private javax.swing.JButton BotonGuardarActual;
-    private javax.swing.JButton ButtonDebug;
     private javax.swing.JButton ButtonRun;
+    private javax.swing.JButton DeleteFile;
+    private javax.swing.JLabel DirToCreate;
     private javax.swing.JTabbedPane EditorTab;
+    private javax.swing.JMenu HideTabs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -307,7 +538,10 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuItem opc1;
+    private javax.swing.JButton openFIle;
     // End of variables declaration//GEN-END:variables
 }

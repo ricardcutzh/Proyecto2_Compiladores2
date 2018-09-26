@@ -6,7 +6,7 @@
 package web_assembly;
 
 /**
- *
+ * Clase que maneja el inicio de la Aplicacion de Web Assembly
  * @author richard
  */
 import GUI.IDE;
