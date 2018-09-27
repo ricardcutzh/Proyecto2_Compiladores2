@@ -7,8 +7,10 @@ package GUI.TextEditorPanel;
 
 import DracoScriptPackage.DracoAnalizador;
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import javax.swing.JOptionPane;
 import org.fife.ui.rsyntaxtextarea.*;
@@ -59,6 +61,26 @@ public class WebAssEditor extends javax.swing.JPanel {
         
         RTextScrollPane sp = new RTextScrollPane(t);
         this.add(sp);
+        
+        ReadFile();
+    }
+    
+    public void ReadFile()
+    {
+        try {
+            FileReader file = new FileReader(this.pathArchivo);
+            BufferedReader reader = new BufferedReader(file);
+            String text = "";
+            String line = reader.readLine();
+            while(line != null)
+            {
+                text += line;
+                line = reader.readLine();
+            }
+            this.areaEdicion.setText(text);
+        } catch (Exception e) {
+            JOptionPane.showConfirmDialog(null, "Error: "+e.getMessage(), "Error Al Abrir el archivo", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
@@ -139,6 +161,7 @@ public class WebAssEditor extends javax.swing.JPanel {
             case "ds":
             {
                 DracoScriptPackage.DracoAnalizador analizador = new DracoAnalizador(this.areaEdicion.getText(), this.fileName, this.pathProyecto);
+                analizador.analizar();
                 break;
             }
             case "dasm":

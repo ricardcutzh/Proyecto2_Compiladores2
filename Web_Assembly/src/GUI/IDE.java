@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import InfoEstatica.Estatico;
+import javax.swing.JPanel;
 
 /**
  *
@@ -37,7 +38,7 @@ public class IDE extends javax.swing.JFrame {
         ActivaLasOpciones(false);
         
         //INICIALIZO TODO 
-        Estatico.setUp(this.Consola);
+        Estatico.setUp(this.Consola, this.TablaError, null);
     }
 
     /**
@@ -73,6 +74,7 @@ public class IDE extends javax.swing.JFrame {
         DirToCreate = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
+        TablaError = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         Consola = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -227,6 +229,29 @@ public class IDE extends javax.swing.JFrame {
         jToolBar1.add(DirToCreate);
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        TablaError.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        TablaError.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Tipo de Error", "Lexema", "Mensaje", "Linea", "Columna", "Archivo Origen"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TablaError.setRowHeight(30);
+        TablaError.getTableHeader().setResizingAllowed(false);
+        TablaError.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(TablaError);
+
         jTabbedPane1.addTab("Errores", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/cancel.png")), jScrollPane1); // NOI18N
 
         Consola.setEditable(false);
@@ -440,6 +465,21 @@ public class IDE extends javax.swing.JFrame {
 
     private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRunActionPerformed
         // TODO add your handling code here:
+        Estatico.setUp(Consola, TablaError, TablaError);
+        if(EditorTab.getTabCount() > 0)
+        {
+            int x = EditorTab.getTabCount();
+            Object c = EditorTab.getSelectedComponent();
+            if(c instanceof WebAssEditor)
+            {
+                WebAssEditor aux = (WebAssEditor)c;
+                aux.EjecutarAnalisis();
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No hay Tabs Para Leer!", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_ButtonRunActionPerformed
 
     private void BotonDebugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDebugActionPerformed
@@ -535,6 +575,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JLabel DirToCreate;
     private javax.swing.JTabbedPane EditorTab;
     private javax.swing.JMenu HideTabs;
+    private javax.swing.JTable TablaError;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

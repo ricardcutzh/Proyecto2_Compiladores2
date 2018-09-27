@@ -1,12 +1,17 @@
 /*                 CODIGO DE USUARIO                       */
 package DracoScriptPackage.Analizador;
 import java_cup.runtime.*;
-import java.util.ArrayList;
 import ErrorManager.TError;
+import InfoEstatica.Estatico;
 /*                 OPCIONES Y DECLARACIONES                */
 %%
 %{
-    ///
+    String nombreArchivo;
+    ///CODIVFO DE USUARIO
+    public void setNombreArchivo(String nombreArchivo)
+    {
+      this.nombreArchivo = nombreArchivo;
+    }
 %}
 
 %public
@@ -95,5 +100,6 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> .
                                                   {
                                                       /*NO HAY NADA*/
-                                                      System.err.println("Error lexico: "+yytext());
+                                                      TError error = new TError("Caracter: "+yytext(), "Erro Lexico, Caracter no reconocido", "Lexico", yyline, yycolumn, false, this.nombreArchivo);
+                                                      Estatico.agregarError(error);
                                                   }

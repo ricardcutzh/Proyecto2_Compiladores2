@@ -57,6 +57,8 @@ public class DracoAnalizador {
         try 
         {
             DSLex lex = new DSLex(new StringReader(cadena));
+            lex.setNombreArchivo(Archivo);
+            
             DracoParser parser = new DracoParser(lex);
             parser.parse();
             return true;
