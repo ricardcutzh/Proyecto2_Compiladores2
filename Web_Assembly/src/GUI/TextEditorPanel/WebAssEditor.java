@@ -5,9 +5,15 @@
  */
 package GUI.TextEditorPanel;
 
+import DracoScriptPackage.DracoAnalizador;
 import java.awt.BorderLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import javax.swing.JOptionPane;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.*;
+
 
 /**
  * Clase que se encarga de generar el editor de texto correspodiente para cada
@@ -15,31 +21,40 @@ import org.fife.ui.rtextarea.*;
  * @author richard
  */
 public class WebAssEditor extends javax.swing.JPanel {
-
+    
+    RSyntaxTextArea areaEdicion;
     String pathArchivo;
-
+    String fileExtension = "";
     String fileName;
+    String pathProyecto ="";
     /**
      * Construye un nuevo Panel editor de Texto, Usando la libreria: Rsyntax Highlighter
      * @param pathArchivo ruta del archivo
-     * @param ext la extension de el archivo
+     * @param pathProyecto Ruta donde se encuentra alojado el proyecto
      */
-    public WebAssEditor(String pathArchivo) {
+    
+    public WebAssEditor(String pathArchivo, String pathProyecto) {
         this.pathArchivo = pathArchivo;
         initComponents();
-        
+        this.pathProyecto = pathProyecto;
         String arr[] = pathArchivo.split("/");
         
         this.fileName  = arr[arr.length - 1];
+        try{
+            String aux[] = this.fileName.split("\\.");
+            this.fileExtension = aux[1];
+        }
+        catch(Exception e)
+        {
+            
+        }
+        
         
         this.setLayout(new BorderLayout());
         RSyntaxTextArea t = new RSyntaxTextArea();
-        t.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        try {
-            Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));
-            theme.apply(t);
-        } catch (Exception e) {
-        }
+        this.areaEdicion = t;
+        colocaColorSyntaxis(t, fileExtension);
+        
      
         
         RTextScrollPane sp = new RTextScrollPane(t);
@@ -64,7 +79,80 @@ public class WebAssEditor extends javax.swing.JPanel {
         return this.fileName;
     }
     
-
+    /**
+     * Metodo encargado de colocarle la coloracion de sintaxis correspondiente
+     * @param editor Editor al que se le colocara la coloraicon de la sintaxis
+     * @param ext Extension que dependiendo de la extension se le colocara
+     */
+    private void colocaColorSyntaxis(RSyntaxTextArea editor, String ext)
+    {
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+        switch(ext.toLowerCase())
+        {
+            case "ds":
+            {
+                atmf.putMapping("text/ds", "GUI.TextEditorPanel.SyntaxDracoScript.DracoScriptSyntax");
+                editor.setSyntaxEditingStyle("text/ds");
+                try {
+                    Theme theme = Theme.load(getClass().getResourceAsStream("/GUI/TextEditorPanel/SyntaxDracoScript/DracoTema.xml"));
+                    theme.apply(editor);
+                } catch (Exception e) {
+                }
+                break;
+            }
+            case "dasm":
+            {
+                break;
+            }
+            case "dpp":
+            {
+                atmf.putMapping("text/dpp", "GUI.TextEditorPanel.SyntaxDpp.DppSyntax");
+                editor.setSyntaxEditingStyle("text/dpp");
+                try {
+                    Theme theme = Theme.load(getClass().getResourceAsStream("/GUI/TextEditorPanel/SyntaxDpp/miTema.xml"));
+                    theme.apply(editor);
+                } catch (Exception e) {
+                }
+                break;
+            }
+        }
+    }
+    
+    public Boolean saveFile()
+    {
+        File f = new File(this.pathArchivo);
+        try {
+            String text = this.areaEdicion.getText();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            writer.write(text);
+            writer.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar archivo: "+this.pathArchivo+" | "+e.getMessage());
+        }
+        return true;
+    }
+    
+    public Object EjecutarAnalisis()
+    {
+        switch(this.fileExtension)
+        {
+            case "ds":
+            {
+                DracoScriptPackage.DracoAnalizador analizador = new DracoAnalizador(this.areaEdicion.getText(), this.fileName, this.pathProyecto);
+                break;
+            }
+            case "dasm":
+            {
+                break;
+            }
+            case "dpp":
+            {
+                break;
+            }
+        }
+        return null;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

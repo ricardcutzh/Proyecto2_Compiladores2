@@ -1,0 +1,83 @@
+/*------------------------------ CODIGO DE USUARIO                           */
+package DracoScriptPackage.Analizador;
+import java_cup.runtime.Symbol;
+
+//--------------------> CODIGO DEL PARSER, VARIABLES Y METODOS
+parser code
+{:
+    public void syntax_error(Symbol s)
+    {
+      /*METODO PARA RECUPERACION DE ERRORES*/
+      System.err.println("Error en :"+ s.value.toString() + " | Linea: "+s.right+1);
+    }
+
+    //METODO PARA ERRORES QUE NO SE RECUPERAN
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+      /*METODO PARA ERRORE IRRECUPERABLES*/
+      System.err.println("Error en :"+ s.value.toString() + " | Linea: "+s.right+1);
+    }
+:}
+
+// CODIGO PARA LAS ACCINES GRAMATICALES
+action code
+{:
+
+:}
+/*--------------------CODIGO AREA DE DECLARACIONES                           */
+//-----------> PUNTACION
+terminal String ptComa, asigna, oParent, cParent, coma;
+//----------> OPERADORES
+terminal String mas, menos, mult, div, pot, inc, dec, igual, dif, menor, mayor;
+terminal String menorigual, mayorigual, and, or, not, mod;
+//-----------> VALORES
+terminal int entero;
+terminal double decimal;
+terminal String identificador;
+terminal char caracter;
+terminal String cadena;
+//---------> NO TERMINALES
+non terminal Object EXP, E, INICIO;
+
+//-----------> PRECEDENCIA
+precedence left or;
+precedence left and;
+precedence left igual, dif;
+precedence left menor, mayor, menorigual, mayorigual;
+precedence left mas, menos;
+precedence left mult, div, mod;
+precedence left pot;
+precedence right inc, dec, not;
+precedence left cParent;
+
+start with INICIO;
+/*-----------------------------REGLAS SEMANTICAS                             */
+//INICIO////////////////////////////////////////////////////////////////////////
+INICIO ::= EXP ptComa;
+
+// EXPRESIONES//////////////////////////////////////////////////////////////////
+EXP::= E;
+E ::=  E mas E
+    | E menos E
+    | E mult E
+    | E div E
+    | E pot E
+    | E mod E
+    | E igual E
+    | E dif E
+    | E menor E
+    | E mayor E
+    | E menorigual E
+    | E mayorigual E
+    | E and E
+    | E or E
+    | menos E %prec menos
+    | not E
+    | E inc
+    | E dec
+    | oParent E cParent
+    | entero
+    | decimal
+    | identificador
+    | caracter
+    | cadena;

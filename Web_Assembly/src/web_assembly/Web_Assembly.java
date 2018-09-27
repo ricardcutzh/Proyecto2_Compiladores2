@@ -11,7 +11,8 @@ package web_assembly;
  */
 import GUI.IDE;
 import javax.swing.UIManager;
-
+import DracoScriptPackage.Analizador.*;
+import java.io.FileReader;
 
 public class Web_Assembly {
 
@@ -27,6 +28,19 @@ public class Web_Assembly {
         }
         IDE ide = new IDE();
         ide.setVisible(true);
+        //pruebas();
+    }
+    
+    
+    public static void pruebas()
+    {
+        try {
+            DSLex lex = new DSLex(new FileReader("/home/richard/Documents/Universidad/Entradas/ejemplo.ds"));
+            DracoParser p = new DracoParser(lex);
+            p.parse();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
     
 }

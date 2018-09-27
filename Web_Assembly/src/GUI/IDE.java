@@ -11,7 +11,8 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JFrame;
+import InfoEstatica.Estatico;
 
 /**
  *
@@ -29,11 +30,14 @@ public class IDE extends javax.swing.JFrame {
      */
     public IDE() {
         initComponents();
-
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ImageIcon img = new ImageIcon(this.getClass().getResource("Iconos/coding.png"));
         this.setIconImage(img.getImage());
         this.ArbolArchivos.setVisible(false);
         ActivaLasOpciones(false);
+        
+        //INICIALIZO TODO 
+        Estatico.setUp(this.Consola);
     }
 
     /**
@@ -70,6 +74,7 @@ public class IDE extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
+        Consola = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
@@ -223,6 +228,16 @@ public class IDE extends javax.swing.JFrame {
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTabbedPane1.addTab("Errores", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/cancel.png")), jScrollPane1); // NOI18N
+
+        Consola.setEditable(false);
+        Consola.setBackground(new java.awt.Color(0, 0, 0));
+        Consola.setColumns(20);
+        Consola.setFont(new java.awt.Font("Ubuntu Light", 0, 14)); // NOI18N
+        Consola.setForeground(new java.awt.Color(255, 255, 255));
+        Consola.setRows(5);
+        Consola.setText(">> Web Assembly Console | Compiladores 2 | 2015003476");
+        jScrollPane2.setViewportView(Consola);
+
         jTabbedPane1.addTab("Consola", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/terminal.png")), jScrollPane2); // NOI18N
         jTabbedPane1.addTab("Tabla de Simbolos", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/table-grid.png")), jScrollPane3); // NOI18N
 
@@ -464,7 +479,7 @@ public class IDE extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!this.SelectedFile.equals("")) 
         {
-            WebAssEditor txt = new WebAssEditor(this.SelectedFile);
+            WebAssEditor txt = new WebAssEditor(this.SelectedFile, this.directorioProyecto);
             this.EditorTab.addTab(txt.getFileName(), txt);
         } else {
             JOptionPane.showMessageDialog(this, "No Existe un Archivo Seleccionado!", "Error: Abrir Archivo", JOptionPane.ERROR_MESSAGE);
@@ -515,6 +530,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JButton BotonDebug;
     private javax.swing.JButton BotonGuardarActual;
     private javax.swing.JButton ButtonRun;
+    private javax.swing.JTextArea Consola;
     private javax.swing.JButton DeleteFile;
     private javax.swing.JLabel DirToCreate;
     private javax.swing.JTabbedPane EditorTab;
