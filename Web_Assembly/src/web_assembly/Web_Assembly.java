@@ -13,6 +13,7 @@ import GUI.IDE;
 import javax.swing.UIManager;
 import DracoScriptPackage.Analizador.*;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 public class Web_Assembly {
 
@@ -29,6 +30,7 @@ public class Web_Assembly {
         IDE ide = new IDE();
         ide.setVisible(true);
         //pruebas();
+        
     }
     
     

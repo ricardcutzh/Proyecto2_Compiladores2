@@ -257,7 +257,7 @@ public class IDE extends javax.swing.JFrame {
         Consola.setEditable(false);
         Consola.setBackground(new java.awt.Color(0, 0, 0));
         Consola.setColumns(20);
-        Consola.setFont(new java.awt.Font("Ubuntu Light", 0, 14)); // NOI18N
+        Consola.setFont(new java.awt.Font("Ubuntu Light", 0, 16)); // NOI18N
         Consola.setForeground(new java.awt.Color(255, 255, 255));
         Consola.setRows(5);
         Consola.setText(">> Web Assembly Console | Compiladores 2 | 2015003476");

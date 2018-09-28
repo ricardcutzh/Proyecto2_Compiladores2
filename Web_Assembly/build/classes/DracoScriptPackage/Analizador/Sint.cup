@@ -1,10 +1,20 @@
 /*------------------------------ CODIGO DE USUARIO                           */
 package DracoScriptPackage.Analizador;
 import java_cup.runtime.Symbol;
+import Abstraccion.*;
+import DracoScriptPackage.DracoAST.Valores.*;
+import DracoScriptPackage.DracoAST.Declaraciones.*;
+import DracoScriptPackage.DracoAST.Sentencias.*;
+import InfoEstatica.Estatico;
+import ObjsComun.*;
+import java.util.ArrayList;
 
 //--------------------> CODIGO DEL PARSER, VARIABLES Y METODOS
 parser code
 {:
+    public static String ArchivoOrigen;
+    public static Instruccion root;
+
     public void syntax_error(Symbol s)
     {
       /*METODO PARA RECUPERACION DE ERRORES*/
@@ -22,7 +32,19 @@ parser code
 // CODIGO PARA LAS ACCINES GRAMATICALES
 action code
 {:
+  String ArchivoOrigen;
 
+  Instruccion root;
+
+  public void SetArchivo(String nombre)
+  {
+    ArchivoOrigen = nombre;
+  }
+
+  public Instruccion getRoot()
+  {
+    return root;
+  }
 :}
 /*--------------------CODIGO AREA DE DECLARACIONES                           */
 //-----------> PUNTACION
@@ -30,14 +52,20 @@ terminal String ptComa, asigna, oParent, cParent, coma;
 //----------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, dif, menor, mayor;
 terminal String menorigual, mayorigual, and, or, not, mod;
+//-----------> PALABRAS RESERVADAS
+terminal String var;
+terminal String print;
 //-----------> VALORES
-terminal int entero;
-terminal double decimal;
+terminal String entero;
+terminal String decimal;
 terminal String identificador;
-terminal char caracter;
+terminal String caracter;
 terminal String cadena;
+terminal String verdad, falso;
 //---------> NO TERMINALES
-non terminal Object EXP, E, INICIO;
+non terminal Expresion EXP, E;
+non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR;
+non terminal Object L_DECLA, INICIO;
 
 //-----------> PRECEDENCIA
 precedence left or;
@@ -53,31 +81,248 @@ precedence left cParent;
 start with INICIO;
 /*-----------------------------REGLAS SEMANTICAS                             */
 //INICIO////////////////////////////////////////////////////////////////////////
-INICIO ::= EXP ptComa;
+INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen;:}STATEMENTS:listado
+        {:
+          ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)listado;
+          if(instrucciones==null)
+          {
+            instrucciones = new ArrayList<>();
+          }
+          NodoInicio raiz = new NodoInicio(instrucciones);
+          this.root = raiz;
+          parser.root = raiz;
+        :}
+        ;
+
+// STATEMENTES /////////////////////////////////////////////////////////////////
+STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion ins = (Instruccion)declaracion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista IMPRIMIR:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | DECLARACION_VAR:declaracion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)declaracion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | IMPRIMIR:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            ;
+
+/// DECLARACIONES DE VARIABLES /////////////////////////////////////////////////
+DECLARACION_VAR ::= var:aux L_DECLA:lista ptComa
+                {:
+                  ArrayList<Instruccion> declaraciones = (ArrayList<Instruccion>)lista;
+                  if(declaraciones == null)
+                  {
+                    declaraciones = new ArrayList<>();
+                  }
+                  DeclaracionesVar d = new DeclaracionesVar(auxright, auxleft, ArchivoOrigen, declaraciones);
+                  RESULT = d;
+                :}
+                | var error:val ptComa
+                {:
+
+                :}
+                ;
+
+////////////////////////////////////////////////////////////////////////////////
+L_DECLA ::= L_DECLA:lista coma identificador:id
+        {:
+          ArrayList<Instruccion> declaraciones = (ArrayList<Instruccion>)lista;
+          if(declaraciones==null)
+          {
+            declaraciones = new ArrayList<>();
+          }
+          declaraciones.add(new DeclaracionVar(idright, idleft, ArchivoOrigen, id));
+          RESULT = declaraciones;
+        :}
+        | L_DECLA:lista coma identificador:id asigna EXP:nodo
+        {:
+          ArrayList<Instruccion> declaraciones = (ArrayList<Instruccion>)lista;
+          if(declaraciones==null)
+          {
+            declaraciones = new ArrayList<>();
+          }
+          declaraciones.add(new DeclaracionVar(idright, idleft, ArchivoOrigen, id, nodo));
+          RESULT = declaraciones;
+        :}
+        | identificador:id
+        {:
+          DeclaracionVar v = new DeclaracionVar(idright, idleft, ArchivoOrigen, id);
+          ArrayList<Instruccion> declaraciones = new ArrayList<>();
+          declaraciones.add(v);
+          RESULT = declaraciones;
+        :}
+        | identificador:id asigna EXP:nodo
+        {:
+            DeclaracionVar v = new DeclaracionVar(idright, idleft, ArchivoOrigen, id, nodo);
+            ArrayList<Instruccion> declaraciones = new ArrayList<>();
+            declaraciones.add(v);
+            RESULT = declaraciones;
+        :}
+        ;
+
+////////////////////////////////////////////////////////////////////////////////
+IMPRIMIR ::= print:aux oParent EXP:nodo cParent ptComa
+          {:
+            Expresion exp = (Expresion)nodo;
+            Print p = new Print(auxright, auxleft, ArchivoOrigen, exp);
+            RESULT = p;
+          :}
+          | print error ptComa
+          {:
+
+          :}
+          ;
 
 // EXPRESIONES//////////////////////////////////////////////////////////////////
-EXP::= E;
-E ::=  E mas E
-    | E menos E
-    | E mult E
-    | E div E
-    | E pot E
-    | E mod E
-    | E igual E
-    | E dif E
-    | E menor E
-    | E mayor E
-    | E menorigual E
-    | E mayorigual E
-    | E and E
-    | E or E
-    | menos E %prec menos
-    | not E
-    | E inc
-    | E dec
-    | oParent E cParent
-    | entero
-    | decimal
-    | identificador
-    | caracter
-    | cadena;
+EXP::= E:val
+    {:
+      RESULT = val;
+    :}
+    ;
+E ::=  E:val1 mas:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MAS);
+    :}
+    | E:val1 menos:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MENOS);
+    :}
+    | E:val1 mult:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MULT);
+    :}
+    | E:val1 div:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.DIV);
+    :}
+    | E:val1 pot:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.POT);
+    :}
+    | E:val1 mod:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MOD);
+    :}
+    | E:val1 igual:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.IGUAL);
+    :}
+    | E:val1 dif:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.DIFERENTE);
+    :}
+    | E:val1 menor:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MENOR);
+    :}
+    | E:val1 mayor:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MAYOR);
+    :}
+    | E:val1 menorigual:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.MENORIGUAL);
+    :}
+    | E:val1 mayorigual:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft,ArchivoOrigen, val1, val2, Estatico.OPERADORES.MAYORIGUAL);
+    :}
+    | E:val1 and:aux E:val2
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.AND);
+    :}
+    | E:val2 or:aux E:val1
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val1, val2, Estatico.OPERADORES.OR);
+    :}
+    | menos:aux E:val
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val, Estatico.OPERADORES.MENOS);
+    :} %prec menos
+    | not:aux E:val
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val, Estatico.OPERADORES.NOT);
+    :}
+    | E:val inc:aux
+    {:
+       RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val, Estatico.OPERADORES.INC);
+    :}
+    | E:val dec:aux
+    {:
+      RESULT = new Operacion(auxright, auxleft, ArchivoOrigen, val, Estatico.OPERADORES.DEC);
+    :}
+    | oParent E:val cParent
+    {:
+      RESULT = val;
+    :}
+    | verdad:val
+    {:
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, true);
+    :}
+    | falso: val
+    {:
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, false);
+    :}
+    | entero:val
+    {:
+      int res = Integer.parseInt(val);
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, res);
+    :}
+    | decimal:val
+    {:
+      double res = Double.parseDouble(val);
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, res);
+    :}
+    | identificador:val
+    {:
+      RESULT = new Identificador(valright, valleft, ArchivoOrigen, val);
+    :}
+    | caracter:val
+    {:
+      char res = val.charAt(1);
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, res);
+    :}
+    | cadena:val
+    {:
+      RESULT = new ValorPrimitivo(valright, valleft, ArchivoOrigen, val);
+    :}
+    ;

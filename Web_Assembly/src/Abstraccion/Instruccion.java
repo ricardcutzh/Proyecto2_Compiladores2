@@ -10,7 +10,7 @@ import Simbolos.Ambito;
  * Posiblemente no devuelve un valor
  * @author richard
  */
-public interface Intruccion {
+public interface Instruccion {
     
     /**
      * Metodo que permitira a cad instruccion ejecutarse

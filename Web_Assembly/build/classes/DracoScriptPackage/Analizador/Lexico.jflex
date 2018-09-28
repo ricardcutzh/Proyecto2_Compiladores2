@@ -12,6 +12,12 @@ import InfoEstatica.Estatico;
     {
       this.nombreArchivo = nombreArchivo;
     }
+
+    private String quitarDeTexto(String quita, String cadena)
+    {
+      cadena = cadena.replace(quita, "");
+      return cadena;
+    }
 %}
 
 %public
@@ -74,14 +80,19 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> "||"                                  {return new Symbol(Simbolos.or, yycolumn, yyline, yytext());}
 <YYINITIAL> "!"                                   {return new Symbol(Simbolos.not, yycolumn, yyline, yytext());}
 
+//------------------------------- PALABRAS RESERVADAS ---------------------------------------------------------
+<YYINITIAL> "var"                                 {return new Symbol(Simbolos.var, yycolumn, yyline, yytext());}
+<YYINITIAL> "true"                                {return new Symbol(Simbolos.verdad, yycolumn, yyline, yytext());}
+<YYINITIAL> "false"                               {return new Symbol(Simbolos.falso, yycolumn, yyline, yytext());}
+<YYINITIAL> "print"                               {return new Symbol(Simbolos.print, yycolumn, yyline, yytext());}
 
 //---------------------------EXPRESIONES REGULARES
 <YYINITIAL> {entero}                              {return new Symbol(Simbolos.entero, yycolumn, yyline, yytext());}
 <YYINITIAL> {decimal}                             {return new Symbol(Simbolos.decimal, yycolumn, yyline, yytext());}
 <YYINITIAL> {caracter}                            {return new Symbol(Simbolos.caracter, yycolumn, yyline, yytext());}
 <YYINITIAL> {identificador}                       {return new Symbol(Simbolos.identificador, yycolumn, yyline, yytext());}
-<YYINITIAL> {CharLiteral}                         {return new Symbol(Simbolos.caracter, yycolumn, yyline, yytext());}
-<YYINITIAL> {StringLiteral}                       {return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext());}
+<YYINITIAL> {CharLiteral}                         {return new Symbol(Simbolos.caracter, yycolumn, yyline, quitarDeTexto("\'",yytext()));}
+<YYINITIAL> {StringLiteral}                       {return new Symbol(Simbolos.cadena, yycolumn, yyline, quitarDeTexto("\"",yytext()));}
 <YYINITIAL> {inicioComentarioMult}                {yybegin(MULTICOMMENT);}
 <YYINITIAL> {inicioComentarioLinea}               {yybegin(LINECOMMENT);}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

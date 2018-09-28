@@ -74,7 +74,7 @@ public class WebAssEditor extends javax.swing.JPanel {
             String line = reader.readLine();
             while(line != null)
             {
-                text += line;
+                text += line+"\n";
                 line = reader.readLine();
             }
             this.areaEdicion.setText(text);
@@ -161,7 +161,10 @@ public class WebAssEditor extends javax.swing.JPanel {
             case "ds":
             {
                 DracoScriptPackage.DracoAnalizador analizador = new DracoAnalizador(this.areaEdicion.getText(), this.fileName, this.pathProyecto);
-                analizador.analizar();
+                if(analizador.analizar())
+                {
+                    
+                }
                 break;
             }
             case "dasm":

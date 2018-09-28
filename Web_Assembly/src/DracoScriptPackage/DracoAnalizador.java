@@ -5,6 +5,8 @@
  */
 package DracoScriptPackage;
 import DracoScriptPackage.Analizador.*;
+import DracoScriptPackage.DracoAST.Declaraciones.NodoInicio;
+import Simbolos.Ambito;
 import java.io.StringReader;
 /**
  * Clase que inicializa el Analisis para el lenguage DracoScript
@@ -58,12 +60,19 @@ public class DracoAnalizador {
         {
             DSLex lex = new DSLex(new StringReader(cadena));
             lex.setNombreArchivo(Archivo);
-            
+            DracoParser.ArchivoOrigen = Archivo;
             DracoParser parser = new DracoParser(lex);
             parser.parse();
+            NodoInicio iniciar = (NodoInicio)DracoParser.root;
+            if(iniciar!=null)
+            {
+                Ambito nuevo = new Ambito("Global", null, Archivo);
+                iniciar.Ejecutar(nuevo);
+            }
             return true;
         } catch (Exception e) 
         {
+            System.err.println("Error: "+e.getMessage());
             return false;
         }
     }
