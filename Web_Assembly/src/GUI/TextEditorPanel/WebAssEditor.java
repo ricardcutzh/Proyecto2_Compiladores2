@@ -161,10 +161,9 @@ public class WebAssEditor extends javax.swing.JPanel {
             case "ds":
             {
                 DracoScriptPackage.DracoAnalizador analizador = new DracoAnalizador(this.areaEdicion.getText(), this.fileName, this.pathProyecto);
-                if(analizador.analizar())
-                {
-                    
-                }
+                Runnable r = analizador;
+                Thread t = new Thread(r);
+                t.start();
                 break;
             }
             case "dasm":

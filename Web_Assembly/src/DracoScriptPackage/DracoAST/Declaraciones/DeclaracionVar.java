@@ -5,7 +5,12 @@
  */
 package DracoScriptPackage.DracoAST.Declaraciones;
 import Abstraccion.*;
+import ErrorManager.TError;
+import InfoEstatica.Estatico;
+import ObjsComun.Nulo;
 import Simbolos.Ambito;
+import Simbolos.Simbolo;
+import Simbolos.Variable;
 /**
  *
  * @author richard
@@ -45,7 +50,34 @@ public class DeclaracionVar extends  NodoAST implements Instruccion{
 
     @Override
     public Object Ejecutar(Ambito ambito) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try 
+        {
+            if(!ambito.existeVariable(identificador.toLowerCase()))
+            {
+                if(this.expresion == null)
+                {
+                    Variable var = new Variable(identificador, false, "NULO", new Nulo());
+                    ambito.AgregarVariable(identificador.toLowerCase(), var);
+                }
+                else
+                {
+                    Object valor = this.expresion.getValor(ambito);
+                    String tipo = this.expresion.getTipo(ambito);
+                    Variable var = new Variable(identificador, false, tipo, valor);
+                    ambito.AgregarVariable(this.identificador.toLowerCase(), var);
+                }
+            }
+            else
+            {
+                TError error = new TError(identificador, "Ya existe una declaracion de: "+identificador+" en este ambito", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                Estatico.agregarError(error);
+            }
+        } catch (Exception e) 
+        {
+            TError error = new TError("No Aplica", "Error al ejecutar declaracion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return new Nulo();
     }
     
     

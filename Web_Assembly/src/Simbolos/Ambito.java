@@ -26,6 +26,7 @@ public class Ambito {
         this.idAmbito = idAmbito;
         this.Archivo = Archivo;
         this.Anterior = Anterior;
+        this.tablaVars = new TablaDeVariables();
     }
     
     /**
@@ -82,4 +83,13 @@ public class Ambito {
         this.tablaVars.agregarVariabe(id, sim);
     }
     
+    /**
+     * Comprueba si la variable especificada existe en el ambito
+     * @param id clave de la variable
+     * @return Verdadero si existe, Falso si no existe
+     */
+    public Boolean existeVariable(String id)
+    {
+        return this.tablaVars.existeVariable(id);
+    }
 }

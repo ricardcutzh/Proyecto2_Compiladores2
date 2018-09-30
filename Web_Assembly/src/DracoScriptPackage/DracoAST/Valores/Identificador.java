@@ -5,12 +5,17 @@
  */
 package DracoScriptPackage.DracoAST.Valores;
 import Abstraccion.*;
+import ErrorManager.TError;
+import InfoEstatica.Estatico;
 import Simbolos.Ambito;
+import Simbolos.Simbolo;
+import Simbolos.Variable;
 /**
  * Expresiones derivadas de un identificador
  * @author richard
  */
 public class Identificador extends NodoAST implements Expresion{
+    String id;
     
     /**
      * Constructor de la clase que maneja expresiones con Identificadores
@@ -21,16 +26,42 @@ public class Identificador extends NodoAST implements Expresion{
      */
     public Identificador(int linea, int columna, String Archivo, String identificador) {
         super(linea, columna, Archivo);
+        this.id = identificador;
     }
-
+    Object valorAux = null;
     @Override
     public String getTipo(Ambito ambito) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.valorAux == null)
+        {
+            valorAux = getValor(ambito);
+        }
+        ManejadorTipo m = new ManejadorTipo(valorAux);
+        return m.evaluaValor();
     }
 
     @Override
     public Object getValor(Ambito ambito) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try 
+        {
+            Simbolo s = ambito.getSimbolo(this.id.toLowerCase());
+            if(s!=null)
+            {
+                Variable v = (Variable)s;
+                this.valorAux = v.getValor();
+                return valorAux;
+            }
+            else
+            {
+                TError error = new TError(this.id, "Se hace referencia a una Variable que no Existe en este ambito", "Semantico", super.getLinea(), super.getColumna(),false, ambito.getArchivo());
+                Estatico.agregarError(error);
+            }
+        } catch (Exception e) 
+        {
+            TError erro = new TError("No Aplica","Error: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(erro);
+        }
+        valorAux = 0;
+        return valorAux;
     }
     
 }

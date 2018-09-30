@@ -21,7 +21,7 @@ public class ManejadorTipo {
     {
         if(this.valor instanceof Integer)
         {
-            return "ENTERO";
+            return "NUMERICO";
         }
         if(this.valor instanceof String)
         {
@@ -29,7 +29,7 @@ public class ManejadorTipo {
         }
         if(this.valor instanceof Double)
         {
-            return "DECIMAL";
+            return "NUMERICO";
         }
         if(this.valor instanceof Boolean)
         {

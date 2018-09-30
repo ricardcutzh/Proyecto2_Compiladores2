@@ -22,7 +22,7 @@ public class Variable extends Simbolo {
     public Variable(String idSimbolo, Boolean esVector, String tipo, Object Valor)
     {
         super(idSimbolo, esVector, tipo);
-        this.valor = valor;
+        this.valor = Valor;
     }
     
     /**

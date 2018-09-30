@@ -248,7 +248,6 @@ public class IDE extends javax.swing.JFrame {
             }
         });
         TablaError.setRowHeight(30);
-        TablaError.getTableHeader().setResizingAllowed(false);
         TablaError.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(TablaError);
 

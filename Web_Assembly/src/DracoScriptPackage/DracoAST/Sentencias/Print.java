@@ -38,7 +38,7 @@ public class Print extends NodoAST implements Instruccion{
             Object valor = this.expresion.getValor(ambito);
             InfoEstatica.Estatico.ImprimeEnConsola(valor.toString());
         } catch (Exception e) {
-            TError error = new TError("No Aplica", e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo());
+            TError error = new TError("No Aplica","Error al ejecutar funcion print: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo());
             InfoEstatica.Estatico.agregarError(error);
         }
         return new Nulo();

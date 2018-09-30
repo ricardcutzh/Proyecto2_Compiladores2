@@ -5,6 +5,9 @@
  */
 package DracoScriptPackage.DracoAST.Declaraciones;
 import Abstraccion.*;
+import ErrorManager.TError;
+import InfoEstatica.Estatico;
+import ObjsComun.Nulo;
 import Simbolos.Ambito;
 import java.util.ArrayList;
 /**
@@ -25,10 +28,21 @@ public class DeclaracionesVar extends NodoAST implements Instruccion{
         super(linea, columna, Archivo);
         this.declaraciones = declaraciones;
     }
-
+    
     @Override
     public Object Ejecutar(Ambito ambito) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try 
+        {
+            for(Instruccion ins : this.declaraciones)
+            {
+                ins.Ejecutar(ambito);
+            }
+        } catch (Exception e) 
+        {
+            TError error = new TError("No Aplica", "Error al iniciar la declaracion de variables: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return new Nulo();
     }
     
 }

@@ -6,13 +6,14 @@
 package DracoScriptPackage;
 import DracoScriptPackage.Analizador.*;
 import DracoScriptPackage.DracoAST.Declaraciones.NodoInicio;
+import InfoEstatica.Estatico;
 import Simbolos.Ambito;
 import java.io.StringReader;
 /**
  * Clase que inicializa el Analisis para el lenguage DracoScript
  * @author richard
  */
-public class DracoAnalizador {
+public class DracoAnalizador implements Runnable{
     String cadena;
     String Archivo;
     String pathProyecto;
@@ -74,6 +75,21 @@ public class DracoAnalizador {
         {
             System.err.println("Error: "+e.getMessage());
             return false;
+        }
+    }
+    
+    /**
+     * Metodo que permite levantar el hilo de ejecucion de draco Script
+     */
+    @Override
+    public void run() {
+        if(analizar())
+        {
+            Estatico.ImprimeEnConsola("Ejecucion Finalizada con Exito");
+        }
+        else
+        {
+            Estatico.ImprimeEnConsola("Error Al Ejecutar DracoScript");
         }
     }
     
