@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import ErrorManager.TError;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Clase que sera de apoyo para La informacion Estatica
@@ -63,31 +64,15 @@ public class Estatico {
     public static void agregarError(TError error) {
         try {
             errores.add(error);
-            String matriz[][] = new String[errores.size()][6];
-            for (int i = 0; i < errores.size(); i++) {
-                matriz[i][0] = errores.get(i).getTipo();
-                matriz[i][1] = errores.get(i).getLexema();
-                matriz[i][2] = errores.get(i).getMensaje();
-                matriz[i][3] = String.valueOf(errores.get(i).getLinea() + 1);
-                matriz[i][4] = String.valueOf(errores.get(i).getColumna());
-                matriz[i][5] = errores.get(i).getArchivo();
-            }
-
-            /*ACTUALIZANDO LA TABLA AL COLOCAR ERRORES*/
-            tablaError.setModel(new javax.swing.table.DefaultTableModel(
-                    matriz,
-                    new String[]{
-                        "Tipo de Error", "Lexema", "Mensaje", "Linea", "Columna", "Archivo Origen"
-                    }
-            ) {
-                boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, false
-                };
-
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit[columnIndex];
-                }
-            });
+            DefaultTableModel model = (DefaultTableModel)tablaError.getModel();
+            Object rowData[] = new Object[6];
+            rowData[0] = error.getTipo();
+            rowData[1] = error.getLexema();
+            rowData[2] = error.getMensaje();
+            rowData[3] = error.getLinea();
+            rowData[4] = error.getColumna();
+            rowData[5] = error.getArchivo();
+            model.addRow(rowData);
         } catch (Exception e) {
         }
 
@@ -112,5 +97,25 @@ public class Estatico {
 
     public static void ImprimeEnConsola(String mensaje) {
         console.append("\n>> " + mensaje);
+    }
+    
+    public static void ActualizarTablaDeErrores()
+    {
+        try {
+            DefaultTableModel model = (DefaultTableModel)tablaError.getModel();
+            Object rowData[] = new Object[6];
+            for(TError e : errores)
+            {
+                rowData[0] = e.getTipo();
+                rowData[1] = e.getLexema();
+                rowData[2] = e.getMensaje();
+                rowData[3] = e.getLinea();
+                rowData[4] = e.getColumna();
+                rowData[5] = e.getArchivo();
+                model.addRow(rowData);
+            }
+        } catch (Exception e) {
+            
+        }
     }
 }

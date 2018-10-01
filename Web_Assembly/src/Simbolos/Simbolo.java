@@ -61,6 +61,13 @@ public class Simbolo {
     public String toString() {
         return "Simbolo{" + "idSimbolo=" + idSimbolo + ", esVector=" + esVector + ", tipo=" + tipo + '}';
     }
+    /**
+     * Actualiza el tipo del simbolo
+     * @param tipo nuevo tipo
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     
     
 }

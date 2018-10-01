@@ -114,19 +114,23 @@ public class Operacion extends NodoAST implements Expresion {
                 {
                     case INC:
                     {
-                        break;
+                        this.valorAux = HazAumento(op1, codigo, ambito);
+                        return this.valorAux;
                     }
                     case DEC:
                     {
-                        break;
+                        this.valorAux = HazDecremento(op1, codigo, ambito);
+                        return this.valorAux;
                     }
                     case NOT:
                     {
-                        break;
+                        this.valorAux = HazNot(op1, codigo, ambito);
+                        return valorAux;
                     }
                     case MENOS:
                     {
-                        break;
+                        this.valorAux = HazMenos(op1, codigo, ambito);
+                        return this.valorAux;
                     }
                 }
             }
@@ -178,27 +182,33 @@ public class Operacion extends NodoAST implements Expresion {
                     }
                     case MAYOR:
                     {
-                        
+                        this.valorAux = HazMayor(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                     case MENOR:
                     {
-                        
+                        this.valorAux = HazMenor(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                     case MAYORIGUAL:
                     {
-                        
+                        this.valorAux = MayorIgual(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                     case MENORIGUAL:
                     {
-                        
+                        this.valorAux = MenorIgual(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                     case AND:
                     {
-                        
+                        this.valorAux = HazAnd(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                     case OR:
                     {
-                        
+                        this.valorAux = HazOr(op1, op2, codigo1, ambito);
+                        return this.valorAux;
                     }
                 }
             }
@@ -1103,7 +1113,7 @@ public class Operacion extends NodoAST implements Expresion {
     //**********************************************************************************************
     //*                 | BOOLEAN        |     CADENA     |       NUMERICO   |       CARACTER      *
     //**********************************************************************************************
-    //*   BOOLEAN       |      00        |      00        |          13      |        14           *
+    //*   BOOLEAN       |      00        |      00        |          00      |        00           *
     //---------------------------------------------------------------------------------------------*
     //*   CADENA        |      00        |      00        |          00      |        00           *
     //---------------------------------------------------------------------------------------------*
@@ -1111,14 +1121,125 @@ public class Operacion extends NodoAST implements Expresion {
     //---------------------------------------------------------------------------------------------*
     //*   CARACTER      |      41        |      00        |          43      |        00           *
     //---------------------------------------------------------------------------------------------*
+    /**
+     * 
+     * Metodo que se encarga de realizar la comparacion Mayor
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
     private Object HazMayor(Expresion op1, Expresion op2, String codigo, Ambito ambito)
     {
         String tipo1 = op1.getTipo(ambito);
         String tipo2 = op2.getTipo(ambito);
         try {
+            Object val1 = op1.getValor(ambito);
+            Object val2 = op2.getValor(ambito);
             switch(codigo)
             {
                 
+                case "22":
+                {
+                    String valor1 = (String)val1;
+                    String valor2 = (String)val2;
+                    if(valor1.compareTo(valor2)>0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                case "23":
+                {
+                    String valor1 = (String)val1;
+                    String valor2 = val2.toString();
+                    if(valor1.compareTo(valor2)>0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "24":
+                {
+                    String valor1 = (String)val1;
+                    Character valor2 = (Character)val2;
+                    if(valor1.compareTo(valor2.toString())>0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "32":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    String valor2 = (String)val2;
+                    if(String.valueOf(valor1).compareTo(valor2)>0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "33":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    Double valor2 = Double.parseDouble(val2.toString());
+                    if(valor1 > valor2)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "34":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    Character valor2 = (Character)val2;
+                    Double aux = Double.valueOf(Character.getNumericValue(valor2));
+                    if(valor1>aux)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "42":
+                {
+                    Character valor1 = (Character)val1;
+                    String valor2 = (String)val2;
+                    if(valor1.toString().compareTo(valor2)>0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "43":
+                {
+                    Character valor1 = (Character)val1;
+                    Double valor2 = Double.parseDouble(val2.toString());
+                    Double aux1 = Double.valueOf(Character.getNumericValue(valor1));
+                    if(aux1 > valor2)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "44":
+                {
+                    Character valor1 = (Character)val1;
+                    Character valor2 = (Character)val2;
+                    if(valor1.compareTo(valor2)>0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                default:
+                {
+                    TError error = new TError(tipo1+">"+tipo2, "No se puede realizar la Mayor entre tipo: "+tipo1+" y "+tipo2, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
             }
         } catch (Exception e) {
             TError error = new TError(tipo1+">"+tipo2, "Error al ejecutar Mayor: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
@@ -1126,17 +1247,379 @@ public class Operacion extends NodoAST implements Expresion {
         }
         return false;
     }
-    
+    /**
+     * 
+     * Metodo que se encarga de realizar la comparacion Menor
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
     private Object HazMenor(Expresion op1, Expresion op2, String codigo, Ambito ambito)
     {
         String tipo1 = op1.getTipo(ambito);
         String tipo2 = op2.getTipo(ambito);
         try {
-            
+            Object val1 = op1.getValor(ambito);
+            Object val2 = op2.getValor(ambito);
+            switch(codigo)
+            {
+                case "22":
+                {
+                    String valor1 = (String)val1;
+                    String valor2 = (String)val2;
+                    if(valor1.compareTo(valor2)<0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                case "23":
+                {
+                    String valor1 = (String)val1;
+                    String valor2 = val2.toString();
+                    if(valor1.compareTo(valor2)<0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "24":
+                {
+                    String valor1 = (String)val1;
+                    Character valor2 = (Character)val2;
+                    if(valor1.compareTo(valor2.toString())<0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "32":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    String valor2 = (String)val2;
+                    if(String.valueOf(valor1).compareTo(valor2)<0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "33":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    Double valor2 = Double.parseDouble(val2.toString());
+                    if(valor1 < valor2)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "34":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    Character valor2 = (Character)val2;
+                    Double aux = Double.valueOf(Character.getNumericValue(valor2));
+                    if(valor1<aux)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "42":
+                {
+                    Character valor1 = (Character)val1;
+                    String valor2 = (String)val2;
+                    if(valor1.toString().compareTo(valor2)<0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "43":
+                {
+                    Character valor1 = (Character)val1;
+                    Double valor2 = Double.parseDouble(val2.toString());
+                    Double aux1 = Double.valueOf(Character.getNumericValue(valor1));
+                    if(aux1 < valor2)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                case "44":
+                {
+                    Character valor1 = (Character)val1;
+                    Character valor2 = (Character)val2;
+                    if(valor1.compareTo(valor2)<0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                default:
+                {
+                    TError error = new TError(tipo1+"<"+tipo2, "No se puede realizar la Menor entre tipo: "+tipo1+" y "+tipo2, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
         } catch (Exception e) {
             TError error = new TError(tipo1+"<"+tipo2, "Error al ejecutar Menor: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
             Estatico.agregarError(error);
         }
         return false;
+    }
+    
+    /**
+     * 
+     * Metodo que se encarga de realizar la comparacion Mayor Igual
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object MayorIgual(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        String tipo2 = op2.getTipo(ambito);
+        try 
+        {
+            Boolean esMayor = (Boolean)HazMayor(op1, op2, codigo, ambito);
+            Boolean esIgual = (Boolean)HazIgual(op1, op2, codigo, ambito);
+            return esMayor || esIgual;
+        } catch (Exception e) 
+        {
+            TError error = new TError(tipo1+">="+tipo2, "Error al ejecutar Mayor igual: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return false;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la comparacion Menor Igual
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object MenorIgual(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        String tipo2 = op2.getTipo(ambito);
+        try {
+            Boolean esMenor = (Boolean)HazMenor(op1, op2, codigo, ambito);
+            Boolean esIguak = (Boolean)HazIgual(op1, op2, codigo, ambito);
+            return esMenor || esIguak;
+        } catch (Exception e) {
+            TError error = new TError(tipo1+"<="+tipo2, "Error al ejecutar Menor igual: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return false;
+    }
+    
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion AND
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazAnd(Expresion op1,Expresion op2, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        String tipo2 = op2.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            Object val2 = op2.getValor(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    Boolean valor1 = (Boolean)val1;
+                    Boolean valor2 = (Boolean)val2;
+                    return valor1 && valor2;
+                }
+                default:
+                {
+                    TError error = new TError(tipo1+"&&"+tipo2, "No se puede realizar Operacion AND entre tipo: "+tipo1+" y "+tipo2, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError(tipo1+"&&"+tipo2, "Error al ejecutar AND: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return false;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion OR
+     * @param op1 operando1
+     * @param op2 operando2
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazOr(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        String tipo2 = op2.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            Object val2 = op2.getValor(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    Boolean valor1 = (Boolean)val1;
+                    Boolean valor2 = (Boolean)val2;
+                    return valor1 || valor2;
+                }
+                default:
+                {
+                    TError error = new TError(tipo1+"||"+tipo2, "No se puede realizar Operacion OR entre tipo: "+tipo1+" y "+tipo2, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError(tipo1+"||"+tipo2, "Error al ejecutar OR: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return false;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion NOT
+     * @param op1 operando1
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazNot(Expresion op1, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            switch(codigo)
+            {
+                case "1":
+                {
+                    Boolean valor1 = (Boolean)val1;
+                    return !valor1;
+                }
+                default:
+                {
+                    TError error = new TError("!"+tipo1, "No se puede realizar Operacion NOT entre tipo: "+tipo1, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError("!"+tipo1, "Error al ejecutar NOT: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return false;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion Aumento
+     * @param op1 operando1
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazAumento(Expresion op1, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            switch(codigo)
+            {
+                case "3":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    return valor1 + 1.0;
+                }
+                default:
+                {
+                     TError error = new TError(tipo1+"++", "No se puede realizar Operacion Incremento entre tipo: "+tipo1, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError(tipo1+"++", "Error al ejecutar Incremento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return 0.0;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion Decremento
+     * @param op1 operando1
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazDecremento(Expresion op1, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            switch(codigo)
+            {
+                case "3":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    return valor1 - 1.0;
+                }
+                default:
+                {
+                    TError error = new TError(tipo1+"--", "No se puede realizar Operacion Decremento entre tipo: "+tipo1, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError(tipo1+"--", "Error al ejecutar Decremento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return 0.0;
+    }
+    /**
+     * 
+     * Metodo que se encarga de realizar la operacion Negativo
+     * @param op1 operando1
+     * @param codigo codigo previamente buscado
+     * @param ambito Ambito donde se encuentra
+     * @return el resultado de la operacion binaria
+     */
+    private Object HazMenos(Expresion op1, String codigo, Ambito ambito)
+    {
+        String tipo1 = op1.getTipo(ambito);
+        try {
+            Object val1 = op1.getValor(ambito);
+            switch(codigo)
+            {
+                case "3":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    return valor1*-1;
+                }
+                default:
+                {
+                    TError error = new TError("-"+tipo1, "No se puede realizar Operacion Negativo entre tipo: "+tipo1, "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+                    Estatico.agregarError(error);
+                }
+            }
+        } catch (Exception e) {
+            TError error = new TError("-"+tipo1, "Error al ejecutar Negativo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo());
+            Estatico.agregarError(error);
+        }
+        return 0.0;
     }
 }

@@ -6,9 +6,11 @@
 package DracoScriptPackage;
 import DracoScriptPackage.Analizador.*;
 import DracoScriptPackage.DracoAST.Declaraciones.NodoInicio;
+import ErrorManager.TError;
 import InfoEstatica.Estatico;
 import Simbolos.Ambito;
 import java.io.StringReader;
+import java.util.ArrayList;
 /**
  * Clase que inicializa el Analisis para el lenguage DracoScript
  * @author richard
@@ -65,12 +67,22 @@ public class DracoAnalizador implements Runnable{
             DracoParser parser = new DracoParser(lex);
             parser.parse();
             NodoInicio iniciar = (NodoInicio)DracoParser.root;
-            if(iniciar!=null)
+            ArrayList<TError> errores = DracoParser.errores;
+            if(iniciar!=null && errores.isEmpty())
             {
                 Ambito nuevo = new Ambito("Global", null, Archivo);
                 iniciar.Ejecutar(nuevo);
+                return  true;
             }
-            return true;
+            else
+            {
+                for(TError err: errores)
+                {
+                    Estatico.errores.add(err);
+                }
+                Estatico.ActualizarTablaDeErrores();
+                return false;
+            }
         } catch (Exception e) 
         {
             System.err.println("Error: "+e.getMessage());

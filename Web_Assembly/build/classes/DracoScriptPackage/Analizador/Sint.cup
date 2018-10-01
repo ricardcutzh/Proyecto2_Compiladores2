@@ -8,6 +8,7 @@ import DracoScriptPackage.DracoAST.Sentencias.*;
 import InfoEstatica.Estatico;
 import ObjsComun.*;
 import java.util.ArrayList;
+import ErrorManager.TError;
 
 //--------------------> CODIGO DEL PARSER, VARIABLES Y METODOS
 parser code
@@ -15,17 +16,21 @@ parser code
     public static String ArchivoOrigen;
     public static Instruccion root;
 
+    public static ArrayList<TError> errores;
+
     public void syntax_error(Symbol s)
     {
       /*METODO PARA RECUPERACION DE ERRORES*/
-      System.err.println("Error en :"+ s.value.toString() + " | Linea: "+s.right+1);
+      this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
     }
 
     //METODO PARA ERRORES QUE NO SE RECUPERAN
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
       /*METODO PARA ERRORE IRRECUPERABLES*/
-      System.err.println("Error en :"+ s.value.toString() + " | Linea: "+s.right+1);
+      this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
     }
 :}
 
@@ -65,7 +70,7 @@ terminal String verdad, falso;
 //---------> NO TERMINALES
 non terminal Expresion EXP, E;
 non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR;
-non terminal Object L_DECLA, INICIO;
+non terminal Object L_DECLA, INICIO, ASIGNACION_VAR;
 
 //-----------> PRECEDENCIA
 precedence left or;
@@ -81,7 +86,7 @@ precedence left cParent;
 start with INICIO;
 /*-----------------------------REGLAS SEMANTICAS                             */
 //INICIO////////////////////////////////////////////////////////////////////////
-INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen;:}STATEMENTS:listado
+INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>();:}STATEMENTS:listado
         {:
           ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)listado;
           if(instrucciones==null)
@@ -123,6 +128,20 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               }
               RESULT = instrucciones;
             :}
+            | STATEMENTS:lista ASIGNACION_VAR:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
             | DECLARACION_VAR:declaracion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
@@ -134,6 +153,16 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               RESULT = instrucciones;
             :}
             | IMPRIMIR:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | ASIGNACION_VAR:instruccion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
               Instruccion ins = (Instruccion)instruccion;
@@ -158,7 +187,7 @@ DECLARACION_VAR ::= var:aux L_DECLA:lista ptComa
                 :}
                 | var error:val ptComa
                 {:
-
+                  /*EL ERRO YA SE REPORTA CON EXITOOO!*/
                 :}
                 ;
 
@@ -198,6 +227,15 @@ L_DECLA ::= L_DECLA:lista coma identificador:id
             RESULT = declaraciones;
         :}
         ;
+
+////////////////////////////////////////////////////////////////////////////////
+ASIGNACION_VAR ::= identificador:id asigna EXP:nodo ptComa
+              {:
+                Expresion val = (Expresion)nodo;
+                AsignacionVar ins = new AsignacionVar(idright, idleft, ArchivoOrigen, id, val);
+                RESULT = ins;
+              :}
+              ;
 
 ////////////////////////////////////////////////////////////////////////////////
 IMPRIMIR ::= print:aux oParent EXP:nodo cParent ptComa

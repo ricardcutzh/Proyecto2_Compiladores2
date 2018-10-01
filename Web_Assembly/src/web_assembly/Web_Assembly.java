@@ -36,13 +36,7 @@ public class Web_Assembly {
     
     public static void pruebas()
     {
-        try {
-            DSLex lex = new DSLex(new FileReader("/home/richard/Documents/Universidad/Entradas/ejemplo.ds"));
-            DracoParser p = new DracoParser(lex);
-            p.parse();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+
     }
     
 }

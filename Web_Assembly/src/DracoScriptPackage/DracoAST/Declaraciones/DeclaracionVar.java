@@ -56,7 +56,7 @@ public class DeclaracionVar extends  NodoAST implements Instruccion{
             {
                 if(this.expresion == null)
                 {
-                    Variable var = new Variable(identificador, false, "NULO", new Nulo());
+                    Variable var = new Variable(identificador, false, "NUMERICO", 0.0);
                     ambito.AgregarVariable(identificador.toLowerCase(), var);
                 }
                 else

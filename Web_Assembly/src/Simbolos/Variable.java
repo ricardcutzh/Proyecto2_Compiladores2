@@ -33,5 +33,15 @@ public class Variable extends Simbolo {
         return valor;
     }
     
+    /**
+     * Actualiza el valor de la variable
+     * @param valor el valor nuevo
+     */
+    public void setValor(Object valor) {
+        this.valor = valor;
+    }
+    
+    
+    
     
 }
