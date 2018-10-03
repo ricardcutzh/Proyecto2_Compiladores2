@@ -9,7 +9,7 @@
 
    <!-- Omitting baseFont will use a system-appropriate monospaced. -->
    <!--<baseFont family="..." size="13"/>-->
-
+   <!-- 2F393C color para marcars-->
    <!--  General editor colors. -->
    <background color="293134"/>
    <caret color="c1cbc2"/>
@@ -72,7 +72,7 @@
       <style token="ERROR_IDENTIFIER" fg="E0E2E4" bg="04790e"/>
       <style token="ERROR_NUMBER_FORMAT" fg="E0E2E4" bg="04790e"/>
       <style token="ERROR_STRING_DOUBLE" fg="E0E2E4" bg="04790e"/>
-      <style token="ERROR_CHAR" fg="E0E2E4" bg="04790e"/>
+      <style token="ERROR_CHAR" fg="E0E2E4" bg="ff1a1a"/>
    </tokenStyles>
 
 </RSyntaxTheme>

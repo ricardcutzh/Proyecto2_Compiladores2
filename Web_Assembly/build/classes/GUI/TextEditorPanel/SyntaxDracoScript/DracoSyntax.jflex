@@ -206,18 +206,18 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    "if" |
    "elif"|
    "not"|
-   "for"
+   "for"|
    "smash"|
    "true"|
    "false"|
    "while"      { addToken(Token.RESERVED_WORD); }
 
-   /* Data types */
+   /*
    "byte" |
    "char" |
    "double" |
    "float" |
-   "int"      { addToken(Token.DATA_TYPE); }
+   "int"      { addToken(Token.DATA_TYPE); }*/
 
    /* Functions */
    "Print"|
@@ -250,8 +250,8 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
 
    /* Operators. */
    "+" | "-" | "*" | "/" | "^" | "%" | "++"|
-   "--"| "==" | "!=" | "<"| ">" "<=" | ">="|
-   "&&" | "||" | "!" { addToken(Token.OPERATOR); }
+   "--"| "==" | "!=" | "<"| ">" | "<=" | ">="|
+   "&&" | "||" | "!" | ":=:" { addToken(Token.OPERATOR); }
 
    /* Numbers */
    {IntegerLiteral}         { addToken(Token.LITERAL_NUMBER_DECIMAL_INT); }
@@ -262,7 +262,7 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    <<EOF>>                  { addNullToken(); return firstToken; }
 
    /* Catch any other (unhandled) characters. */
-   .                     { addToken(Token.IDENTIFIER); }
+   .                     { addToken(Token.ERROR_CHAR); }
 
 }
 

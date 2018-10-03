@@ -29,7 +29,7 @@ public class Web_Assembly {
         }
         IDE ide = new IDE();
         ide.setVisible(true);
-        //pruebas();
+        
         
     }
     

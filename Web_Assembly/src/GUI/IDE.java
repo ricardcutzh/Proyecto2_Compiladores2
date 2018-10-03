@@ -13,7 +13,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import InfoEstatica.Estatico;
+import ObjsComun.BreakPointNode;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -39,6 +45,7 @@ public class IDE extends javax.swing.JFrame {
         
         //INICIALIZO TODO 
         Estatico.setUp(this.Consola, this.TablaError, null);
+        Estatico.colocaTablaBreaks(TablaBreaks);
     }
 
     /**
@@ -68,8 +75,12 @@ public class IDE extends javax.swing.JFrame {
         BotonCerrarActual = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         ButtonRun = new javax.swing.JButton();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jLabel5 = new javax.swing.JLabel();
         BotonDebug = new javax.swing.JButton();
+        NextLine = new javax.swing.JButton();
+        NextBreakPoint = new javax.swing.JButton();
+        StopDebugger = new javax.swing.JButton();
+        ClearHigh = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         DirToCreate = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -78,6 +89,8 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Consola = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        TablaBreaks = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
@@ -88,6 +101,8 @@ public class IDE extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         HideTabs = new javax.swing.JMenu();
         opc1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IDE Web Assembly");
@@ -208,7 +223,9 @@ public class IDE extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(ButtonRun);
-        jToolBar1.add(jSeparator4);
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
+        jToolBar1.add(jLabel5);
 
         BotonDebug.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/debug.png"))); // NOI18N
         BotonDebug.setToolTipText("Debug");
@@ -221,6 +238,53 @@ public class IDE extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(BotonDebug);
+
+        NextLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/skip.png"))); // NOI18N
+        NextLine.setToolTipText("Siguiente Linea");
+        NextLine.setFocusable(false);
+        NextLine.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        NextLine.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        NextLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextLineActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(NextLine);
+
+        NextBreakPoint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/next.png"))); // NOI18N
+        NextBreakPoint.setToolTipText("Siguiente Punto");
+        NextBreakPoint.setFocusable(false);
+        NextBreakPoint.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        NextBreakPoint.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        NextBreakPoint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextBreakPointActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(NextBreakPoint);
+
+        StopDebugger.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/stop.png"))); // NOI18N
+        StopDebugger.setToolTipText("Detener Debugger");
+        StopDebugger.setFocusable(false);
+        StopDebugger.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        StopDebugger.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        StopDebugger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StopDebuggerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(StopDebugger);
+
+        ClearHigh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/highlighter.png"))); // NOI18N
+        ClearHigh.setFocusable(false);
+        ClearHigh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ClearHigh.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ClearHigh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClearHighActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ClearHigh);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/vertical-ellipsis (1).png"))); // NOI18N
         jToolBar1.add(jLabel3);
@@ -264,6 +328,28 @@ public class IDE extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Consola", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/terminal.png")), jScrollPane2); // NOI18N
         jTabbedPane1.addTab("Tabla de Simbolos", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/table-grid.png")), jScrollPane3); // NOI18N
+
+        TablaBreaks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TablaBreaks.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        TablaBreaks.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Numero de Linea", "Archivo de Origen"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(TablaBreaks);
+
+        jTabbedPane1.addTab("BreakPoints", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/break.png")), jScrollPane5); // NOI18N
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("File Explorer"));
 
@@ -341,6 +427,24 @@ public class IDE extends javax.swing.JFrame {
         });
         HideTabs.add(opc1);
 
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/break.png"))); // NOI18N
+        jMenuItem3.setText("Agregar BreakPoint");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        HideTabs.add(jMenuItem3);
+
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/eraser.png"))); // NOI18N
+        jMenuItem4.setText("Clear BreakPoints");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        HideTabs.add(jMenuItem4);
+
         jMenuBar1.add(HideTabs);
 
         setJMenuBar(jMenuBar1);
@@ -385,8 +489,12 @@ public class IDE extends javax.swing.JFrame {
         this.ButtonRun.setEnabled(bandera);
         this.DeleteFile.setEnabled(bandera);
         this.openFIle.setEnabled(bandera);
+        this.NextBreakPoint.setEnabled(bandera);
+        this.NextLine.setEnabled(bandera);
+        this.StopDebugger.setEnabled(bandera);
+        this.ClearHigh.setEnabled(bandera);
     }
-
+    
     private void BotonCrearArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearArchivoActionPerformed
         // TODO add your handling code here:
         if (!this.toCreate.equals("")) {
@@ -460,11 +568,19 @@ public class IDE extends javax.swing.JFrame {
 
     private void BotonCerrarActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCerrarActualActionPerformed
         // TODO add your handling code here:
+        if(EditorTab.getTabCount()>0)
+        {
+            EditorTab.remove(EditorTab.getSelectedIndex());
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "No hay Tabs Abiertas!", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BotonCerrarActualActionPerformed
 
     private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRunActionPerformed
         // TODO add your handling code here:
         Estatico.setUp(Consola, TablaError, TablaError);
+        Estatico.mod = Estatico.MODALIDAD.RUN_MODE;
         if(EditorTab.getTabCount() > 0)
         {
             int x = EditorTab.getTabCount();
@@ -483,6 +599,21 @@ public class IDE extends javax.swing.JFrame {
 
     private void BotonDebugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDebugActionPerformed
         // TODO add your handling code here:
+        Estatico.setUp(Consola, TablaError, TablaError);
+        Estatico.mod = Estatico.MODALIDAD.DEBUGG_MODE;
+        if(EditorTab.getTabCount() > 0)
+        {
+            Object c = EditorTab.getSelectedComponent();
+            if(c instanceof WebAssEditor)
+            {
+                WebAssEditor aux = (WebAssEditor)c;
+                aux.EjecutarAnalisis();
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No hay Tabs Para Leer!", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BotonDebugActionPerformed
 
     private void ArbolArchivosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ArbolArchivosMouseClicked
@@ -508,7 +639,7 @@ public class IDE extends javax.swing.JFrame {
     private void DeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFileActionPerformed
         // TODO add your handling code here:
         if (!this.SelectedFile.equals("")) {
-
+            
         } else {
             JOptionPane.showMessageDialog(this, "No Existe un Archivo Seleccionado!", "Error: Eliminar Archivo", JOptionPane.ERROR_MESSAGE);
         }
@@ -524,6 +655,88 @@ public class IDE extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No Existe un Archivo Seleccionado!", "Error: Abrir Archivo", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_openFIleActionPerformed
+
+    private void NextLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextLineActionPerformed
+        // TODO add your handling code here:
+        if(Estatico.suspended)
+        {
+            try {
+                Estatico.esLinea = true;
+                Estatico.hilo.resume();
+            } catch (Exception e) {
+            }
+            
+        }
+    }//GEN-LAST:event_NextLineActionPerformed
+
+    private void NextBreakPointActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBreakPointActionPerformed
+        // TODO add your handling code here:
+        if(Estatico.suspended)
+        {
+            try {
+                Estatico.suspended = false;
+                Estatico.esLinea = false;
+                Estatico.hilo.resume();
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_NextBreakPointActionPerformed
+
+    private void StopDebuggerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopDebuggerActionPerformed
+        // TODO add your handling code here:
+        try {
+            Estatico.hilo.stop();
+            Estatico.suspended = true;
+            JOptionPane.showMessageDialog(this, "Debugger finalizado", "Proceso terminado", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_StopDebuggerActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        if(EditorTab.getTabCount()>0)
+        {
+            Object c = EditorTab.getSelectedComponent();
+            if(c instanceof WebAssEditor)
+            {
+                WebAssEditor aux = (WebAssEditor)c;
+                String archivo = aux.getFileName();
+                SpinnerModel modelo = new SpinnerNumberModel(1, 1, aux.areaEdicion.getLineCount(), 1);
+                JSpinner numLinea = new JSpinner(modelo);
+                
+                JLabel l = new JLabel(archivo);
+                Object[] message = {"Archivo: ", l, "Linea: ", numLinea};
+                int option = JOptionPane.showConfirmDialog(this, message, "Agregar BreakPoint", JOptionPane.OK_CANCEL_OPTION);
+                if(option == JOptionPane.OK_OPTION)
+                {
+                    //System.err.println("Linea: "+numLinea.getValue().toString());
+                    int line = Integer.parseInt(numLinea.getValue().toString()) - 1;
+                    String key = line + "_"+archivo;
+                    if(!Estatico.breakPoints.containsKey(key))
+                    {
+                        Estatico.breakPoints.put(key, new BreakPointNode(archivo, line));
+                        Estatico.agregarBreakPoint(archivo, line);
+                    }
+                }
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No hay Tabs Abiertas para colocar un BreakPoint", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        Estatico.breakPoints.clear();
+        Estatico.resetBreaks();
+        JOptionPane.showMessageDialog(this, "Registro de BreakPoints Limpiado", "Clear BreakPoints!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void ClearHighActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearHighActionPerformed
+        // TODO add your handling code here:
+        Estatico.quitarMarcas();
+    }//GEN-LAST:event_ClearHighActionPerformed
 
     /**
      * @param args the command line arguments
@@ -569,20 +782,28 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JButton BotonDebug;
     private javax.swing.JButton BotonGuardarActual;
     private javax.swing.JButton ButtonRun;
+    private javax.swing.JButton ClearHigh;
     private javax.swing.JTextArea Consola;
     private javax.swing.JButton DeleteFile;
     private javax.swing.JLabel DirToCreate;
     private javax.swing.JTabbedPane EditorTab;
     private javax.swing.JMenu HideTabs;
+    private javax.swing.JButton NextBreakPoint;
+    private javax.swing.JButton NextLine;
+    private javax.swing.JButton StopDebugger;
+    private javax.swing.JTable TablaBreaks;
     private javax.swing.JTable TablaError;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -590,10 +811,10 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;

@@ -53,10 +53,11 @@ action code
 :}
 /*--------------------CODIGO AREA DE DECLARACIONES                           */
 //-----------> PUNTACION
-terminal String ptComa, asigna, oParent, cParent, coma;
+terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 //----------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, dif, menor, mayor;
-terminal String menorigual, mayorigual, and, or, not, mod;
+terminal String mientras, para;
+terminal String menorigual, mayorigual, and, or, not, mod, si, sino, ifnot, romper;
 //-----------> PALABRAS RESERVADAS
 terminal String var;
 terminal String print;
@@ -69,8 +70,9 @@ terminal String cadena;
 terminal String verdad, falso;
 //---------> NO TERMINALES
 non terminal Expresion EXP, E;
-non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR;
-non terminal Object L_DECLA, INICIO, ASIGNACION_VAR;
+non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR, IF, ELSE, IF_NOT;
+non terminal Object L_DECLA, INICIO, ASIGNACION_VAR, SMASH;
+non terminal Object SENT_WHILE, AUMENTO, DECREMENTO, SENT_FOR, INS1, INS2;
 
 //-----------> PRECEDENCIA
 precedence left or;
@@ -82,6 +84,9 @@ precedence left mult, div, mod;
 precedence left pot;
 precedence right inc, dec, not;
 precedence left cParent;
+
+precedence right si;
+precedence right ifnot;
 
 start with INICIO;
 /*-----------------------------REGLAS SEMANTICAS                             */
@@ -142,6 +147,90 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               }
               RESULT = instrucciones;
             :}
+            | STATEMENTS:lista SMASH:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista IF:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista SENT_WHILE:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista AUMENTO:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista DECREMENTO:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista SENT_FOR:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
             | DECLARACION_VAR:declaracion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
@@ -163,6 +252,66 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               RESULT = instrucciones;
             :}
             | ASIGNACION_VAR:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | IF:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | SMASH:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | SENT_WHILE:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | AUMENTO:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | DECREMENTO:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | SENT_FOR:instruccion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
               Instruccion ins = (Instruccion)instruccion;
@@ -250,6 +399,137 @@ IMPRIMIR ::= print:aux oParent EXP:nodo cParent ptComa
           :}
           ;
 
+////////////////////////////////////////////////////////////////////////////////
+IF ::= si:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey ELSE:listanodos IF_NOT:defecto
+      {:
+        Expresion condicion = (Expresion)nodo;
+        ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+        ArrayList<NodoELIF> elifs = (ArrayList<NodoELIF>)listanodos;
+        NodoELIF n = (NodoELIF)defecto;
+        elifs.add(n);
+        SentenciaIf instruc = new SentenciaIf(auxright, auxleft, ArchivoOrigen, condicion, instrucciones, elifs);
+
+        RESULT = instruc;
+      :}
+      |si:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey IF_NOT:defecto
+      {:
+        Expresion condicion = (Expresion)nodo;
+        ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+        ArrayList<NodoELIF> nodos = new ArrayList<>();
+        NodoELIF n = (NodoELIF)defecto;
+        nodos.add(n);
+        SentenciaIf instruc = new SentenciaIf(auxright, auxleft, ArchivoOrigen, condicion, instrucciones, nodos);
+        RESULT = instruc;
+      :}
+      |si:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey
+      {:
+        Expresion condicion = (Expresion)nodo;
+        ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+        SentenciaIf instruc = new SentenciaIf(auxright, auxleft, ArchivoOrigen, condicion, instrucciones, null);
+        RESULT = instruc;
+      :}
+      |si error cKey
+      {:
+        /*POR SI EXISTE UN ERROR*/
+      :}
+      ;
+
+ELSE ::= ELSE:lista2 sino:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey
+       {:
+         Expresion condicion = (Expresion)nodo;
+         ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+         ArrayList<NodoELIF> nodos = (ArrayList<NodoELIF>)lista2;
+         if(nodos==null)
+         {
+           nodos = new ArrayList<>();
+         }
+         if(condicion!=null&&instrucciones!=null)
+         {
+           nodos.add(new NodoELIF(instrucciones, condicion, auxright, auxleft, ArchivoOrigen));
+         }
+         RESULT = nodos;
+       :}
+       | sino:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey
+       {:
+         Expresion condicion = (Expresion)nodo;
+         ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+         ArrayList<NodoELIF> nodos = new ArrayList<>();
+         nodos.add(new NodoELIF(instrucciones, condicion, auxright, auxleft, ArchivoOrigen));
+         RESULT = nodos;
+       :}
+       ;
+IF_NOT::= si ifnot:aux oKey STATEMENTS:lista cKey
+        {:
+          ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+          NodoELIF nuevo = new NodoELIF(instrucciones, auxright, auxleft, ArchivoOrigen);
+          RESULT = nuevo;
+        :}
+        ;
+
+////////////////////////////////////////////////////////////////////////////////
+SENT_WHILE::= mientras:aux oParent EXP:nodo cParent oKey STATEMENTS:lista cKey
+          {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+            SentenciaWhile s = new SentenciaWhile(auxright, auxleft, ArchivoOrigen, exp, instrucciones);
+            RESULT = s;
+          :}
+          | mientras error cKey
+          ;
+////////////////////////////////////////////////////////////////////////////////
+SENT_FOR::= para:aux oParent INS1:instruc1 EXP:nodo ptComa INS2:instrc2 cParent oKey STATEMENTS:lista cKey
+          {:
+            Expresion condicion = (Expresion)nodo;
+            Instruccion ins1 = (Instruccion)instruc1;
+            Instruccion ins2 = (Instruccion)instrc2;
+            ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+            SentenciaFor n = new SentenciaFor(auxright, auxleft, ArchivoOrigen, ins1, condicion, ins2, instrucciones);
+            RESULT = n;
+          :}
+          ;
+
+INS1::= ASIGNACION_VAR:instruccion
+      {:
+        Instruccion ins = (Instruccion)instruccion;
+        RESULT = ins;
+      :}
+      | DECLARACION_VAR:instruccion
+      {:
+        Instruccion ins = (Instruccion)instruccion;
+        RESULT = ins;
+      :}
+      ;
+INS2::= identificador:aux inc
+      {:
+        SentAumento s = new SentAumento(auxright, auxleft, ArchivoOrigen, aux);
+        RESULT = s;
+      :}
+      | identificador:aux dec
+      {:
+        SentDec d = new SentDec(auxright, auxleft, ArchivoOrigen, aux);
+        RESULT = d;
+      :}
+      ;
+////////////////////////////////////////////////////////////////////////////////
+AUMENTO ::= identificador:aux inc ptComa
+          {:
+            SentAumento s = new SentAumento(auxright, auxleft, ArchivoOrigen, aux);
+            RESULT = s;
+          :}
+          ;
+////////////////////////////////////////////////////////////////////////////////
+DECREMENTO::= identificador:aux dec ptComa
+          {:
+            SentDec d = new SentDec(auxright, auxleft, ArchivoOrigen, aux);
+            RESULT = d;
+          :}
+          ;
+//SMASH/////////////////////////////////////////////////////////////////////////
+SMASH::= romper:aux ptComa
+        {:
+          RESULT = new SentenciaSmash(auxright, auxleft, ArchivoOrigen);
+        :}
+        ;
 // EXPRESIONES//////////////////////////////////////////////////////////////////
 EXP::= E:val
     {:

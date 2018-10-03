@@ -5,6 +5,8 @@
  */
 package Simbolos;
 
+import java.util.Map;
+
 /**
  * Clase manejadora de los Ambitos en la ejecucion
  * @author richard
@@ -91,5 +93,28 @@ public class Ambito {
     public Boolean existeVariable(String id)
     {
         return this.tablaVars.existeVariable(id);
+    }
+    
+    
+    public void tomaValoresDeAmbito(Ambito padre)
+    {
+        TomaVariables(padre.tablaVars);
+    }
+    
+    public void TomaVariables(TablaDeVariables tablaPadre)
+    {
+        for(Map.Entry<String, Simbolo> entry : tablaPadre.variables.entrySet())
+        {
+            Simbolo s = entry.getValue();
+            if(s instanceof Variable)
+            {
+                Variable v = (Variable)s;
+                if(!this.existeVariable(v.idSimbolo.toLowerCase()))
+                {
+                    this.AgregarVariable(v.idSimbolo.toLowerCase(), v);
+                }
+            }
+            // AQUI IRIRA LO DE LOS ARREGLOS
+        }
     }
 }

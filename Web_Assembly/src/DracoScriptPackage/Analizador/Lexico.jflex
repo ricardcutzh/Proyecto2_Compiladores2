@@ -60,6 +60,8 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> "("                                   {return new Symbol(Simbolos.oParent, yycolumn, yyline, yytext());}
 <YYINITIAL> ")"                                   {return new Symbol(Simbolos.cParent, yycolumn, yyline, yytext());}
 <YYINITIAL> ","                                   {return new Symbol(Simbolos.coma, yycolumn, yyline, yytext());}
+<YYINITIAL> "{"                                   {return new Symbol(Simbolos.oKey, yycolumn, yyline, yytext());}
+<YYINITIAL> "}"                                   {return new Symbol(Simbolos.cKey, yycolumn, yyline, yytext());}
 
 // OPERADORES
 <YYINITIAL> "+"                                   {return new Symbol(Simbolos.mas, yycolumn, yyline, yytext());}
@@ -85,6 +87,12 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> "true"                                {return new Symbol(Simbolos.verdad, yycolumn, yyline, yytext());}
 <YYINITIAL> "false"                               {return new Symbol(Simbolos.falso, yycolumn, yyline, yytext());}
 <YYINITIAL> "print"                               {return new Symbol(Simbolos.print, yycolumn, yyline, yytext());}
+<YYINITIAL> "if"                                  {return new Symbol(Simbolos.si, yycolumn, yyline, yytext());}
+<YYINITIAL> "elif"                                {return new Symbol(Simbolos.sino, yycolumn, yyline, yytext());}
+<YYINITIAL> "not"                                 {return new Symbol(Simbolos.ifnot, yycolumn, yyline, yytext());}
+<YYINITIAL> "smash"                               {return new Symbol(Simbolos.romper, yycolumn, yyline, yytext());}
+<YYINITIAL> "while"                               {return new Symbol(Simbolos.mientras, yycolumn, yyline, yytext());}
+<YYINITIAL> "for"                                 {return new Symbol(Simbolos.para, yycolumn, yyline, yytext());}
 
 //---------------------------EXPRESIONES REGULARES
 <YYINITIAL> {entero}                              {return new Symbol(Simbolos.entero, yycolumn, yyline, yytext());}

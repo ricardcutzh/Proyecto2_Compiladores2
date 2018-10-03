@@ -6,6 +6,7 @@
 package GUI.TextEditorPanel;
 
 import DracoScriptPackage.DracoAnalizador;
+import InfoEstatica.Estatico;
 import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,7 +25,7 @@ import org.fife.ui.rtextarea.*;
  */
 public class WebAssEditor extends javax.swing.JPanel {
     
-    RSyntaxTextArea areaEdicion;
+    public RSyntaxTextArea areaEdicion;
     String pathArchivo;
     String fileExtension = "";
     String fileName;
@@ -57,7 +58,7 @@ public class WebAssEditor extends javax.swing.JPanel {
         this.areaEdicion = t;
         colocaColorSyntaxis(t, fileExtension);
         
-     
+        
         
         RTextScrollPane sp = new RTextScrollPane(t);
         this.add(sp);
@@ -163,6 +164,9 @@ public class WebAssEditor extends javax.swing.JPanel {
                 DracoScriptPackage.DracoAnalizador analizador = new DracoAnalizador(this.areaEdicion.getText(), this.fileName, this.pathProyecto);
                 Runnable r = analizador;
                 Thread t = new Thread(r);
+                Estatico.hilo = t;
+                Estatico.punteroText = this.areaEdicion;
+                
                 t.start();
                 break;
             }

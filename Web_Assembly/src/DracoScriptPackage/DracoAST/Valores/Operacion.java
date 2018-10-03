@@ -1046,6 +1046,12 @@ public class Operacion extends NodoAST implements Expresion {
                 {
                     return String.valueOf(val1).equals(val2.toString());
                 }
+                case "33":
+                {
+                    Double valor1 = Double.parseDouble(val1.toString());
+                    Double valor2 = Double.parseDouble(val2.toString());
+                    return valor1.equals(valor2);
+                }
                 case "34":
                 {
                     Double valor1 = (Double)val1;
