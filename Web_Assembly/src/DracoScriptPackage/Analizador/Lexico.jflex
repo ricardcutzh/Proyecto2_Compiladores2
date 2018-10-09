@@ -93,6 +93,11 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> "smash"                               {return new Symbol(Simbolos.romper, yycolumn, yyline, yytext());}
 <YYINITIAL> "while"                               {return new Symbol(Simbolos.mientras, yycolumn, yyline, yytext());}
 <YYINITIAL> "for"                                 {return new Symbol(Simbolos.para, yycolumn, yyline, yytext());}
+<YYINITIAL> "point"                               {return new Symbol(Simbolos.funPoint, yycolumn, yyline, yytext());}
+<YYINITIAL> "quadrate"                            {return new Symbol(Simbolos.funQuadrate, yycolumn, yyline, yytext());}
+<YYINITIAL> "oval"                                {return new Symbol(Simbolos.funOval, yycolumn, yyline, yytext());}
+<YYINITIAL> "line"                                {return new Symbol(Simbolos.funLine, yycolumn, yyline, yytext());}
+<YYINITIAL> "string"                              {return new Symbol(Simbolos.funString, yycolumn, yyline, yytext());}
 
 //---------------------------EXPRESIONES REGULARES
 <YYINITIAL> {entero}                              {return new Symbol(Simbolos.entero, yycolumn, yyline, yytext());}

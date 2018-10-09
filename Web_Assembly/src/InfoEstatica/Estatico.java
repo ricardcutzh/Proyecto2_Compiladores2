@@ -7,6 +7,7 @@ package InfoEstatica;
 
 import java.util.ArrayList;
 import ErrorManager.TError;
+import GUI.NavegorWeb.Interfaz.Navegador;
 import ObjsComun.BreakPointNode;
 import ObjsComun.NodoIDValor;
 import java.awt.Color;
@@ -49,6 +50,8 @@ public class Estatico {
     public static Boolean suspended;
     ////////////////////////////////////////////////////////////////////////////
     public static Stack<Boolean> pilaCiclos;
+    ////////////////////////////////////////////////////////////////////////////
+    public static Navegador navegador;
     ////////////////////////////////////////////////////////////////////////////
     public static void setUp(JTextArea consola, JTable tablaErrores, JTable tablaSimbolo) {
         errores = new ArrayList<>();
@@ -110,6 +113,7 @@ public class Estatico {
             rowData[4] = error.getColumna();
             rowData[5] = error.getArchivo();
             model.addRow(rowData);
+            MarcarError(error.getLinea());
         } catch (Exception e) {
         }
 
@@ -179,6 +183,7 @@ public class Estatico {
                 rowData[4] = e.getColumna();
                 rowData[5] = e.getArchivo();
                 model.addRow(rowData);
+                MarcarError(e.getLinea());
             }
         } catch (Exception e) {
 
@@ -196,6 +201,21 @@ public class Estatico {
 
             } catch (BadLocationException ex) {
                 Logger.getLogger(Estatico.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public static void MarcarError(int linea)
+    {
+        if(punteroText!=null)
+        {
+            Highlighter h = punteroText.getHighlighter();
+            try {
+                int inicio = punteroText.getLineStartOffset(linea);
+                int fin = punteroText.getLineEndOffset(linea);
+                h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.MAGENTA));
+            } catch (Exception e) {
+                
             }
         }
     }

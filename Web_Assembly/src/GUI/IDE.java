@@ -276,6 +276,7 @@ public class IDE extends javax.swing.JFrame {
         jToolBar1.add(StopDebugger);
 
         ClearHigh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/highlighter.png"))); // NOI18N
+        ClearHigh.setToolTipText("Quitar Marcas");
         ClearHigh.setFocusable(false);
         ClearHigh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ClearHigh.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

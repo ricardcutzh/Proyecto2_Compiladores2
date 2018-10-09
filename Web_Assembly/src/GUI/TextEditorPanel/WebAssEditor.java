@@ -5,7 +5,9 @@
  */
 package GUI.TextEditorPanel;
 
+import DppPackage.DppAnalizador;
 import DracoScriptPackage.DracoAnalizador;
+import GUI.NavegorWeb.Interfaz.Navegador;
 import InfoEstatica.Estatico;
 import java.awt.BorderLayout;
 import java.io.BufferedReader;
@@ -125,6 +127,13 @@ public class WebAssEditor extends javax.swing.JPanel {
             }
             case "dasm":
             {
+                atmf.putMapping("text/dasm", "GUI.TextEditorPanel.SyntaxDASM.DasmSyntax");
+                editor.setSyntaxEditingStyle("text/dasm");
+                try {
+                    Theme theme = Theme.load(getClass().getResourceAsStream("/GUI/TextEditorPanel/SyntaxDASM/DasmTheme.xml"));
+                    theme.apply(editor);
+                } catch (Exception e) {
+                }
                 break;
             }
             case "dpp":
@@ -166,16 +175,26 @@ public class WebAssEditor extends javax.swing.JPanel {
                 Thread t = new Thread(r);
                 Estatico.hilo = t;
                 Estatico.punteroText = this.areaEdicion;
+                Estatico.navegador = new Navegador();
+                Estatico.navegador.setVisible(true);
                 
                 t.start();
                 break;
             }
             case "dasm":
             {
+                /*NO HACE NADA*/
                 break;
             }
             case "dpp":
             {
+                DppPackage.DppAnalizador analizador = new DppAnalizador(this.areaEdicion.getText(), this.fileName, pathProyecto);
+                Runnable r = analizador;
+                Thread t = new Thread(r);
+                Estatico.hilo = t;
+                Estatico.punteroText = this.areaEdicion;
+                /*AQUI GENERA EL CODIGO*/
+                t.start();
                 break;
             }
         }

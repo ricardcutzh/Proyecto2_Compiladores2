@@ -5,6 +5,7 @@ import Abstraccion.*;
 import DracoScriptPackage.DracoAST.Valores.*;
 import DracoScriptPackage.DracoAST.Declaraciones.*;
 import DracoScriptPackage.DracoAST.Sentencias.*;
+import DracoScriptPackage.DracoAST.FuncionesNativas.*;
 import InfoEstatica.Estatico;
 import ObjsComun.*;
 import java.util.ArrayList;
@@ -18,10 +19,22 @@ parser code
 
     public static ArrayList<TError> errores;
 
+    public static ArrayList<String> expected;
+
     public void syntax_error(Symbol s)
     {
       /*METODO PARA RECUPERACION DE ERRORES*/
-      this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      String esp = esperados();
+      if(esp.equals(""))
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+      else
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString()+" | se esperaba: "+esperados(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+
+      expected.clear();
       //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
     }
 
@@ -29,8 +42,28 @@ parser code
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
       /*METODO PARA ERRORE IRRECUPERABLES*/
-      this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      String esp = esperados();
+      if(esp.equals(""))
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+      else
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString()+" | se esperaba: "+esperados(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+
+      expected.clear();
       //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+    }
+
+    private String esperados()
+    {
+      String cad = "";
+      for(String s: expected)
+      {
+        cad += "\'"+s+"\',";
+      }
+      return cad;
     }
 :}
 
@@ -56,7 +89,7 @@ action code
 terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 //----------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, dif, menor, mayor;
-terminal String mientras, para;
+terminal String mientras, para, funPoint, funQuadrate, funOval, funLine, funString;
 terminal String menorigual, mayorigual, and, or, not, mod, si, sino, ifnot, romper;
 //-----------> PALABRAS RESERVADAS
 terminal String var;
@@ -71,8 +104,9 @@ terminal String verdad, falso;
 //---------> NO TERMINALES
 non terminal Expresion EXP, E;
 non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR, IF, ELSE, IF_NOT;
-non terminal Object L_DECLA, INICIO, ASIGNACION_VAR, SMASH;
+non terminal Object L_DECLA, INICIO, ASIGNACION_VAR, SMASH, FUN_POINT;
 non terminal Object SENT_WHILE, AUMENTO, DECREMENTO, SENT_FOR, INS1, INS2;
+non terminal Object FUN_QUADRATE, FUN_OVAL, FUN_LINE, FUN_STRING;
 
 //-----------> PRECEDENCIA
 precedence left or;
@@ -91,7 +125,7 @@ precedence right ifnot;
 start with INICIO;
 /*-----------------------------REGLAS SEMANTICAS                             */
 //INICIO////////////////////////////////////////////////////////////////////////
-INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>();:}STATEMENTS:listado
+INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>();:}STATEMENTS:listado
         {:
           ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)listado;
           if(instrucciones==null)
@@ -231,6 +265,76 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               }
               RESULT = instrucciones;
             :}
+            | STATEMENTS:lista FUN_POINT:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista FUN_QUADRATE:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista FUN_OVAL:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista FUN_LINE:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
+            | STATEMENTS:lista FUN_STRING:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
             | DECLARACION_VAR:declaracion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
@@ -321,6 +425,56 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               }
               RESULT = instrucciones;
             :}
+            | FUN_POINT:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | FUN_QUADRATE:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | FUN_OVAL:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | FUN_LINE:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | FUN_STRING:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
             ;
 
 /// DECLARACIONES DE VARIABLES /////////////////////////////////////////////////
@@ -337,6 +491,8 @@ DECLARACION_VAR ::= var:aux L_DECLA:lista ptComa
                 | var error:val ptComa
                 {:
                   /*EL ERRO YA SE REPORTA CON EXITOOO!*/
+                  parser.expected.add("identificador");
+                  parser.expected.add("identificador = Expresion");
                 :}
                 ;
 
@@ -529,6 +685,42 @@ SMASH::= romper:aux ptComa
         {:
           RESULT = new SentenciaSmash(auxright, auxleft, ArchivoOrigen);
         :}
+        ;
+/////////////////////////////////////////////////////////////////////////////////
+FUN_POINT::= funPoint:aux oParent EXP:posx coma EXP:posy coma EXP:color coma EXP:diametro cParent ptComa
+        {:
+          FuncionPoint f = new FuncionPoint(auxright, auxleft, ArchivoOrigen, posx, posy, color, diametro);
+          RESULT = f;
+        :}
+        | funPoint error ptComa
+        ;
+FUN_QUADRATE::= funQuadrate:aux oParent EXP:posx coma EXP:posy coma EXP:color coma EXP:ancho coma EXP:alto cParent ptComa
+        {:
+          FuncionQuadrate f = new FuncionQuadrate(auxright, auxleft, ArchivoOrigen, posx, posy, color, alto, ancho);
+          RESULT = f;
+        :}
+        | funQuadrate error ptComa
+        ;
+FUN_OVAL::= funOval:aux oParent EXP:posx coma EXP:posy coma EXP:color coma EXP:ancho coma EXP:alto cParent ptComa
+        {:
+          FuncionOval f = new FuncionOval(auxright, auxleft, ArchivoOrigen, posx, posy, color, alto, ancho);
+          RESULT = f;
+        :}
+        | funOval error ptComa
+        ;
+FUN_LINE::= funLine:aux oParent EXP:x1 coma EXP:y1 coma EXP:x2 coma EXP:y2 coma EXP:color coma EXP:grosor cParent ptComa
+        {:
+          FuncionLine f = new FuncionLine(auxright, auxleft, ArchivoOrigen, x1, y1, x2, y2, color, grosor);
+          RESULT = f;
+        :}
+        | funLine error ptComa
+        ;
+FUN_STRING::= funString:aux oParent EXP:posx coma EXP:posy coma EXP:color coma EXP:cadena cParent ptComa
+        {:
+          FuncionString f = new FuncionString(auxright, auxleft, ArchivoOrigen, posx, posy ,cadena, color);
+          RESULT = f;
+        :}
+        | funString error ptComa
         ;
 // EXPRESIONES//////////////////////////////////////////////////////////////////
 EXP::= E:val
