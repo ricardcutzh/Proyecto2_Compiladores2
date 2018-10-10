@@ -5,6 +5,7 @@
  */
 package DppPackage.DppAST.Valores;
 import Abstraccion.*;
+import ErrorManager.TError;
 import Simbolos.Ambito;
 /**
  * Clase que manejara la traduccion de un valor primitivo
@@ -27,12 +28,46 @@ public class ValorPrimitivo extends NodoAST implements Expresion{
 
     @Override
     public Object generateByteCode(Ambito ambito) {
-        return super.generateByteCode(ambito); //To change body of generated methods, choose Tools | Templates.
+        try 
+        {
+            String tipo = getTipo(ambito);
+            switch(tipo)
+            {
+                case "ENTERO":// TAMANO DE 4 BYTES
+                {
+                    return valor.toString(); // DEVUELVO EL VALOR ENTERO DEL VALOR
+                }
+                case "DECIMAL":// TAMANO DE 8 BYTES
+                {
+                    return valor.toString(); // DEVUELVO EL VALOR DECIMAL DEL VALOR
+                }
+                case "CADENA":
+                {
+                    
+                }
+                case "BOOLEAN":// TAMANO DE 1 BYTE
+                {
+                    Boolean aux = (Boolean)this.valor;
+                    if(aux) {return "1";}
+                    return "0";
+                }
+                case "CARACTER":// TAMANO DE 1 BYTE
+                {
+                    Character aux = (Character)this.valor;
+                    return String.valueOf(Character.getNumericValue(aux));// DEVUELVO EL VALOR NUMERICO DEL CHARACTER
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+        }
+        return "";
     }
 
     @Override
     public String getTipo(Ambito ambito) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TypeManage manejador = new TypeManage(this.valor);
+        return manejador.evaluaValor();
     }
 
     @Override

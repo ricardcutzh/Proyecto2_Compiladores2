@@ -7,7 +7,9 @@ package DppPackage;
 
 import DppPackage.Analizador.DPPLex;
 import DppPackage.Analizador.DppParser;
+import DppPackage.DppAST.Declaraciones.DppASTTree;
 import ErrorManager.TError;
+import Simbolos.Ambito;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -69,8 +71,9 @@ public class DppAnalizador implements Runnable{
             parser.parse();
             // AQUI TENGO QUE BUSCAR LA RAIZ DEL ARBOL QUE FORME
             ArrayList<TError> errores = DppParser.errores;
-            if(errores.isEmpty())
+            if(errores.isEmpty() && DppParser.inicial!=null)
             {
+                DppParser.inicial.generateByteCode(new Ambito("Global", null, this.archivo));
                 return null;
             }
             else 

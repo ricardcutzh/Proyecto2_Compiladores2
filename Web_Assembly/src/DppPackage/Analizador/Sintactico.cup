@@ -7,7 +7,8 @@ import ObjsComun.*;
 import java.util.ArrayList;
 import ErrorManager.TError;
 import DppPackage.DppAST.Valores.*;
-
+import DppPackage.DppAST.Declaraciones.*;
+import DppPackage.DppAST.Importaciones.*;
 // --------------------------------> CODIGO DEL PARSER
 parser code
 {:
@@ -16,6 +17,8 @@ parser code
     public static ArrayList<TError> errores;
 
     public static ArrayList<String> expected;
+
+    public static DppASTTree inicial;
 
     public void syntax_error(Symbol s)
     {
@@ -81,11 +84,11 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 // ------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
-terminal entero, decimal, cadena, caracter, booleano, verdadero, falso;
+terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar;
 // ------> VALORES
-terminal numEntero, numDecimal, dataChar, identificador, dataString;
+terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
-non terminal Object EXP, E, TIPO, L_DECLARACION;
+non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR;
 // ------> PRECEDENCE
 precedence left or;
@@ -101,16 +104,50 @@ precedence left cParent;
 start with INICIO;
 /*                         REGLAS SEMANTICAS                               */
 /////////////////////////////////////////////////////////////////////////////
-INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>();:} DECLARACIONES
+INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} L_IMPORTAR DECLARACIONES
+           | {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} DECLARACIONES
+           ;
+/////////////////////////////////////////////////////////////////////////////
+L_IMPORTAR::= L_IMPORTAR importar:aux oParent dataString:ruta cParent ptComa
            {:
+                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta);
+                parser.inicial.addNodo(im);
+                RESULT = "";
+           :}
+           | importar:aux oParent dataString:ruta cParent ptComa
+           {:
+                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta);
+                parser.inicial.addNodo(im);
+                RESULT = "";
            :}
            ;
 /////////////////////////////////////////////////////////////////////////////
-DECLARACIONES::= DECLARACIONES DECLARACION_VAR
-            | DECLARACION_VAR
+DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACION_VAR:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
             ;
 /////////////////////////////////////////////////////////////////////////////
-DECLARACION_VAR::= TIPO L_DECLARACION ptComa
+DECLARACION_VAR::= TIPO:aux L_DECLARACION:lista ptComa
+                 {:
+                    String tipo = (String)aux;
+                    ArrayList<NodoIDValor> nodos = (ArrayList<NodoIDValor>)lista;
+                    if(nodos==null){nodos = new ArrayList<>();}
+                    DeclaracionVar d = new DeclaracionVar(auxright, auxleft, ArchivoOrigen, nodos,tipo);
+                    RESULT = d;
+                 :}
                  | TIPO error ptComa
                  {:
                     parser.expected.add("'identificador'");
@@ -119,16 +156,59 @@ DECLARACION_VAR::= TIPO L_DECLARACION ptComa
                  ;
 //---------------------------------------------------------------------------
 TIPO ::= entero
+       {:
+            RESULT = "ENTERO";
+       :}
        | decimal
+       {:
+            RESULT = "DECIMAL";
+       :}
        | cadena
+       {:
+            RESULT = "CADENA";
+       :}
        | caracter
+       {:
+            RESULT = "CARACTER";
+       :}
        | booleano
+       {:
+            RESULT = "BOOLEAN";
+       :}
        ;
 //---------------------------------------------------------------------------
-L_DECLARACION ::= L_DECLARACION coma identificador
-             | L_DECLARACION coma identificador asigna EXP
-             | identificador
-             | identificador asigna EXP
+L_DECLARACION ::= L_DECLARACION:lista coma identificador:id
+             {:
+                ArrayList<NodoIDValor> nodos = (ArrayList<NodoIDValor>)lista;
+                if(nodos==null){nodos = new ArrayList<>();}
+                NodoIDValor n = new NodoIDValor(id, null, idright, idleft, ArchivoOrigen);
+                nodos.add(n);
+                RESULT = nodos;
+             :}
+             | L_DECLARACION:lista coma identificador:id asigna EXP:nodo
+             {:
+                ArrayList<NodoIDValor> nodos = (ArrayList<NodoIDValor>)lista;
+                if(nodos==null){nodos = new ArrayList<>();}
+                Expresion exp = (Expresion)nodo;
+                NodoIDValor n = new NodoIDValor(id, exp, idright, idleft, ArchivoOrigen);
+                nodos.add(n);
+                RESULT = nodos;
+             :}
+             | identificador:id
+             {:
+                NodoIDValor n = new NodoIDValor(id, null, idright, idleft, ArchivoOrigen);
+                ArrayList<NodoIDValor> nodos = new ArrayList<>();
+                nodos.add(n);
+                RESULT = nodos;
+             :}
+             | identificador:id asigna EXP:nodo
+             {:
+                Expresion exp = (Expresion)nodo;
+                NodoIDValor n = new NodoIDValor(id, exp, idright, idleft, ArchivoOrigen);
+                ArrayList<NodoIDValor> nodos = new ArrayList<>();
+                nodos.add(n);
+                RESULT = nodos;
+             :}
              | identificador error ptComa
              {:
                 parser.expected.add("'= Expresion'");
@@ -283,25 +363,23 @@ E ::= E:val1 mas:aux E:val2
     | numEntero:val
     {:
         //
-        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, val);
-        RESULT = v;
-    :}
-    | decimal:val
-    {:
-        //
-        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, val);
+        int real = Integer.parseInt(val);
+        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, real);
         RESULT = v;
     :}
     | numDecimal:val
     {:
         //
-        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, val);
+        double real = Double.parseDouble(val);
+        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, real);
         RESULT = v;
     :}
     | dataChar:val
     {:
         //
-        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, val);
+
+        Character real = val.charAt(0);
+        ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, real);
         RESULT = v;
     :}
     | dataString:val
