@@ -63,19 +63,19 @@ public class Operacion extends NodoAST implements Expresion {
                 {
                     case NOT:
                     {
-                        
+                        break;
                     }
                     case MENOS:
                     {
-                        
+                        return TraduceNegativo(op1, codigo, ambito);
                     }
                     case INC:
                     {
-                        
+                        return TraduceAumento(op1, codigo, ambito);
                     }
                     case DEC:
                     {
-                        
+                        return TraduceDecremento(op1, codigo, ambito);
                     }
                 }
             }
@@ -561,5 +561,117 @@ public class Operacion extends NodoAST implements Expresion {
         return "";
     }
 
+    //*****************************************
+    //*                AUMENTO                *
+    //*****************************************
+    //*  ENTERO   |       1                   *
+    //*****************************************
+    //*  DECIMAL  |       5                   *
+    //*****************************************
+    private Object TraduceAumento(Expresion op1, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "1":
+                {
+                    resultado = "ENTERO";
+                    return t1+"\n1\nADD\n";
+                }
+                case "5":
+                {
+                    resultado = "DECIMAL";
+                    return t1+"\n1\nADD\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"++", "No es posible aumentar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error de Traducir un aumento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+        }
+        return "";
+    }
     
+    //*****************************************
+    //*                DECREMENTO             *
+    //*****************************************
+    //*  ENTERO   |       1                   *
+    //*****************************************
+    //*  DECIMAL  |       5                   *
+    //*****************************************
+    private Object TraduceDecremento(Expresion op1, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "1":
+                {
+                    resultado = "ENTERO";
+                    return t1+"\n1\nDIFF";
+                }
+                case "5":
+                {
+                    resultado = "DECIMAL";
+                    return t1+"\n1\nDIFF";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"--", "No es posible decrementar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al Traducir el Decremento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+        }
+        return "";
+    }
+    
+    //*****************************************
+    //*                NEGATIVO               *
+    //*****************************************
+    //*  ENTERO   |       1                   *
+    //*****************************************
+    //*  DECIMAL  |       5                   *
+    //*****************************************
+    private Object TraduceNegativo(Expresion op1, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "1":
+                {
+                    resultado = "ENTERO";
+                    return t1+"\n-1\nMULT\n";
+                }
+                case "2":
+                {
+                    resultado = "DECIMAL";
+                    return t1+"\n-1\nMULT\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError("-"+tipo1, "No es posible aplicar Negativo al tipo indicado", "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir el Negativo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+        }
+        return "";
+    }
 } 

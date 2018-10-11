@@ -103,6 +103,7 @@ public class IDE extends javax.swing.JFrame {
         opc1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IDE Web Assembly");
@@ -446,6 +447,15 @@ public class IDE extends javax.swing.JFrame {
         });
         HideTabs.add(jMenuItem4);
 
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/refresh-button.png"))); // NOI18N
+        jMenuItem5.setText("Refrescar Proyecto");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        HideTabs.add(jMenuItem5);
+
         jMenuBar1.add(HideTabs);
 
         setJMenuBar(jMenuBar1);
@@ -739,6 +749,17 @@ public class IDE extends javax.swing.JFrame {
         Estatico.quitarMarcas();
     }//GEN-LAST:event_ClearHighActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        try {
+            if(!this.directorioProyecto.equals(""))
+            {
+                this.ArbolArchivos.setModel(new FileSystemModel(new File(this.directorioProyecto)));
+            }
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -805,6 +826,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;

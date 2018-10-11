@@ -73,6 +73,7 @@ public class DppAnalizador implements Runnable{
             ArrayList<TError> errores = DppParser.errores;
             if(errores.isEmpty() && DppParser.inicial!=null)
             {
+                DppParser.inicial.setPathEscritura(this.PathProyecto);
                 DppParser.inicial.generateByteCode(new Ambito("Global", null, this.archivo));
                 return null;
             }

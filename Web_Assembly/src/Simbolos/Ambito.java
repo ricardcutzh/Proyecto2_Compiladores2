@@ -5,6 +5,7 @@
  */
 package Simbolos;
 
+import ObjsComun.Clave;
 import java.util.Map;
 
 /**
@@ -15,6 +16,7 @@ public class Ambito {
     String idAmbito;
     Ambito Anterior;
     TablaDeVariables tablaVars;
+    TablaFunciones tablaFunciones;
     String Archivo;
     
     /**
@@ -29,6 +31,7 @@ public class Ambito {
         this.Archivo = Archivo;
         this.Anterior = Anterior;
         this.tablaVars = new TablaDeVariables();
+        this.tablaFunciones = new TablaFunciones();
     }
     
     /**
@@ -117,4 +120,27 @@ public class Ambito {
             // AQUI IRIRA LO DE LOS ARREGLOS
         }
     }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * Metodo que comprueba si una funcion existe en el metodo indicado
+     * @param key clave a buscar en la tabla
+     * @return retorna verdadero o falso dependiendo si existe o no
+     */
+    public Boolean existeFuncion(Clave key)
+    {
+        return this.tablaFunciones.existeFuncionMetodo(key);
+    }
+    
+    /**
+     * Metodo que anande una nueva referencia a una funcion o metodo al ambito
+     * @param key clave del metodo o funcion
+     * @param fun  la referencia
+     */
+    public void agregarMetodoFuncion(Clave key, MetodoFuncion fun)
+    {
+        this.tablaFunciones.agregarMetodoFuncion(key, fun);
+    }
+    
+    
 }

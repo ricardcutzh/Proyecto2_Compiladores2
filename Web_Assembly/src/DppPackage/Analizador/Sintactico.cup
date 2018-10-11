@@ -85,11 +85,13 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar;
+terminal String principal, vacio;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR;
+non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -130,6 +132,33 @@ DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
                 }
                 RESULT = "";
             :}
+            | DECLARACIONES MAIN:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null)
+                {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACIONES METODOS:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null)
+                {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACIONES FUNCIONES:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null)
+                {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
             | DECLARACION_VAR:nodo
             {:
                 NodoAST n = (NodoAST)nodo;
@@ -138,7 +167,106 @@ DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
                 }
                 RESULT = "";
             :}
+            | MAIN:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | METODOS:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | FUNCIONES:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
             ;
+/////////////////////////////////////////////////////////////////////////////
+PARAMETROS ::= PARAMETROS:lista coma TIPO:tipo identificador:id
+            {:
+                ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
+                if(p==null){p = new ArrayList<>();}
+                String t = (String)tipo;
+                NodoParametro n = new NodoParametro(id, t, false);
+                p.add(n);
+                RESULT = p;
+            :}
+            | TIPO:tipo identificador:id
+            {:
+                ArrayList<NodoParametro> p = new ArrayList<>();
+                String t = (String)tipo;
+                NodoParametro n = new NodoParametro(id, t, false);
+                p.add(n);
+                RESULT = p;
+            :}
+            ;
+/////////////////////////////////////////////////////////////////////////////
+MAIN ::= vacio principal:aux oParent cParent oKey cKey
+      {:
+            ArrayList<Object> s = new ArrayList<>();
+            DeclaracionMain m = new DeclaracionMain(auxright, auxleft, ArchivoOrigen,s);
+            RESULT = m;
+      :}
+      | vacio principal error cKey
+      {:
+            parser.expected.add("'('");
+      :}
+      ;
+/////////////////////////////////////////////////////////////////////////////
+METODOS ::= vacio identificador:id oParent cParent oKey cKey
+        {:
+            ArrayList<Object> s = new ArrayList<>();
+            ArrayList<NodoParametro> p = new ArrayList<>();
+            DeclaracionMetodo m = new DeclaracionMetodo(idright, idleft, ArchivoOrigen, id, p, s);
+            RESULT = m;
+        :}
+        | vacio identificador:id oParent PARAMETROS:lista cParent oKey cKey
+        {:
+            ArrayList<Object> s = new ArrayList<>();
+            ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
+            DeclaracionMetodo m = new DeclaracionMetodo(idright, idleft, ArchivoOrigen, id, p, s);
+            RESULT = m;
+        :}
+        | vacio identificador error cKey
+        {:
+            parser.expected.add("'('");
+            parser.expected.add("'( PARAMETROS )'");
+        :}
+        ;
+/////////////////////////////////////////////////////////////////////////////
+FUNCIONES ::= TIPO:tipo identificador:id oParent cParent oKey cKey
+        {:
+            String t = (String)tipo;
+            ArrayList<Object> s = new ArrayList<>();
+            ArrayList<NodoParametro> p = new ArrayList<>();
+            DeclaracionFuncion f = new DeclaracionFuncion(idright, idleft, ArchivoOrigen, t, id, p, s);
+            RESULT = f;
+        :}
+        | TIPO:tipo identificador:id oParent PARAMETROS:lista cParent oKey cKey
+        {:
+            String t = (String)tipo;
+            ArrayList<Object> s = new ArrayList<>();
+            ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
+            DeclaracionFuncion f = new DeclaracionFuncion(idright, idleft, ArchivoOrigen, t, id, p, s);
+            RESULT = f;
+        :}
+        | TIPO identificador error cKey
+        {:
+            parser.expected.add("'()'");
+            parser.expected.add("'(PARAMETROS)'");
+        :}
+        ;
 /////////////////////////////////////////////////////////////////////////////
 DECLARACION_VAR::= TIPO:aux L_DECLARACION:lista ptComa
                  {:
@@ -174,6 +302,10 @@ TIPO ::= entero
        | booleano
        {:
             RESULT = "BOOLEAN";
+       :}
+       | identificador:id
+       {:
+            RESULT = id.toUpperCase();
        :}
        ;
 //---------------------------------------------------------------------------

@@ -39,16 +39,32 @@ public class DeclaracionVar extends NodoAST {
         {
             for(NodoIDValor n : this.declaraciones)
             {
-                Expresion aux = (Expresion)n.getValor(); // OBTENGO EL TIPO DE LA EXPRESION DE LA DECLARACION
-                if(aux!=null) // SI EXISTE CODIGO DE LA EXPRESION
+                String id = n.getIdentificador();
+                if(!ambito.existeVariable(id))
                 {
-                    NodoAST nodo = (NodoAST)aux;
-                    String expCode = (String)nodo.generateByteCode(ambito);
-                    System.out.print(expCode); // para mientras....
+                    Expresion aux = n.getValor();
+                    if(aux!=null)
+                    {
+                        // SI SI CONTIENE UNA EXPRESION
+                        String expCode = (String)n.generateByteCode(ambito); // CODIGO GENERADO DE LA EXPRESION
+                        String tipovar = aux.getTipo(ambito); // TIPO RESULTANTE
+                        if(this.tipo.equals("CADENA")) // SI EL TIPO ESPERADO ES UNA CADENA...
+                        {
+                            
+                        }
+                        else // SI FUESE OTRO....
+                        {
+                            
+                        }
+                    }
+                    else
+                    {
+                        // ASIGNACION POR DEFECTO
+                    }
                 }
-                else // EN CASO QUE NO EXISTA SE ASIGNA UN VALOR POR DEFECTO
+                else
                 {
-                    System.out.println("AUN SIN IMPLEMENTACION");
+                    InfoEstatica.Estatico.agregarError(new TError("Simbolo: "+n.getIdentificador(), "Ya existe una definicion del Simbolo en este Ambito", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, ambito.getArchivo()));
                 }
             }
         } catch (Exception e) 
