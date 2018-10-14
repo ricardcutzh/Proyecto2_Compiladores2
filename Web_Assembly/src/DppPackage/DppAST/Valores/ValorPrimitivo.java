@@ -59,7 +59,7 @@ public class ValorPrimitivo extends NodoAST implements Expresion{
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }

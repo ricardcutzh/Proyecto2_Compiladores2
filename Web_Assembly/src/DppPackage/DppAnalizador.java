@@ -5,6 +5,7 @@
  */
 package DppPackage;
 
+import Abstraccion.NodoAST;
 import DppPackage.Analizador.DPPLex;
 import DppPackage.Analizador.DppParser;
 import DppPackage.DppAST.Declaraciones.DppASTTree;
@@ -12,6 +13,7 @@ import ErrorManager.TError;
 import Simbolos.Ambito;
 import java.io.StringReader;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * Clase que maneja el Analisis de el Lenguaje D++
@@ -67,15 +69,14 @@ public class DppAnalizador implements Runnable{
             DppPackage.Analizador.DPPLex lex = new DPPLex(new StringReader(cadena));
             lex.setNombreArchivo(archivo);
             DppParser.ArchivoOrigen = archivo;
+            DppParser.PathProyecto = PathProyecto;
             DppParser parser = new DppParser(lex);
             parser.parse();
             // AQUI TENGO QUE BUSCAR LA RAIZ DEL ARBOL QUE FORME
             ArrayList<TError> errores = DppParser.errores;
             if(errores.isEmpty() && DppParser.inicial!=null)
             {
-                DppParser.inicial.setPathEscritura(this.PathProyecto);
-                DppParser.inicial.generateByteCode(new Ambito("Global", null, this.archivo));
-                return null;
+                return DppParser.inicial;// RETORNA EL NODO
             }
             else 
             {
@@ -83,7 +84,6 @@ public class DppAnalizador implements Runnable{
                 {
                     InfoEstatica.Estatico.errores.add(err);
                 }
-                InfoEstatica.Estatico.ActualizarTablaDeErrores();
                 return null;
             }
         } catch (Exception e) {
@@ -98,9 +98,19 @@ public class DppAnalizador implements Runnable{
     @Override
     public void run() {
         try {
-            Object r = getRootFromImport();
-            /*DESPUES TENDRIA QUE PREGUNTAR SI EL ANALISIS FUE NULO ENTONCES.....*/
+            Object r = getRootFromImport();  
+            if(InfoEstatica.Estatico.errores.size()>0)
+            {
+                InfoEstatica.Estatico.ActualizarTablaDeErrores();
+            }
+            else if(r!=null)
+            {
+                DppASTTree aux = (DppASTTree)r;
+                aux.setPathEscritura(PathProyecto);
+                aux.generateByteCode(new Ambito("Global", null, archivo));
+            }
         } catch (Exception e) {
+            
         }
     }
     

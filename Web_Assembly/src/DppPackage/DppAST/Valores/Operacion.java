@@ -105,7 +105,7 @@ public class Operacion extends NodoAST implements Expresion {
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al Traducir Operacion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al Traducir Operacion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -249,12 +249,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"+"+tipo2, "Error La suma entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"+"+tipo2, "Error La suma entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al realizar la suma: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al realizar la suma: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -348,12 +348,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"-"+tipo2, "Error La resta entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"-"+tipo2, "Error La resta entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al realizar la resta: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al realizar la resta: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -452,12 +452,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"*"+tipo2, "Error La Multiplicacion entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"*"+tipo2, "Error La Multiplicacion entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar la multiplicacion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar la multiplicacion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -551,12 +551,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"/"+tipo2, "Error La Divison entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"/"+tipo2, "Error La Divison entre tipos indicados no es compatible", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Erro al ejecutar la division: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Erro al ejecutar la division: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -589,12 +589,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"++", "No es posible aumentar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"++", "No es posible aumentar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error de Traducir un aumento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error de Traducir un aumento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -627,12 +627,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"--", "No es posible decrementar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"--", "No es posible decrementar el tipo indicado", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al Traducir el Decremento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al Traducir el Decremento: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }
@@ -665,12 +665,12 @@ public class Operacion extends NodoAST implements Expresion {
                 }
                 default:
                 {
-                    InfoEstatica.Estatico.agregarError(new TError("-"+tipo1, "No es posible aplicar Negativo al tipo indicado", "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                    InfoEstatica.Estatico.agregarError(new TError("-"+tipo1, "No es posible aplicar Negativo al tipo indicado", "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
                 }
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir el Negativo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir el Negativo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }

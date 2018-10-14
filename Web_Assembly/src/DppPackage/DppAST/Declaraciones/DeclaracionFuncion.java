@@ -43,32 +43,18 @@ public class DeclaracionFuncion extends NodoAST{
     public Object generateByteCode(Ambito ambito) {
         try 
         {
-            String cad = "";
             Clave key = new Clave(id, parametros);
             if(!ambito.existeFuncion(key))
             {
-                //ambito.agregarMetodoFuncion(key, new MetodoFuncion(id, Boolean.FALSE, tipo));
-                cad += "\n/* CODIGO DE FUNCION: "+id+"*/\n";
-                cad += "Function $"+key.toString()+"\n";
-                for(Object o : this.sentencias)
-                {
-                    if(o instanceof NodoAST)
-                    {
-                        NodoAST aux = (NodoAST)o;
-                        cad += (String)aux.generateByteCode(new Ambito("Local", ambito, ambito.getArchivo()));
-                    }
-                }
-                cad +="\nEnd\n\n";
-                ambito.agregarMetodoFuncion(key, new MetodoFuncion(id, Boolean.FALSE, tipo, 0)); // FALTA DE SABER EL SIZE DEL METODO
-                return cad;
+                ambito.agregarMetodoFuncion(key, new MetodoFuncion(super.getLinea(), super.getColumna(), super.getArchivo(), id, tipo, parametros, sentencias));// GUARDO LA FUNCION
             }
             else
             {
-                InfoEstatica.Estatico.agregarError(new TError("Funcion: "+id, "Ya existe una definicion de una funcion: "+id+" que recibe la mismca cantidad de parametros", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, ambito.getArchivo()));
+                InfoEstatica.Estatico.agregarError(new TError("Funcion: "+id, "Ya existe una definicion de una funcion: "+id+" que recibe la mismca cantidad de parametros", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error en la traduccion de Funcion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(),false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error en la traduccion de Funcion: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(),false, super.getArchivo()));
         }
         return "";
     }

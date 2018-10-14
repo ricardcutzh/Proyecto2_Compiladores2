@@ -6,6 +6,7 @@
 package Simbolos;
 
 import ObjsComun.Clave;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ public class Ambito {
     TablaDeVariables tablaVars;
     TablaFunciones tablaFunciones;
     String Archivo;
-    
+    int tamanio;
     /**
      * Constructode del Ambito nuevo
      * @param idAmbito Nombre que se le dara al Ambito
@@ -32,6 +33,7 @@ public class Ambito {
         this.Anterior = Anterior;
         this.tablaVars = new TablaDeVariables();
         this.tablaFunciones = new TablaFunciones();
+        this.tamanio = 0;
     }
     
     /**
@@ -86,6 +88,25 @@ public class Ambito {
     public void AgregarVariable(String id, Simbolo sim)
     {
         this.tablaVars.agregarVariabe(id, sim);
+    }
+    /**
+     * ME VA A SERVIR PARA LLEVAR EL CONTROL DE LOS SIMBOLOS EXISTENTES EN EL AMBITO 
+     * @param id
+     * @param sim 
+     */
+    public void addDppSimbol(String id, Simbolo sim)
+    {
+        this.tablaVars.agregarVariabe(id, sim);
+        this.tamanio++;
+    }
+    
+    /**
+     * Getter del tamanio del  Ambito
+     * @return 
+     */
+    public int getSize()
+    {
+        return this.tamanio;
     }
     
     /**
@@ -142,5 +163,9 @@ public class Ambito {
         this.tablaFunciones.agregarMetodoFuncion(key, fun);
     }
     
-    
+    //METODO QUE ME DEVUELVE EL HASH PARA REALIZAR LA TRADUCCION
+    public HashMap<Clave, MetodoFuncion> getTablaFunciones()
+    {
+        return this.tablaFunciones.funciones;
+    }
 }

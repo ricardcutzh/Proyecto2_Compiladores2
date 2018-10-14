@@ -53,7 +53,8 @@ public class SentenciaWhile extends NodoAST implements Instruccion{
                             NodoAST aux = (NodoAST)ins;
                             if(InfoEstatica.Estatico.esLinea)
                             {
-                                InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                //InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                InfoEstatica.Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                 InfoEstatica.Estatico.suspended = true;
                                 InfoEstatica.Estatico.hilo.suspend();
                             }
@@ -62,7 +63,8 @@ public class SentenciaWhile extends NodoAST implements Instruccion{
                                 String key = aux.getLinea() + "_" + aux.getArchivo();
                                 if (InfoEstatica.Estatico.breakPoints.containsKey(key))
                                 {
-                                    InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                    //InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                    InfoEstatica.Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                     InfoEstatica.Estatico.suspended = true;
                                     InfoEstatica.Estatico.hilo.suspend();
                                 }
@@ -80,7 +82,8 @@ public class SentenciaWhile extends NodoAST implements Instruccion{
                     val = (Boolean)comprobacion;
                     if(InfoEstatica.Estatico.esLinea)
                     {
-                        InfoEstatica.Estatico.MarcaLinea(super.getLinea());
+                        //InfoEstatica.Estatico.MarcaLinea(super.getLinea());
+                        InfoEstatica.Estatico.MarcarLineaArchivo(ambito.getArchivo(), super.getLinea());
                         InfoEstatica.Estatico.suspended = true;
                         InfoEstatica.Estatico.hilo.suspend();
                     }

@@ -44,7 +44,7 @@ public class IDE extends javax.swing.JFrame {
         ActivaLasOpciones(false);
         
         //INICIALIZO TODO 
-        Estatico.setUp(this.Consola, this.TablaError, null);
+        Estatico.setUp(this.Consola, this.TablaError, this.SimbolTable);
         Estatico.colocaTablaBreaks(TablaBreaks);
     }
 
@@ -89,8 +89,10 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Consola = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
+        SimbolTable = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
         TablaBreaks = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
@@ -329,6 +331,25 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane2.setViewportView(Consola);
 
         jTabbedPane1.addTab("Consola", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/terminal.png")), jScrollPane2); // NOI18N
+
+        SimbolTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Ambito", "Nombre", "Tipo", "Linea", "Columna", "Tamano", "Es Arreglo", "Rol"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(SimbolTable);
+
         jTabbedPane1.addTab("Tabla de Simbolos", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/table-grid.png")), jScrollPane3); // NOI18N
 
         TablaBreaks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -352,6 +373,7 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane5.setViewportView(TablaBreaks);
 
         jTabbedPane1.addTab("BreakPoints", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/break.png")), jScrollPane5); // NOI18N
+        jTabbedPane1.addTab("Dasm", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/dasm.png")), jScrollPane6); // NOI18N
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("File Explorer"));
 
@@ -575,6 +597,16 @@ public class IDE extends javax.swing.JFrame {
 
     private void BotonGuardarActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActualActionPerformed
         // TODO add your handling code here:
+        for(int x = 0; x < this.EditorTab.getTabCount(); x++)
+        {
+            Object o = EditorTab.getComponentAt(x);
+            if(o instanceof WebAssEditor)
+            {
+                WebAssEditor aux = (WebAssEditor)o;
+                aux.saveFile();
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Todos los archivos fueron guardados", "Guardado", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_BotonGuardarActualActionPerformed
 
     private void BotonCerrarActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCerrarActualActionPerformed
@@ -590,7 +622,8 @@ public class IDE extends javax.swing.JFrame {
 
     private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRunActionPerformed
         // TODO add your handling code here:
-        Estatico.setUp(Consola, TablaError, TablaError);
+        Estatico.Pestanas = EditorTab; // REFERENCIA A LAS PESTANAS
+        Estatico.setUp(Consola, TablaError, SimbolTable);
         Estatico.mod = Estatico.MODALIDAD.RUN_MODE;
         if(EditorTab.getTabCount() > 0)
         {
@@ -610,7 +643,8 @@ public class IDE extends javax.swing.JFrame {
 
     private void BotonDebugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDebugActionPerformed
         // TODO add your handling code here:
-        Estatico.setUp(Consola, TablaError, TablaError);
+        Estatico.Pestanas = EditorTab;//REFERENCIA A LAS PESTANAS
+        Estatico.setUp(Consola, TablaError, SimbolTable);
         Estatico.mod = Estatico.MODALIDAD.DEBUGG_MODE;
         if(EditorTab.getTabCount() > 0)
         {
@@ -746,7 +780,8 @@ public class IDE extends javax.swing.JFrame {
 
     private void ClearHighActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearHighActionPerformed
         // TODO add your handling code here:
-        Estatico.quitarMarcas();
+        //Estatico.quitarMarcas();
+        Estatico.desmarcarTodo();
     }//GEN-LAST:event_ClearHighActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -812,6 +847,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenu HideTabs;
     private javax.swing.JButton NextBreakPoint;
     private javax.swing.JButton NextLine;
+    private javax.swing.JTable SimbolTable;
     private javax.swing.JButton StopDebugger;
     private javax.swing.JTable TablaBreaks;
     private javax.swing.JTable TablaError;
@@ -835,6 +871,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;

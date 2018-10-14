@@ -9,10 +9,13 @@ import ErrorManager.TError;
 import DppPackage.DppAST.Valores.*;
 import DppPackage.DppAST.Declaraciones.*;
 import DppPackage.DppAST.Importaciones.*;
+import DppPackage.DppAST.Sentencias.*;
 // --------------------------------> CODIGO DEL PARSER
 parser code
 {:
     public static String ArchivoOrigen;
+
+    public static String PathProyecto;
 
     public static ArrayList<TError> errores;
 
@@ -72,10 +75,16 @@ action code
 {:
     String ArchivoOrigen;
 
+    String PathProyecto;
 
     public void SetArchivo(String nombre)
     {
         ArchivoOrigen = nombre;
+    }
+
+    public void SetPathProyecto(String path)
+    {
+        PathProyecto = path;
     }
 :}
 // -----------------------------------------------> CODIGO DE DECLARACIONES
@@ -91,7 +100,7 @@ terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR;
-non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS;
+non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -106,20 +115,40 @@ precedence left cParent;
 start with INICIO;
 /*                         REGLAS SEMANTICAS                               */
 /////////////////////////////////////////////////////////////////////////////
-INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} L_IMPORTAR DECLARACIONES
-           | {: this.ArchivoOrigen = parser.ArchivoOrigen; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} DECLARACIONES
+INICIO ::= {: this.ArchivoOrigen = parser.ArchivoOrigen; this.PathProyecto = parser.PathProyecto; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} L_IMPORTAR DECLARACIONES
+           | {: this.ArchivoOrigen = parser.ArchivoOrigen; this.PathProyecto = parser.PathProyecto; parser.errores = new ArrayList<>(); parser.expected = new ArrayList<>(); parser.inicial = new DppASTTree(0,0, ArchivoOrigen);:} DECLARACIONES
            ;
 /////////////////////////////////////////////////////////////////////////////
 L_IMPORTAR::= L_IMPORTAR importar:aux oParent dataString:ruta cParent ptComa
            {:
-                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta);
-                parser.inicial.addNodo(im);
+                DppASTTree temporal = parser.inicial;
+                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta, PathProyecto);
+                Object temp = im.generateByteCode(null);
+                if(temp!=null)
+                {
+                    DppASTTree t = (DppASTTree)temp;
+                    for(NodoAST n : t.nodos)
+                    {
+                        temporal.addNodo(n);
+                    }
+                }
+                parser.inicial = temporal;
                 RESULT = "";
            :}
            | importar:aux oParent dataString:ruta cParent ptComa
            {:
-                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta);
-                parser.inicial.addNodo(im);
+                DppASTTree temporal = parser.inicial;
+                Importacion im = new Importacion(auxright, auxleft, ArchivoOrigen,(String)ruta, PathProyecto);
+                Object temp = im.generateByteCode(null);
+                if(temp!=null)
+                {
+                    DppASTTree t = (DppASTTree)temp;
+                    for(NodoAST n : t.nodos)
+                    {
+                        temporal.addNodo(n);
+                    }
+                }
+                parser.inicial = temporal;
                 RESULT = "";
            :}
            ;
@@ -193,6 +222,44 @@ DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
             :}
             ;
 /////////////////////////////////////////////////////////////////////////////
+SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista ASIGNACION_VAR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | DECLARACION_VAR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | ASIGNACION_VAR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          ;
+/////////////////////////////////////////////////////////////////////////////
 PARAMETROS ::= PARAMETROS:lista coma TIPO:tipo identificador:id
             {:
                 ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
@@ -218,6 +285,13 @@ MAIN ::= vacio principal:aux oParent cParent oKey cKey
             DeclaracionMain m = new DeclaracionMain(auxright, auxleft, ArchivoOrigen,s);
             RESULT = m;
       :}
+      | vacio principal:aux oParent cParent oKey SENTENCIAS:lista cKey
+      {:
+            ArrayList<Object> s = (ArrayList<Object>)lista;
+            if(s==null) {s = new ArrayList<>();}
+            DeclaracionMain m = new DeclaracionMain(auxright, auxleft, ArchivoOrigen,s);
+            RESULT = m;
+      :}
       | vacio principal error cKey
       {:
             parser.expected.add("'('");
@@ -235,6 +309,23 @@ METODOS ::= vacio identificador:id oParent cParent oKey cKey
         {:
             ArrayList<Object> s = new ArrayList<>();
             ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
+            DeclaracionMetodo m = new DeclaracionMetodo(idright, idleft, ArchivoOrigen, id, p, s);
+            RESULT = m;
+        :}
+        | vacio identificador:id oParent cParent oKey SENTENCIAS:lista cKey
+        {:
+            ArrayList<Object> s = (ArrayList<Object>)lista;
+            if(s==null) { s = new ArrayList<>();}
+            ArrayList<NodoParametro> p = new ArrayList<>();
+            DeclaracionMetodo m = new DeclaracionMetodo(idright, idleft, ArchivoOrigen, id, p, s);
+            RESULT = m;
+        :}
+        | vacio identificador:id oParent PARAMETROS:lista2 cParent oKey SENTENCIAS:lista cKey
+        {:
+            ArrayList<Object> s = (ArrayList<Object>)lista;
+            if(s==null) { s = new ArrayList<>();}
+            ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista2;
+            if(p==null){p = new ArrayList<>();}
             DeclaracionMetodo m = new DeclaracionMetodo(idright, idleft, ArchivoOrigen, id, p, s);
             RESULT = m;
         :}
@@ -258,6 +349,25 @@ FUNCIONES ::= TIPO:tipo identificador:id oParent cParent oKey cKey
             String t = (String)tipo;
             ArrayList<Object> s = new ArrayList<>();
             ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista;
+            DeclaracionFuncion f = new DeclaracionFuncion(idright, idleft, ArchivoOrigen, t, id, p, s);
+            RESULT = f;
+        :}
+        | TIPO:tipo identificador:id oParent cParent oKey SENTENCIAS:lista cKey
+        {:
+            String t = (String)tipo;
+            ArrayList<Object> s = (ArrayList<Object>)lista;
+            if(s==null){s = new ArrayList<>();}
+            ArrayList<NodoParametro> p = new ArrayList<>();
+            DeclaracionFuncion f = new DeclaracionFuncion(idright, idleft, ArchivoOrigen, t, id, p, s);
+            RESULT = f;
+        :}
+        | TIPO:tipo identificador:id oParent PARAMETROS:lista2 cParent oKey SENTENCIAS:lista cKey
+        {:
+            String t = (String)tipo;
+            ArrayList<Object> s = (ArrayList<Object>)lista;
+            if(s==null){s = new ArrayList<>();}
+            ArrayList<NodoParametro> p = (ArrayList<NodoParametro>)lista2;
+            if(p==null){p = new ArrayList<>();}
             DeclaracionFuncion f = new DeclaracionFuncion(idright, idleft, ArchivoOrigen, t, id, p, s);
             RESULT = f;
         :}
@@ -348,6 +458,18 @@ L_DECLARACION ::= L_DECLARACION:lista coma identificador:id
                 parser.expected.add("','");
              :}
              ;
+//////////////////////////////////////////////////////////////////////////////
+ASIGNACION_VAR ::= identificador:id asigna EXP:exp ptComa
+                {:
+                    Expresion e = (Expresion)exp;
+                    AsignacionVar a = new AsignacionVar(idright, idleft, ArchivoOrigen, e, id);
+                    RESULT = a;
+                :}
+                | identificador asigna error ptComa
+                {:
+                    parser.expected.add("'= Expresion'");
+                :}
+                ;
 //////////////////////////////////////////////////////////////////////////////
 EXP ::= E:e
       {:
@@ -531,5 +653,10 @@ E ::= E:val1 mas:aux E:val2
         //
         ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, false);
         RESULT = v;
+    :}
+    | identificador:id
+    {:
+        Identificador i = new Identificador(idright, idleft, ArchivoOrigen, id);
+        RESULT = i;
     :}
     ;

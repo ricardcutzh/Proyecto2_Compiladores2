@@ -44,28 +44,15 @@ public class DeclaracionMetodo extends NodoAST{
             Clave key = new Clave(id, parametros);
             if(!ambito.existeFuncion(key))
             {
-                //ambito.agregarMetodoFuncion(key, new MetodoFuncion(id, false, "vacio"));
-                cad += "\n/* CODIGO DE METODO: "+id+"*/\n";
-                cad += "Function $"+key.toString()+"\n";
-                for(Object o : sentencias)
-                {
-                    if(o instanceof NodoAST)
-                    {
-                        NodoAST aux = (NodoAST)o;
-                        cad += (String)aux.generateByteCode(new Ambito("Local", ambito, ambito.getArchivo()));
-                    }
-                }
-                cad +="\nEnd\n\n";
-                ambito.agregarMetodoFuncion(key, new MetodoFuncion(id, Boolean.FALSE, "VACIO", 0)); // FALTA DE SABER EL SIZE DEL METODO
-                return cad;
+               ambito.agregarMetodoFuncion(key, new MetodoFuncion(super.getLinea(), super.getColumna(), super.getArchivo(), id, "VACIO", parametros, sentencias));// GUARDO LA FUNCION
             }
             else
             {
-                InfoEstatica.Estatico.agregarError(new TError("Metodo: "+id, "Ya existe la definicion de un metodo: "+id+" que recibe la misma cantidad y tipo de parametros", "Semantico", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+                InfoEstatica.Estatico.agregarError(new TError("Metodo: "+id, "Ya existe la definicion de un metodo: "+id+" que recibe la misma cantidad y tipo de parametros", "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
             }
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir un metodo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), true, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir un metodo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), true, super.getArchivo()));
         }
         return "";
     }

@@ -39,7 +39,8 @@ public class NodoInicio implements Instruccion{
                 {
                     if(Estatico.esLinea)
                     {
-                        Estatico.MarcaLinea(aux.getLinea());
+                        //Estatico.MarcaLinea(aux.getLinea());
+                        Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                         Estatico.suspended = true;
                         Estatico.hilo.suspend();
                     }
@@ -48,7 +49,8 @@ public class NodoInicio implements Instruccion{
                         String key = aux.getLinea() + "_" +aux.getArchivo();
                         if(Estatico.breakPoints.containsKey(key))
                         {
-                            Estatico.MarcaLinea(aux.getLinea());
+                            //Estatico.MarcaLinea(aux.getLinea());
+                            Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                             Estatico.suspended = true;
                             Estatico.hilo.suspend();
                         }

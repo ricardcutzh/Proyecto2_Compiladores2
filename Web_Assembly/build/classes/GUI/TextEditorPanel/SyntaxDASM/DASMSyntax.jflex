@@ -220,6 +220,7 @@ Identifier            = (\${IdentifierStart}{IdentifierPart}*)
 
    /* Functions */
    "ADD"|
+   "MULT"|
    "DIFF"|
    "MOD"|
    "LT"|

@@ -8,6 +8,7 @@ package InfoEstatica;
 import java.util.ArrayList;
 import ErrorManager.TError;
 import GUI.NavegorWeb.Interfaz.Navegador;
+import GUI.TextEditorPanel.WebAssEditor;
 import ObjsComun.BreakPointNode;
 import ObjsComun.NodoIDValor;
 import java.awt.Color;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
@@ -53,6 +55,10 @@ public class Estatico {
     ////////////////////////////////////////////////////////////////////////////
     public static Navegador navegador;
     ////////////////////////////////////////////////////////////////////////////
+    public static JTabbedPane Pestanas;
+    public static ArrayList<Character> tabs;
+
+    ////////////////////////////////////////////////////////////////////////////
     public static void setUp(JTextArea consola, JTable tablaErrores, JTable tablaSimbolo) {
         errores = new ArrayList<>();
         console = consola;
@@ -65,6 +71,7 @@ public class Estatico {
         pilaCiclos = new Stack<>();
         pilaCiclos.push(false);
         resetTablas();
+        tabs = new ArrayList<>();
     }
 
     public static void colocaTablaBreaks(JTable Tabla) {
@@ -113,10 +120,28 @@ public class Estatico {
             rowData[4] = error.getColumna();
             rowData[5] = error.getArchivo();
             model.addRow(rowData);
-            MarcarError(error.getLinea());
+            //MarcarError(error.getLinea());
+            MarcarErrorArchivo(error.getArchivo(), error.getLinea());
         } catch (Exception e) {
         }
 
+    }
+
+    public static void AgregarTablaSimbolos(Simbolos.SimboloTabla sim) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) tablaSimbolos.getModel();
+            Object rowData[] = new Object[8];
+            rowData[0] = sim.getAmbito();
+            rowData[1] = sim.getIdSimbolo();
+            rowData[2] = sim.getTipo();
+            rowData[3] = sim.getLinea() + 1;
+            rowData[4] = sim.getColumna();
+            rowData[5] = sim.getTamanio();
+            rowData[6] = sim.getEsVector() ? "Si" : "No";
+            rowData[7] = sim.getRol();
+            model.addRow(rowData);
+        } catch (Exception e) {
+        }
     }
 
     public static void agregarBreakPoint(String archivo, int linea) {
@@ -165,6 +190,20 @@ public class Estatico {
                 return canEdit[columnIndex];
             }
         });
+        tablaSimbolos.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Ambito", "Nombre", "Tipo", "Linea", "Columna", "Tamano", "Es Arreglo", "Rol"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
     }
 
     public static void ImprimeEnConsola(String mensaje) {
@@ -183,7 +222,8 @@ public class Estatico {
                 rowData[4] = e.getColumna();
                 rowData[5] = e.getArchivo();
                 model.addRow(rowData);
-                MarcarError(e.getLinea());
+                //MarcarError(e.getLinea());
+                MarcarErrorArchivo(e.getArchivo(), e.getLinea());
             }
         } catch (Exception e) {
 
@@ -204,18 +244,16 @@ public class Estatico {
             }
         }
     }
-    
-    public static void MarcarError(int linea)
-    {
-        if(punteroText!=null)
-        {
+
+    public static void MarcarError(int linea) {
+        if (punteroText != null) {
             Highlighter h = punteroText.getHighlighter();
             try {
                 int inicio = punteroText.getLineStartOffset(linea);
                 int fin = punteroText.getLineEndOffset(linea);
                 h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.MAGENTA));
             } catch (Exception e) {
-                
+
             }
         }
     }
@@ -225,5 +263,83 @@ public class Estatico {
             Highlighter h = punteroText.getHighlighter();
             h.removeAllHighlights();
         }
+    }
+
+    public static void MarcarErrorArchivo(String archivo, int linea) {
+        if (Pestanas.getTabCount() > 0) {
+            for (int x = 0; x < Pestanas.getTabCount(); x++) {
+                Object o = Pestanas.getComponentAt(x);
+                if (o instanceof WebAssEditor) {
+                    if (((WebAssEditor) o).getFileName().equals(archivo)) {
+                        RSyntaxTextArea aux = ((WebAssEditor) o).areaEdicion;
+                        RSyntaxTextArea temp = punteroText;
+                        punteroText = aux;
+                        MarcarError(linea);
+                        punteroText = temp;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void MarcarLineaArchivo(String archivo, int linea) {
+        if (Pestanas.getTabCount() > 0) {
+            for (int x = 0; x < Pestanas.getTabCount(); x++) {
+                Object o = Pestanas.getComponentAt(x);
+                if (o instanceof WebAssEditor) {
+                    if (((WebAssEditor) o).getFileName().equals(archivo)) {
+                        RSyntaxTextArea aux = ((WebAssEditor) o).areaEdicion;
+                        RSyntaxTextArea temp = punteroText;
+                        punteroText = aux;
+                        Pestanas.setSelectedIndex(x);
+                        MarcaLinea(linea);
+                        punteroText = temp;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void desmarcarTodo() {
+        if (Pestanas.getTabCount() > 0) {
+            for (int x = 0; x < Pestanas.getTabCount(); x++) {
+                Object o = Pestanas.getComponentAt(x);
+                if (o instanceof WebAssEditor) {
+                    RSyntaxTextArea aux = ((WebAssEditor) o).areaEdicion;
+                    RSyntaxTextArea temp = punteroText;
+                    punteroText = aux;
+                    quitarMarcas();
+                    punteroText = temp;
+                }
+            }
+        }
+    }
+
+    public static void tabula() {
+        tabs.add('r');
+    }
+
+    public static void destabula() {
+        if (!tabs.isEmpty()) {
+            tabs.remove(0);
+        }
+    }
+
+    public static String aplicaTabulaciones(String original) {
+        String aux = "";
+        for (short x = 0; x < tabs.size(); x++) {
+            aux += "\t";
+        }
+        String salida = "";
+        String lineas[] = original.split("\n");
+        for (String l : lineas) {
+            if(!l.equals("") || !l.equals(" "))
+            {
+                salida += aux + l +"\n";
+            }
+        }
+        return salida;
     }
 }

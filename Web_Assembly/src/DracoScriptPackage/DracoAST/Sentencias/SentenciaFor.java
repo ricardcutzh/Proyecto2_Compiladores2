@@ -7,6 +7,7 @@ package DracoScriptPackage.DracoAST.Sentencias;
 import Abstraccion.*;
 import DracoScriptPackage.DracoAST.Declaraciones.DeclaracionesVar;
 import ErrorManager.TError;
+import InfoEstatica.Estatico;
 import ObjsComun.Nulo;
 import ObjsComun.Romper;
 import Simbolos.Ambito;
@@ -71,7 +72,8 @@ public class SentenciaFor extends NodoAST implements Instruccion{
                             NodoAST aux = (NodoAST)ins;
                             if(InfoEstatica.Estatico.esLinea)
                             {
-                                InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                //InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                 InfoEstatica.Estatico.suspended = true;
                                 InfoEstatica.Estatico.hilo.suspend();
                             }
@@ -80,7 +82,8 @@ public class SentenciaFor extends NodoAST implements Instruccion{
                                 String key = aux.getLinea() + "_" + aux.getArchivo();
                                 if(InfoEstatica.Estatico.breakPoints.containsKey(key))
                                 {
-                                    InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                    //InfoEstatica.Estatico.MarcaLinea(aux.getLinea());
+                                    Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                     InfoEstatica.Estatico.suspended = true;
                                     InfoEstatica.Estatico.hilo.suspend();
                                 }
@@ -99,7 +102,8 @@ public class SentenciaFor extends NodoAST implements Instruccion{
                     val = (Boolean)condicion.getValor(intermedio); // EVALUA CONDICION
                     if(InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE)
                     {
-                        InfoEstatica.Estatico.MarcaLinea(super.getLinea());
+                        //InfoEstatica.Estatico.MarcaLinea(super.getLinea());
+                        Estatico.MarcarLineaArchivo(ambito.getArchivo(), super.getLinea());
                         InfoEstatica.Estatico.suspended = true;
                         InfoEstatica.Estatico.hilo.suspend();
                     }

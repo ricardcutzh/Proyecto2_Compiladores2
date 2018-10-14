@@ -60,7 +60,8 @@ public class SentenciaIf extends NodoAST implements Instruccion {
                         if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
                             NodoAST aux = (NodoAST) ins;
                             if (InfoEstatica.Estatico.esLinea) {
-                                Estatico.MarcaLinea(aux.getLinea());
+                                //Estatico.MarcaLinea(aux.getLinea());
+                                Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                 Estatico.suspended = true;
                                 Estatico.hilo.suspend();
                             } else {
@@ -88,13 +89,15 @@ public class SentenciaIf extends NodoAST implements Instruccion {
                     {
                         if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
                             if (InfoEstatica.Estatico.esLinea) {
-                                Estatico.MarcaLinea(n.getLinea());
+                                //Estatico.MarcaLinea(n.getLinea());
+                                Estatico.MarcarLineaArchivo(ambito.getArchivo(), n.getLinea());
                                 Estatico.suspended = true;
                                 Estatico.hilo.suspend();
                             } else {
                                 String key = n.getLinea() + "_" + n.getArchivo();
                                 if (Estatico.breakPoints.containsKey(key)) {
-                                    Estatico.MarcaLinea(n.getLinea());
+                                    //Estatico.MarcaLinea(n.getLinea());
+                                    Estatico.MarcarLineaArchivo(ambito.getArchivo(), n.getLinea());
                                     Estatico.suspended = true;
                                     Estatico.hilo.suspend();
                                 }
@@ -107,13 +110,15 @@ public class SentenciaIf extends NodoAST implements Instruccion {
                                 if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
                                     NodoAST aux = (NodoAST) ins;
                                     if (InfoEstatica.Estatico.esLinea) {
-                                        Estatico.MarcaLinea(aux.getLinea());
+                                        //Estatico.MarcaLinea(aux.getLinea());
+                                        Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                         Estatico.suspended = true;
                                         Estatico.hilo.suspend();
                                     } else {
                                         String key = aux.getLinea() + "_" + aux.getArchivo();
                                         if (Estatico.breakPoints.containsKey(key)) {
-                                            Estatico.MarcaLinea(aux.getLinea());
+                                            //Estatico.MarcaLinea(aux.getLinea());
+                                            Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                             Estatico.suspended = true;
                                             Estatico.hilo.suspend();
                                         }
@@ -140,13 +145,15 @@ public class SentenciaIf extends NodoAST implements Instruccion {
                                         if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
                                             NodoAST aux = (NodoAST) in;
                                             if (InfoEstatica.Estatico.esLinea) {
-                                                Estatico.MarcaLinea(aux.getLinea());
+                                                //Estatico.MarcaLinea(aux.getLinea());
+                                                Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                                 Estatico.suspended = true;
                                                 Estatico.hilo.suspend();
                                             } else {
                                                 String key = aux.getLinea() + "_" + aux.getArchivo();
                                                 if (Estatico.breakPoints.containsKey(key)) {
-                                                    Estatico.MarcaLinea(aux.getLinea());
+                                                    //Estatico.MarcaLinea(aux.getLinea());
+                                                    Estatico.MarcarLineaArchivo(ambito.getArchivo(), aux.getLinea());
                                                     Estatico.suspended = true;
                                                     Estatico.hilo.suspend();
                                                 }

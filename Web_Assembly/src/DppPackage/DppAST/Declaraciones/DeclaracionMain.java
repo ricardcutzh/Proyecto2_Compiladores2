@@ -25,20 +25,33 @@ public class DeclaracionMain extends NodoAST{
      */
     public DeclaracionMain(int linea, int columna, String Archivo, ArrayList<Object> sentencias) {
         super(linea, columna, Archivo);
+        this.sentencias = sentencias;
     }
 
     @Override
     public Object generateByteCode(Ambito ambito) {
         try 
         {
-            String cad = "/*METODO PRINCIPAL DONDE INICIA LA EJECUCION: */\nFunction $principal\n";
-            cad += "\nEnd\n\n";
+            String cad = "/*METODO PRINCIPAL*/\nFunction $principal\n";
+            Ambito local = new Ambito("Local", ambito, ambito.getArchivo());
+            InfoEstatica.Estatico.tabula();
+            String aux = "";
+            for(Object i : sentencias)
+            {
+                if(i instanceof NodoAST)
+                {
+                    aux = (String)((NodoAST)i).generateByteCode(local);
+                    cad += InfoEstatica.Estatico.aplicaTabulaciones(aux);
+                }
+            }
+            InfoEstatica.Estatico.destabula();
+            cad += "\nEnd\n";
             return cad;
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error en la traduccion del metodo Main: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, ambito.getArchivo()));
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error en la traduccion del metodo Main: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
-        return "Main";
+        return "";
     }
     
 }
