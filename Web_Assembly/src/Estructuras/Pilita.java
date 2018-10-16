@@ -58,4 +58,14 @@ public class Pilita {
         }
         return null;
     }
+    
+    public void printPilita()
+    {
+        System.out.println("****************************");
+        for(NodoPilita n : this.pila)
+        {
+            System.out.println("| "+n.valor+" |");
+        }
+        System.out.println("****************************");
+    }
 }

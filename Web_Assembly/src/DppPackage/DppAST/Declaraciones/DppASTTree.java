@@ -127,6 +127,10 @@ public class DppASTTree extends NodoAST {
                 vars += n.generateByteCode(ambito);
             }
         }
+        if(huboMain)
+        {
+            vars += "\nCall $principal\n";
+        }
         vars += "\n/******************************************************************************************/\n";
 
         return vars;

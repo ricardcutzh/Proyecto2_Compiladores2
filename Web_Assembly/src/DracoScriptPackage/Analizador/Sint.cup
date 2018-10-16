@@ -90,7 +90,7 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 //----------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, dif, menor, mayor;
 terminal String mientras, para, funPoint, funQuadrate, funOval, funLine, funString;
-terminal String menorigual, mayorigual, and, or, not, mod, si, sino, ifnot, romper;
+terminal String menorigual, mayorigual, and, runDasm, or, not, mod, si, sino, ifnot, romper;
 //-----------> PALABRAS RESERVADAS
 terminal String var;
 terminal String print;
@@ -106,7 +106,7 @@ non terminal Expresion EXP, E;
 non terminal Object STATEMENTS, DECLARACION_VAR, IMPRIMIR, IF, ELSE, IF_NOT;
 non terminal Object L_DECLA, INICIO, ASIGNACION_VAR, SMASH, FUN_POINT;
 non terminal Object SENT_WHILE, AUMENTO, DECREMENTO, SENT_FOR, INS1, INS2;
-non terminal Object FUN_QUADRATE, FUN_OVAL, FUN_LINE, FUN_STRING;
+non terminal Object FUN_QUADRATE, FUN_OVAL, FUN_LINE, FUN_STRING, RDASM, L_EXPRE;
 
 //-----------> PRECEDENCIA
 precedence left or;
@@ -335,6 +335,20 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               }
               RESULT = instrucciones;
             :}
+            | STATEMENTS:lista RDASM:instruc
+            {:
+              ArrayList<Instruccion> instrucciones = (ArrayList<Instruccion>)lista;
+              if(instrucciones==null)
+              {
+                instrucciones = new ArrayList<>();
+              }
+              Instruccion pr = (Instruccion)instruc;
+              if(pr!=null)
+              {
+                instrucciones.add(pr);
+              }
+              RESULT = instrucciones;
+            :}
             | DECLARACION_VAR:declaracion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
@@ -466,6 +480,16 @@ STATEMENTS ::=  STATEMENTS:lista DECLARACION_VAR:declaracion
               RESULT = instrucciones;
             :}
             | FUN_STRING:instruccion
+            {:
+              ArrayList<Instruccion> instrucciones = new ArrayList<>();
+              Instruccion ins = (Instruccion)instruccion;
+              if(ins!=null)
+              {
+                instrucciones.add(ins);
+              }
+              RESULT = instrucciones;
+            :}
+            | RDASM:instruccion
             {:
               ArrayList<Instruccion> instrucciones = new ArrayList<>();
               Instruccion ins = (Instruccion)instruccion;
@@ -666,6 +690,31 @@ INS2::= identificador:aux inc
         RESULT = d;
       :}
       ;
+////////////////////////////////////////////////////////////////////////////////
+RDASM::= runDasm:aux oParent L_EXPRE:lista cParent ptComa
+        {:
+            ArrayList<Expresion> exps = (ArrayList<Expresion>)lista;
+            if(exps==null){exps = new ArrayList<>();}
+            RunMultDasm n = new RunMultDasm(auxright, auxleft, ArchivoOrigen, exps);
+            RESULT = n;
+        :}
+        ;
+L_EXPRE ::= L_EXPRE:lista coma EXP:nodo
+        {:
+            ArrayList<Expresion> exprs = (ArrayList<Expresion>)lista;
+            if(lista==null){lista = new ArrayList<>();}
+            Expresion exp = (Expresion)nodo;
+            exprs.add(exp);
+            RESULT = exprs;
+        :}
+        | EXP:nodo
+        {:
+           Expresion exp = (Expresion)nodo;
+           ArrayList<Expresion> lista = new ArrayList<>();
+           lista.add(exp);
+           RESULT = lista;
+        :}
+        ;
 ////////////////////////////////////////////////////////////////////////////////
 AUMENTO ::= identificador:aux inc ptComa
           {:

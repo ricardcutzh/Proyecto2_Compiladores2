@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Estructuras;
-
+import java.util.ArrayList;
 /**
  * Stack de los ambitos que se van a manejar
  * 
@@ -12,4 +12,54 @@ package Estructuras;
  */
 public class StackAmbito {
     int punteroStack; // PUNTERO PARA MOVERME EN EL STACK
+    ArrayList<NodoStack> Pila; //PILA QUE SE MANEJARA PARA LOS AMBITOS
+    /**
+     * Constructor de la estructura de la pila
+     */
+    public StackAmbito()
+    {
+        this.Pila = new ArrayList<>();
+        this.punteroStack = 0; // PUNTERO INICIARA EN 0
+        NodoStack puntero = new NodoStack(punteroStack,Double.valueOf(punteroStack),1,"STACKPOINTER");
+        set_local(puntero, punteroStack);// SETEAL EL PUNTERO DE LA STACK EN LA POSICION 0
+    }
+    
+    /**
+     * va a colocar el nodo en la pocision correspondiente
+     * @param nodo
+     * @param indice 
+     */
+    public void set_local(NodoStack nodo, int indice)
+    {
+        
+        this.Pila.add(this.punteroStack+indice, nodo);
+    }
+    
+    /**
+     * Va a obtener el valor en el indice correspondiente
+     * @param indice
+     * @return 
+     */
+    public NodoStack get_local(int indice)
+    {
+        return this.Pila.get(this.punteroStack + indice);
+    }
+    
+    /**
+     * Obtiene el puntero de la stack
+     * @return 
+     */
+    public Integer getPuntero()
+    {
+        return this.punteroStack;
+    }
+    
+    /**
+     * Seteal el puntero con un nuevo valor
+     * @param nuevoValor 
+     */
+    public void SetPuntero(int nuevoValor)
+    {
+        this.punteroStack = nuevoValor;
+    }
 }

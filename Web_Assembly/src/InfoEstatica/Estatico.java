@@ -43,6 +43,8 @@ public class Estatico {
     public static JTable tablaBreaks;
 
     public static MODALIDAD mod;
+    
+    public static String proyectPath;
 
     public static HashMap<String, BreakPointNode> breakPoints = new HashMap<>();
     ////////////////////////////////////////////////////////////////////////////

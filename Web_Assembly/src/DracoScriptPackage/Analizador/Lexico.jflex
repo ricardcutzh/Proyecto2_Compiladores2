@@ -98,6 +98,7 @@ inicioComentarioLinea = "$$"
 <YYINITIAL> "oval"                                {return new Symbol(Simbolos.funOval, yycolumn, yyline, yytext());}
 <YYINITIAL> "line"                                {return new Symbol(Simbolos.funLine, yycolumn, yyline, yytext());}
 <YYINITIAL> "string"                              {return new Symbol(Simbolos.funString, yycolumn, yyline, yytext());}
+<YYINITIAL> "RunMultDasm"                         {return new Symbol(Simbolos.runDasm, yycolumn, yyline, yytext());}
 
 //---------------------------EXPRESIONES REGULARES
 <YYINITIAL> {entero}                              {return new Symbol(Simbolos.entero, yycolumn, yyline, yytext());}

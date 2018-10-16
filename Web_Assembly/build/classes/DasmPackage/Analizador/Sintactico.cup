@@ -1,0 +1,314 @@
+package DasmPackage.Analizador;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import ErrorManager.TError;
+import DasmPackage.DasmAST.*;
+import Abstraccion.*;
+parser code
+{:
+    public static String ArchivoOrigen;
+    public static String PathProyecto;
+    public static ArrayList<TError> errores;
+    public static ArrayList<String> expected;
+
+    public static ArrayList<SentenciaDasm> instrucciones;
+
+    public void syntax_error(Symbol s)
+    {
+      //System.err.println("hubo un error: "+s.value.toString());
+      /*METODO PARA RECUPERACION DE ERRORES*/
+      String esp = esperados();
+      if(esp.equals(""))
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+      else
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString()+" | se esperaba: "+esperados(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+
+      expected.clear();
+      //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+    }
+
+    //METODO PARA ERRORES QUE NO SE RECUPERAN
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+      //System.err.println("hubo un error: "+s.value.toString());
+      /*METODO PARA ERRORE IRRECUPERABLES*/
+      String esp = esperados();
+      if(esp.equals(""))
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+      else
+      {
+        this.errores.add(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString()+" | se esperaba: "+esperados(), "Sintactico", s.right, s.left, false, ArchivoOrigen));
+      }
+
+      expected.clear();
+      //Estatico.agregarError(new TError(s.value.toString(), "Error Sintactico Cerca de: "+s.value.toString(), "Sintactico", s.right, s.left, false, ArchivoOrigen));*/
+    }
+
+    private String esperados()
+    {
+      String cad = "";
+      for(String s: expected)
+      {
+        cad += "\'"+s+"\',";
+      }
+      return cad;
+    }
+:}
+
+action code
+{:
+    String ArchivoOrigen;
+
+    String PathProyecto;
+
+    public void SetArchivo(String nombre)
+    {
+        ArchivoOrigen = nombre;
+    }
+
+    public void SetPathProyecto(String path)
+    {
+        PathProyecto = path;
+    }
+:}
+// CODIGO DE DECLARACIONES
+// ---------------> PALABRAS RESERVADAS
+terminal String add, diff, mult, div, mod, lt, gt, lte, gte, eqz, and, or, not, br, brIf;
+terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc, point;
+terminal String quadrate, oval, str, line, llama;
+terminal String entero, decimal, identificador;
+////////////////////////////////////////////////
+non terminal Object SENTENCIAS, INICIO, FUNCION, SET_LOCAL, GET_LOCAL, SET_GLOBAL, GET_GLOBAL, LLAMADO;
+////////////////////////////////////////////////
+start with INICIO;
+////////////////////////////////////////////////
+INICIO ::= {:parser.errores = new ArrayList<>(); this.ArchivoOrigen = parser.ArchivoOrigen; parser.expected = new ArrayList<>(); parser.instrucciones= new ArrayList<>();:}
+           SENTENCIAS;
+
+////////////////////////////////////////////////
+SENTENCIAS ::= SENTENCIAS FUNCION
+           | SENTENCIAS GET_GLOBAL
+           | SENTENCIAS GET_LOCAL
+           | SENTENCIAS SET_GLOBAL
+           | SENTENCIAS SET_LOCAL
+           | SENTENCIAS LLAMADO
+           | SENTENCIAS entero:val
+           {:
+              PushEntero i = new PushEntero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS decimal:val
+           {:
+              PushDecimal i = new PushDecimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS add:aux
+           {:
+              InstAdd i = new InstAdd(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS diff:aux
+           {:
+              InstDiff i = new InstDiff(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);              
+           :}
+           | SENTENCIAS mod:aux
+           {:
+              InstMod i = new InstMod(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS div:aux
+           {:
+              InstDiv i = new InstDiv(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS mult:aux
+           {:
+              InstMult i = new InstMult(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | SENTENCIAS lt
+           {:
+              System.out.println("LT");
+           :}
+           | SENTENCIAS gt
+           {:
+              System.out.println("GT");
+           :}
+           | SENTENCIAS lte
+           {:
+              System.out.println("LTE");
+           :}
+           | SENTENCIAS gte
+           {:
+              System.out.println("GTE");
+           :}
+           | SENTENCIAS eqz
+           {:
+              System.out.println("EQZ");
+           :}
+           | SENTENCIAS and
+           {:
+              System.out.println("AND");
+           :}
+           | SENTENCIAS or
+           {:
+              System.out.println("OR");
+           :}
+           | SENTENCIAS not
+           {:
+              System.out.println("NOT");
+           :}
+           | SENTENCIAS br
+           {:
+              System.out.println("BR");
+           :}
+           | SENTENCIAS brIf
+           {:
+              System.out.println("BR_IF");
+           :}
+           | entero:val
+           {:
+              PushEntero i = new PushEntero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              parser.instrucciones.add(i);
+           :}
+           | decimal:val
+           {:
+              PushDecimal i = new PushDecimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
+              parser.instrucciones.add(i);
+           :}
+           | add:aux
+           {:
+              InstAdd i = new InstAdd(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | diff:aux
+           {:
+              InstDiff i = new InstDiff(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i); 
+           :}
+           | mod:aux
+           {:
+              InstMod i = new InstMod(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | div:aux
+           {:
+              InstDiv i = new InstDiv(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | mult:aux
+           {:
+              InstMult i = new InstMult(auxright, auxleft, ArchivoOrigen);
+              parser.instrucciones.add(i);
+           :}
+           | lt
+           {:
+              System.out.println("LT");
+           :}
+           | gt
+           {:
+              System.out.println("GT");
+           :}
+           | lte
+           {:
+              System.out.println("LTE");
+           :}
+           | gte
+           {:
+              System.out.println("GTE");
+           :}
+           | eqz
+           {:
+              System.out.println("EQZ");
+           :}
+           | and
+           {:
+              System.out.println("AND");
+           :}
+           | or
+           {:
+              System.out.println("OR");
+           :}
+           | not
+           {:
+              System.out.println("NOT");
+           :}
+           | br
+           {:
+              System.out.println("BR");
+           :}
+           | brIf
+           {:
+              System.out.println("BR_IF");
+           :}
+           | FUNCION
+           | GET_GLOBAL
+           | GET_LOCAL
+           | SET_LOCAL
+           | SET_GLOBAL
+           | LLAMADO
+           ;
+////////////////////////////////////////////////
+FUNCION ::= function identificador:id end
+        {:
+            System.out.println(" FUNCION: "+id);
+        :}
+        | function identificador:id SENTENCIAS end
+        {:
+            System.out.println(" FUNCION: "+id);
+        :}
+        | function error end
+        ;
+/////////////////////////////////////////////////
+SET_LOCAL ::= slocal entero
+          {:
+              System.out.println("set_local entero");
+          :}
+          | slocal calc
+          {:
+              System.out.println("set_local $calc");
+          :}
+          ;
+/////////////////////////////////////////////////
+GET_GLOBAL ::= gglobal entero
+          {:
+              System.out.println("get_global entero");
+          :}
+          | gglobal calc
+          {:
+            System.out.println("get_global $calc");
+          :}
+          ;
+/////////////////////////////////////////////////
+GET_LOCAL ::= glocal entero
+          {:
+            System.out.println("get_local entero");
+          :}
+          | glocal calc
+          {:
+            System.out.println("get_local $calc");
+          :}
+          ;
+/////////////////////////////////////////////////
+SET_GLOBAL ::= sglobal entero
+          {:
+            System.out.println("set_global entero");
+          :}
+          | sglobal calc
+          {:
+            System.out.println("set_global $calc");
+          :}
+          ;
+//////////////////////////////////////////////////
+LLAMADO ::= llama identificador:id
+        {:
+           System.out.println("llamado a funcion: "+id);
+        :}
+        ;

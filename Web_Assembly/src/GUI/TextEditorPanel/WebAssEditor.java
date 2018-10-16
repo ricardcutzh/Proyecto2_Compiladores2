@@ -177,7 +177,6 @@ public class WebAssEditor extends javax.swing.JPanel {
                 Estatico.punteroText = this.areaEdicion;
                 Estatico.navegador = new Navegador();
                 Estatico.navegador.setVisible(true);
-                
                 t.start();
                 break;
             }

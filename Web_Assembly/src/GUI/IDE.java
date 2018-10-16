@@ -588,6 +588,7 @@ public class IDE extends javax.swing.JFrame {
             this.directorioProyecto = seleccionar.getSelectedFile().toString();
             this.DirToCreate.setText("Directorio Seleccionado: " + directorioProyecto);
             this.toCreate = directorioProyecto;
+            InfoEstatica.Estatico.proyectPath = toCreate;
             this.ArbolArchivos.setVisible(true);
             ActivaLasOpciones(true);
         } else {

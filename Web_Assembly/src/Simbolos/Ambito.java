@@ -33,7 +33,7 @@ public class Ambito {
         this.Anterior = Anterior;
         this.tablaVars = new TablaDeVariables();
         this.tablaFunciones = new TablaFunciones();
-        this.tamanio = 0;
+        this.tamanio = 1;
     }
     
     /**
