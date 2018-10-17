@@ -67,7 +67,7 @@ public class DasmAnalizador {
             if(errores.isEmpty())
             {
                 // AQUI RETORNO EL LISTADO PARA EJECUTAR
-                return DasmParser.instrucciones; // TEMPORAL AUN FALTA LO DE LAS INSTRUCCIONES
+                return DasmParser.gestor;
             }
             else
             {

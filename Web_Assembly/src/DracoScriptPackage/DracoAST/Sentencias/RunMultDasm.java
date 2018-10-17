@@ -10,6 +10,7 @@ import Abstraccion.Instruccion;
 import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
 import ErrorManager.TError;
+import Estructuras.GestorFunciones;
 import ObjsComun.Nulo;
 import Simbolos.Ambito;
 import java.io.BufferedReader;
@@ -70,11 +71,11 @@ public class RunMultDasm extends NodoAST implements Instruccion{
             if(esDasmValido(archivo))
             {
                 DasmPackage.DasmAnalizador analizador = new DasmPackage.DasmAnalizador(textoLeido(InfoEstatica.Estatico.proyectPath+"/"+archivo),archivo, InfoEstatica.Estatico.proyectPath);
-                ArrayList<SentenciaDasm> instrucciones = (ArrayList<SentenciaDasm>)analizador.analizarDasm();
-                if(instrucciones!=null)
+                GestorFunciones g = (GestorFunciones)analizador.analizarDasm();
+                if(g!=null)
                 {
-                    DasmPackage.DasmExecutor exe = new DasmPackage.DasmExecutor(new HashMap<String, Integer>(), instrucciones);
-                    exe.EjecutarDasm();
+                    DasmPackage.DasmExe exe = new DasmPackage.DasmExe(g);
+                    exe.iniciarDasm();
                 }
             }
             else

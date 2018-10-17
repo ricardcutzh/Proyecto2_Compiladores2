@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import ErrorManager.TError;
 import DasmPackage.DasmAST.*;
 import Abstraccion.*;
+import Estructuras.GestorFunciones;
+import Estructuras.FuncionDasm;
 parser code
 {:
     public static String ArchivoOrigen;
     public static String PathProyecto;
     public static ArrayList<TError> errores;
     public static ArrayList<String> expected;
-
-    public static ArrayList<SentenciaDasm> instrucciones;
-
+    public static GestorFunciones gestor;
     public void syntax_error(Symbol s)
     {
       //System.err.println("hubo un error: "+s.value.toString());
@@ -88,50 +88,106 @@ non terminal Object SENTENCIAS, INICIO, FUNCION, SET_LOCAL, GET_LOCAL, SET_GLOBA
 ////////////////////////////////////////////////
 start with INICIO;
 ////////////////////////////////////////////////
-INICIO ::= {:parser.errores = new ArrayList<>(); this.ArchivoOrigen = parser.ArchivoOrigen; parser.expected = new ArrayList<>(); parser.instrucciones= new ArrayList<>();:}
-           SENTENCIAS;
+INICIO ::= {:parser.errores = new ArrayList<>(); this.ArchivoOrigen = parser.ArchivoOrigen; parser.expected = new ArrayList<>();
+             parser.gestor = new GestorFunciones();
+            :}
+           SENTENCIAS:lista
+           {:
+             ArrayList<SentenciaDasm> sentencias = (ArrayList<SentenciaDasm>)lista;
+             if(sentencias == null) {sentencias = new ArrayList<>();}
+             FuncionDasm f = new FuncionDasm(listaright, listaleft, ArchivoOrigen, "$r_global", sentencias);
+             parser.gestor.addFuncion("$r_global", f);
+            :}
+           ;// EN ESTA PARTE DEBERIA DE METER LA "FUNCION GLOBAL DONDE INICIARA LA EJECUCION"
 
 ////////////////////////////////////////////////
-SENTENCIAS ::= SENTENCIAS FUNCION
+SENTENCIAS ::= SENTENCIAS:lista FUNCION
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             RESULT = inst;
+           :}
            | SENTENCIAS GET_GLOBAL
-           | SENTENCIAS GET_LOCAL
+           | SENTENCIAS:lista GET_LOCAL:ins
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             SentenciaDasm i = (SentenciaDasm)ins;
+             inst.add(i);
+             RESULT = inst;
+           :}
            | SENTENCIAS SET_GLOBAL
-           | SENTENCIAS SET_LOCAL
-           | SENTENCIAS LLAMADO
-           | SENTENCIAS entero:val
+           | SENTENCIAS:lista SET_LOCAL:ins
            {:
-              PushEntero i = new PushEntero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
-              parser.instrucciones.add(i);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             SentenciaDasm i = (SentenciaDasm)ins;
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS decimal:val
+           | SENTENCIAS:lista LLAMADO:ins
            {:
-              PushDecimal i = new PushDecimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
-              parser.instrucciones.add(i);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             SentenciaDasm i = (SentenciaDasm)ins;
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS add:aux
+           | SENTENCIAS:lista entero:val
            {:
-              InstAdd i = new InstAdd(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+              if(inst==null){inst = new ArrayList<>();}
+              Entero i = new Entero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              inst.add(i);
+              RESULT = inst;
            :}
-           | SENTENCIAS diff:aux
+           | SENTENCIAS:lista decimal:val
            {:
-              InstDiff i = new InstDiff(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);              
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Decimal i = new Decimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS mod:aux
+           | SENTENCIAS:lista add:aux
            {:
-              InstMod i = new InstMod(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Add i = new Add(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS div:aux
+           | SENTENCIAS:lista diff:aux
            {:
-              InstDiv i = new InstDiv(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Diff i = new Diff(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS mult:aux
+           | SENTENCIAS:lista mod:aux
            {:
-              InstMult i = new InstMult(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Mod i = new Mod(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista div:aux
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Div i = new Div(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista mult:aux
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Mult i = new Mult(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
            | SENTENCIAS lt
            {:
@@ -175,38 +231,52 @@ SENTENCIAS ::= SENTENCIAS FUNCION
            :}
            | entero:val
            {:
-              PushEntero i = new PushEntero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
-              parser.instrucciones.add(i);
+              Entero i = new Entero(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | decimal:val
            {:
-              PushDecimal i = new PushDecimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
-              parser.instrucciones.add(i);
+              Decimal i = new Decimal(valright, valleft, ArchivoOrigen, Double.parseDouble(val));
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | add:aux
            {:
-              InstAdd i = new InstAdd(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+              Add i = new Add(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | diff:aux
            {:
-              InstDiff i = new InstDiff(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i); 
+              Diff i = new Diff(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | mod:aux
            {:
-              InstMod i = new InstMod(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+              Mod i = new Mod(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | div:aux
            {:
-              InstDiv i = new InstDiv(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+              Div i = new Div(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | mult:aux
            {:
-              InstMult i = new InstMult(auxright, auxleft, ArchivoOrigen);
-              parser.instrucciones.add(i);
+              Mult i = new Mult(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | lt
            {:
@@ -250,30 +320,55 @@ SENTENCIAS ::= SENTENCIAS FUNCION
            :}
            | FUNCION
            | GET_GLOBAL
-           | GET_LOCAL
-           | SET_LOCAL
+           | GET_LOCAL:ins
+           {:
+              SentenciaDasm i = (SentenciaDasm)ins;
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
+           :}
+           | SET_LOCAL:ins
+           {:
+             SentenciaDasm i = (SentenciaDasm)ins;
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
            | SET_GLOBAL
-           | LLAMADO
+           | LLAMADO:ins
+           {:
+              SentenciaDasm i = (SentenciaDasm)ins;
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
+           :}
            ;
 ////////////////////////////////////////////////
 FUNCION ::= function identificador:id end
         {:
-            System.out.println(" FUNCION: "+id);
+            ArrayList<SentenciaDasm> sentencias = new ArrayList<>();
+            FuncionDasm f = new FuncionDasm(idright, idleft, ArchivoOrigen, id, sentencias);
+            parser.gestor.addFuncion(id, f);
         :}
-        | function identificador:id SENTENCIAS end
+        | function identificador:id SENTENCIAS:lista end
         {:
-            System.out.println(" FUNCION: "+id);
+            ArrayList<SentenciaDasm> sentencias = (ArrayList<SentenciaDasm>)lista;
+            if(sentencias == null) {sentencias = new ArrayList<>();}
+            FuncionDasm f = new FuncionDasm(idright, idleft, ArchivoOrigen, id, sentencias);
+            parser.gestor.addFuncion(id, f);
         :}
         | function error end
         ;
 /////////////////////////////////////////////////
-SET_LOCAL ::= slocal entero
+SET_LOCAL ::= slocal entero:val
           {:
-              System.out.println("set_local entero");
+              SetLocal i = new SetLocal(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              RESULT = i;
           :}
-          | slocal calc
+          | slocal calc:aux
           {:
-              System.out.println("set_local $calc");
+              SetLocalCalc i = new SetLocalCalc(auxright, auxleft, ArchivoOrigen);
+              RESULT = i;
           :}
           ;
 /////////////////////////////////////////////////
@@ -287,13 +382,15 @@ GET_GLOBAL ::= gglobal entero
           :}
           ;
 /////////////////////////////////////////////////
-GET_LOCAL ::= glocal entero
+GET_LOCAL ::= glocal entero:val
           {:
-            System.out.println("get_local entero");
+             GetLocal i = new GetLocal(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+             RESULT = i;
           :}
-          | glocal calc
+          | glocal calc:aux
           {:
-            System.out.println("get_local $calc");
+            GetLocalCalc i = new GetLocalCalc(auxright, auxleft, ArchivoOrigen);
+            RESULT = i;
           :}
           ;
 /////////////////////////////////////////////////
@@ -309,6 +406,7 @@ SET_GLOBAL ::= sglobal entero
 //////////////////////////////////////////////////
 LLAMADO ::= llama identificador:id
         {:
-           System.out.println("llamado a funcion: "+id);
+           Call i = new Call(idright, idleft, ArchivoOrigen, id);
+           RESULT = i;
         :}
         ;

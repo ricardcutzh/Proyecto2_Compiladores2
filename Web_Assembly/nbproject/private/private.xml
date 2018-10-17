@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/InstDiv.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/Analizador/DasmParser.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/InstMult.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/InstMod.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/InstAdd.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/InstDiff.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAnalizador.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmExe.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/Estructuras/FuncionDasm.java</file>
         </group>
     </open-files>
 </project-private>

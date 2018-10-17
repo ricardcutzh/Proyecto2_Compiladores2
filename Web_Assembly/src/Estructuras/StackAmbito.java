@@ -31,8 +31,11 @@ public class StackAmbito {
      */
     public void set_local(NodoStack nodo, int indice)
     {
-        
-        this.Pila.add(this.punteroStack+indice, nodo);
+        if(existePosicion(indice))
+        {
+            this.Pila.remove(indice);
+        }
+        this.Pila.add(indice, nodo);
     }
     
     /**
@@ -42,7 +45,7 @@ public class StackAmbito {
      */
     public NodoStack get_local(int indice)
     {
-        return this.Pila.get(this.punteroStack + indice);
+        return this.Pila.get(indice);
     }
     
     /**
@@ -61,5 +64,27 @@ public class StackAmbito {
     public void SetPuntero(int nuevoValor)
     {
         this.punteroStack = nuevoValor;
+    }
+    
+    public void printStack()
+    {
+        System.out.println("*****************************************");
+        System.out.println("*                AMBITOS                *");
+        System.out.println("*****************************************");
+        for(NodoStack n: this.Pila)
+        {
+            System.out.println("| "+n.valorAlamacenado+" |");
+        }
+        System.out.println("*****************************************");
+    }
+    
+    private Boolean existePosicion(int pos)
+    {
+        try {
+            NodoStack aux = Pila.get(pos);
+            return  true;
+        } catch (Exception e) {
+            return  false;
+        }
     }
 }

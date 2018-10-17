@@ -62,6 +62,8 @@ public class Pilita {
     public void printPilita()
     {
         System.out.println("****************************");
+        System.out.println("*           Auxiliar       *");
+        System.out.println("****************************");
         for(NodoPilita n : this.pila)
         {
             System.out.println("| "+n.valor+" |");

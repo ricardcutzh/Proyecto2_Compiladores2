@@ -5,6 +5,9 @@
  */
 package Abstraccion;
 
+import Estructuras.IP;
+import Simbolos.EntornoDasm;
+
 /**
  *
  * @author richard
@@ -14,8 +17,9 @@ public interface SentenciaDasm {
     /**
      * Metodo que van a implementar para poder realizar operaciones con las instrucciones
      * que se ejecutan en DASM
-     * @param objeto
+     * @param entorno
+     * @param instrucctionPointer
      * @return 
      */
-    Object Ejecuta(Object objeto);
+    Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer);
 }
