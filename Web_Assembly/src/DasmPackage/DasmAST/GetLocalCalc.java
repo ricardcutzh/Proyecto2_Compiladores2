@@ -38,6 +38,8 @@ public class GetLocalCalc extends NodoAST implements SentenciaDasm{
                 {
                     InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
                     InfoEstatica.Estatico.suspended = true;
+                    InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
+                    InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
                     InfoEstatica.Estatico.hilo.suspend();
                 }
                 else
@@ -47,6 +49,8 @@ public class GetLocalCalc extends NodoAST implements SentenciaDasm{
                     {
                         InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
                         InfoEstatica.Estatico.suspended = true;
+                        InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
+                        InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
                         InfoEstatica.Estatico.hilo.suspend();
                     }
                 }

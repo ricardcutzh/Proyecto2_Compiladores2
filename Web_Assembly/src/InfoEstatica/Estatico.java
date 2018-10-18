@@ -59,7 +59,9 @@ public class Estatico {
     ////////////////////////////////////////////////////////////////////////////
     public static JTabbedPane Pestanas;
     public static ArrayList<Character> tabs;
-
+    ////////////////////////////////////////////////////////////////////////////
+    public static JTable pilitaTable;
+    public static JTable StackTable;
     ////////////////////////////////////////////////////////////////////////////
     public static void setUp(JTextArea consola, JTable tablaErrores, JTable tablaSimbolo) {
         errores = new ArrayList<>();
@@ -343,5 +345,37 @@ public class Estatico {
             }
         }
         return salida;
+    }
+    
+    public static void ActualizaPilita(Estructuras.Pilita pilita)
+    {
+        try 
+        {
+            DefaultTableModel model = (DefaultTableModel)pilitaTable.getModel();
+            if(model.getRowCount()>0)
+            {
+                model.setRowCount(0);
+            }
+            pilita.graficarPilita(model);
+        } catch (Exception e) 
+        {
+            
+        }
+    }
+    
+    public static void ActualizaStack(Estructuras.StackAmbito stack)
+    {
+        try 
+        {
+            DefaultTableModel model = (DefaultTableModel)StackTable.getModel();
+            if(model.getRowCount()>0)
+            {
+                model.setRowCount(0);
+            }
+            stack.graficarStack(model);
+        } catch (Exception e) 
+        {
+            
+        }
     }
 }

@@ -158,9 +158,10 @@ public class DppASTTree extends NodoAST {
             for(Map.Entry<Clave, MetodoFuncion> entry: funcs.entrySet())
             {
                 MetodoFuncion aux = entry.getValue();
+                Clave c = entry.getKey();
                 cad = "Function $"+entry.getKey().toString()+"\n";
                 InfoEstatica.Estatico.tabula();
-                cad += InfoEstatica.Estatico.aplicaTabulaciones((String)aux.generateByteCode(new Ambito("Local", ambito, ambito.getArchivo())));
+                cad += InfoEstatica.Estatico.aplicaTabulaciones((String)aux.generateByteCode(new Ambito("Local | "+c.getIdFuncion(), ambito, ambito.getArchivo())));
                 InfoEstatica.Estatico.destabula();
                 cad += "\nEnd\n";
                 fw.write(cad);

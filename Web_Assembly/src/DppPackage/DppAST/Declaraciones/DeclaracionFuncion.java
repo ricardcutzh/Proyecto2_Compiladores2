@@ -11,6 +11,7 @@ import ObjsComun.Clave;
 import ObjsComun.NodoParametro;
 import Simbolos.Ambito;
 import Simbolos.MetodoFuncion;
+import Simbolos.SimboloTabla;
 import java.util.ArrayList;
 /**
  * Clase que va a manejar la declaracion de las Funciones declaradas en D++

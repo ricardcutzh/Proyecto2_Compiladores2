@@ -94,12 +94,12 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar;
-terminal String principal, vacio;
+terminal String principal, vacio, retornar;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
-non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR;
+non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR;
 // ------> PRECEDENCE
 precedence left or;
@@ -240,6 +240,24 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             }
             RESULT = sentencias;
           :}
+          | SENTENCIAS:lista LLAMADA:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista RETORNA:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
           | DECLARACION_VAR:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
@@ -250,6 +268,24 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             RESULT = sentencias;
           :}
           | ASIGNACION_VAR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | LLAMADA:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | RETORNA:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
             if(nodo!=null)
@@ -375,6 +411,48 @@ FUNCIONES ::= TIPO:tipo identificador:id oParent cParent oKey cKey
         {:
             parser.expected.add("'()'");
             parser.expected.add("'(PARAMETROS)'");
+        :}
+        ;
+/////////////////////////////////////////////////////////////////////////////
+RETORNA ::= retornar ptComa
+        {:
+            
+        :}
+        | retornar EXP ptComa
+        {:
+
+        :}
+        ;
+/////////////////////////////////////////////////////////////////////////////
+LLAMADA ::= identificador:id oParent cParent ptComa
+        {:
+            ArrayList<Expresion> exp = new ArrayList<>();
+            LlamadoMetodo m = new LlamadoMetodo(idright, idleft, ArchivoOrigen, id, exp);
+            RESULT = m;
+        :}
+        | identificador:id oParent L_EXPRE:lista cParent ptComa 
+        {:
+            ArrayList<Expresion> exp = (ArrayList<Expresion>)lista;
+            if(exp==null) { exp = new ArrayList<>();}
+            LlamadoMetodo m = new LlamadoMetodo(idright, idleft, ArchivoOrigen, id, exp);
+            RESULT = m;
+        :}
+        ;
+//---------------------------------------------------------------------------
+L_EXPRE ::= L_EXPRE:lista coma EXP:nodo
+        {:
+            Expresion e = (Expresion)nodo;
+            ArrayList<Expresion> exp = (ArrayList<Expresion>)lista;
+            if(exp==null){exp = new ArrayList<>();}
+            exp.add(e);
+            RESULT = exp;
+        :}
+        | EXP:nodo
+        {:
+            Expresion e = (Expresion)nodo;
+            ArrayList<Expresion> exp = new ArrayList<>();
+            exp.add(e);
+            RESULT = exp;
         :}
         ;
 /////////////////////////////////////////////////////////////////////////////
@@ -658,5 +736,18 @@ E ::= E:val1 mas:aux E:val2
     {:
         Identificador i = new Identificador(idright, idleft, ArchivoOrigen, id);
         RESULT = i;
+    :}
+    | identificador:id oParent L_EXPRE:lista cParent
+    {:
+        ArrayList<Expresion> parametros = (ArrayList<Expresion>)lista;
+        if(parametros == null) {parametros = new ArrayList<>();}
+        LlamadoFuncion f = new LlamadoFuncion(idright, idleft, ArchivoOrigen, id, parametros);
+        RESULT = f;
+    :}
+    | identificador:id oParent cParent
+    {:
+        ArrayList<Expresion> parametros = new ArrayList<>();
+        LlamadoFuncion f = new LlamadoFuncion(idright, idleft, ArchivoOrigen, id, parametros);
+        RESULT = f;
     :}
     ;

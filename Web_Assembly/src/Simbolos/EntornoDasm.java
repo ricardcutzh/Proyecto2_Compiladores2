@@ -14,6 +14,7 @@ public class EntornoDasm {
     Pilita pilita;
     StackAmbito ambitos;
     GestorFunciones gestor;
+    Ret posicionRet;
     /**
      * Constructor del ambito DASM para el manejo de la ejecucion de todo lo que se necesita
      * @param gestor 
@@ -23,6 +24,7 @@ public class EntornoDasm {
         this.pilita = new Pilita();
         this.ambitos = new StackAmbito();
         this.gestor = gestor;
+        posicionRet = new Ret();
     }
     
     /**
@@ -48,5 +50,10 @@ public class EntornoDasm {
     public GestorFunciones getGestor() {
         return gestor;
     }
+
+    public Ret getPosicionRet() {
+        return posicionRet;
+    }
+    
     
 }

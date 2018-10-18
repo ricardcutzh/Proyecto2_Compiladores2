@@ -80,7 +80,7 @@ action code
 // CODIGO DE DECLARACIONES
 // ---------------> PALABRAS RESERVADAS
 terminal String add, diff, mult, div, mod, lt, gt, lte, gte, eqz, and, or, not, br, brIf;
-terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc, point;
+terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc,ret, point;
 terminal String quadrate, oval, str, line, llama;
 terminal String entero, decimal, identificador;
 ////////////////////////////////////////////////
@@ -370,6 +370,11 @@ SET_LOCAL ::= slocal entero:val
               SetLocalCalc i = new SetLocalCalc(auxright, auxleft, ArchivoOrigen);
               RESULT = i;
           :}
+          | slocal ret:aux
+          {:
+              SetLocalRet i = new SetLocalRet(auxright, auxleft, ArchivoOrigen);
+              RESULT = i;
+          :}
           ;
 /////////////////////////////////////////////////
 GET_GLOBAL ::= gglobal entero
@@ -380,6 +385,7 @@ GET_GLOBAL ::= gglobal entero
           {:
             System.out.println("get_global $calc");
           :}
+          | gglobal ret
           ;
 /////////////////////////////////////////////////
 GET_LOCAL ::= glocal entero:val
@@ -392,6 +398,11 @@ GET_LOCAL ::= glocal entero:val
             GetLocalCalc i = new GetLocalCalc(auxright, auxleft, ArchivoOrigen);
             RESULT = i;
           :}
+          | glocal ret:aux
+          {:
+            GetLocalRet i = new GetLocalRet(auxright, auxleft, ArchivoOrigen);
+            RESULT = i;
+          :}
           ;
 /////////////////////////////////////////////////
 SET_GLOBAL ::= sglobal entero
@@ -402,6 +413,7 @@ SET_GLOBAL ::= sglobal entero
           {:
             System.out.println("set_global $calc");
           :}
+          | sglobal ret
           ;
 //////////////////////////////////////////////////
 LLAMADO ::= llama identificador:id

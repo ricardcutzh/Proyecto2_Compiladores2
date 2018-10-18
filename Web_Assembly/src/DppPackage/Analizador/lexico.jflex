@@ -89,7 +89,7 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "importar"                                    {return new Symbol(DppPackage.Analizador.Simbolos.importar, yycolumn, yyline, yytext());}
 <YYINITIAL> "vacio"                                       {return new Symbol(DppPackage.Analizador.Simbolos.vacio, yycolumn, yyline, yytext());}
 <YYINITIAL> "principal"                                   {return new Symbol(DppPackage.Analizador.Simbolos.principal, yycolumn, yyline, yytext());}
-
+<YYINITIAL> "retornar"                                    {return new Symbol(DppPackage.Analizador.Simbolos.retornar, yycolumn, yyline, yytext());}
  
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                      {return new Symbol(DppPackage.Analizador.Simbolos.numEntero, yycolumn, yyline, yytext());}

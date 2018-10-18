@@ -48,6 +48,16 @@ public class Clave {
         return false;
     }
 
+    public String getIdFuncion() {
+        return idFuncion;
+    }
+
+    public ArrayList<NodoParametro> getParametros() {
+        return parametros;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "F_"+this.idFuncion+paramsID();

@@ -5,6 +5,7 @@
  */
 package Estructuras;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author richard
@@ -57,6 +58,25 @@ public class Pilita {
             return pila.get(0).getValor();
         }
         return null;
+    }
+    
+    public void graficarPilita(DefaultTableModel model)
+    {
+        try 
+        {
+            int x = 0;
+            for(NodoPilita n :this.pila)
+            {
+                Object rowData[] = new Object[2];
+                rowData[0] = n.valor;
+                rowData[1] = x;
+                x++;
+                model.addRow(rowData);
+            }
+        } catch (Exception e) 
+        {
+            
+        }
     }
     
     public void printPilita()

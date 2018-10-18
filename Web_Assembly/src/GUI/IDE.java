@@ -45,6 +45,8 @@ public class IDE extends javax.swing.JFrame {
         
         //INICIALIZO TODO 
         Estatico.setUp(this.Consola, this.TablaError, this.SimbolTable);
+        Estatico.pilitaTable = this.PilitaTable;
+        Estatico.StackTable = this.StackTable;
         Estatico.colocaTablaBreaks(TablaBreaks);
     }
 
@@ -93,6 +95,11 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         TablaBreaks = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        PilitaTable = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        StackTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
@@ -373,6 +380,42 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane5.setViewportView(TablaBreaks);
 
         jTabbedPane1.addTab("BreakPoints", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/break.png")), jScrollPane5); // NOI18N
+
+        PilitaTable.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        PilitaTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Valor", "Indice"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(PilitaTable);
+
+        jTabbedPane2.addTab("Pila Auxiliar", jScrollPane7);
+
+        StackTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Valor", "Indice"
+            }
+        ));
+        jScrollPane8.setViewportView(StackTable);
+
+        jTabbedPane2.addTab("Stack Ambitos", jScrollPane8);
+
+        jScrollPane6.setViewportView(jTabbedPane2);
+
         jTabbedPane1.addTab("Dasm", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/dasm.png")), jScrollPane6); // NOI18N
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("File Explorer"));
@@ -848,7 +891,9 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenu HideTabs;
     private javax.swing.JButton NextBreakPoint;
     private javax.swing.JButton NextLine;
+    private javax.swing.JTable PilitaTable;
     private javax.swing.JTable SimbolTable;
+    private javax.swing.JTable StackTable;
     private javax.swing.JButton StopDebugger;
     private javax.swing.JTable TablaBreaks;
     private javax.swing.JTable TablaError;
@@ -873,11 +918,14 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem opc1;
     private javax.swing.JButton openFIle;

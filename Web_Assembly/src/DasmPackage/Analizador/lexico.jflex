@@ -69,6 +69,7 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "$String"                                       {return new Symbol(DasmPackage.Analizador.Simbolos.str, yycolumn, yyline, yytext());}
 <YYINITIAL> "$Line"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.line, yycolumn, yyline, yytext());}
 <YYINITIAL> "Call"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.llama, yycolumn, yyline, yytext());}
+<YYINITIAL> "$ret"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.ret, yycolumn, yyline, yytext());}
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                        {return new Symbol(DasmPackage.Analizador.Simbolos.entero, yycolumn, yyline, yytext());}
 <YYINITIAL> {decimal}                                       {return new Symbol(DasmPackage.Analizador.Simbolos.decimal, yycolumn, yyline, yytext());}

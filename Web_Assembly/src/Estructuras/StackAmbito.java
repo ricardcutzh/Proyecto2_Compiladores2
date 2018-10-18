@@ -5,6 +5,7 @@
  */
 package Estructuras;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 /**
  * Stack de los ambitos que se van a manejar
  * 
@@ -85,6 +86,21 @@ public class StackAmbito {
             return  true;
         } catch (Exception e) {
             return  false;
+        }
+    }
+    
+    public void graficarStack(DefaultTableModel model)
+    {
+        try {
+            int x = 0;
+            for(NodoStack n:this.Pila)
+            {
+                Object rowData[] = new Object[2];
+                rowData[0] = n.valorAlamacenado;
+                rowData[1] = n.indice;
+                model.addRow(rowData);
+            }
+        } catch (Exception e) {
         }
     }
 }

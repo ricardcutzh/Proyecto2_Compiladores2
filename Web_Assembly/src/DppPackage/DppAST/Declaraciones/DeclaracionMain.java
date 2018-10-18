@@ -8,6 +8,7 @@ package DppPackage.DppAST.Declaraciones;
 import Abstraccion.NodoAST;
 import ErrorManager.TError;
 import Simbolos.Ambito;
+import Simbolos.SimboloTabla;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +34,7 @@ public class DeclaracionMain extends NodoAST{
         try 
         {
             String cad = "/*METODO PRINCIPAL*/\nFunction $principal\n";
-            Ambito local = new Ambito("Local", ambito, ambito.getArchivo());
+            Ambito local = new Ambito("Local | Principal", ambito, ambito.getArchivo());
             InfoEstatica.Estatico.tabula();
             String aux = "";
             for(Object i : sentencias)
@@ -46,6 +47,8 @@ public class DeclaracionMain extends NodoAST{
             }
             InfoEstatica.Estatico.destabula();
             cad += "\nEnd\n";
+            InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla("Principal", Boolean.FALSE, "VACIO", "Global | Principal",super.getLinea()
+                    , super.getColumna(), ambito.getSize() - 1, "Metodo Main"));
             return cad;
         } catch (Exception e) 
         {
