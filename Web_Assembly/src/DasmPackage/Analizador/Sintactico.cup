@@ -189,21 +189,37 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | SENTENCIAS lt
+           | SENTENCIAS:lista lt:aux
            {:
-              System.out.println("LT");
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Lt i = new Lt(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS gt
+           | SENTENCIAS:lista gt:aux
            {:
-              System.out.println("GT");
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Gt i = new Gt(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS lte
+           | SENTENCIAS:lista lte:aux
            {:
-              System.out.println("LTE");
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Lte i = new Lte(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS gte
+           | SENTENCIAS:lista gte:aux
            {:
-              System.out.println("GTE");
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Gte i = new Gte(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
            | SENTENCIAS eqz
            {:
@@ -221,13 +237,29 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
            {:
               System.out.println("NOT");
            :}
-           | SENTENCIAS br
+           | SENTENCIAS:lista br:aux identificador:id
            {:
-              System.out.println("BR");
+              Br i = new Br(auxright, auxleft, ArchivoOrigen, id);
+              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+              if(inst==null){inst = new ArrayList<>();}
+              inst.add(i);
+              RESULT = inst;
            :}
-           | SENTENCIAS brIf
+           | SENTENCIAS:lista brIf:aux identificador:id
            {:
-              System.out.println("BR_IF");
+              BrIf i = new BrIf(auxright, auxleft, ArchivoOrigen, id);
+              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+              if(inst==null){inst = new ArrayList<>();}
+              inst.add(i);
+              RESULT = inst;
+           :}
+           | SENTENCIAS:lista identificador:aux
+           {:
+              Etiqueta i = new Etiqueta(auxright, auxleft, ArchivoOrigen, aux);
+              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+              if(inst==null){inst = new ArrayList<>();}
+              inst.add(i);
+              RESULT = inst;
            :}
            | entero:val
            {:
@@ -278,21 +310,33 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
               inst.add(i);
               RESULT = inst;
            :}
-           | lt
+           | lt:aux
            {:
-              System.out.println("LT");
+              Lt i = new Lt(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
-           | gt
+           | gt:aux
            {:
-              System.out.println("GT");
+              Gt i = new Gt(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
-           | lte
+           | lte:aux
            {:
-              System.out.println("LTE");
+              Lte i = new Lte(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
-           | gte
+           | gte:aux
            {:
-              System.out.println("GTE");
+              Gte i = new Gte(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | eqz
            {:
@@ -310,13 +354,26 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
            {:
               System.out.println("NOT");
            :}
-           | br
+           | br identificador:id
            {:
-              System.out.println("BR");
+              Br i = new Br(idright, idleft, ArchivoOrigen, id);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
-           | brIf
+           | brIf:aux identificador:id
            {:
-              System.out.println("BR_IF");
+              BrIf i = new BrIf(auxright, auxleft, ArchivoOrigen, id);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
+           :}
+           | identificador:aux
+           {:
+              Etiqueta i = new Etiqueta(auxright, auxleft, ArchivoOrigen, aux);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
            :}
            | FUNCION
            | GET_GLOBAL

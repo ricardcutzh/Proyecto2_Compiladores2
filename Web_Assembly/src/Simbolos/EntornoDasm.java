@@ -5,6 +5,7 @@
  */
 package Simbolos;
 import Estructuras.*;
+import java.util.HashMap;
 /**
  * CLASE QUE VA A CONTENER LAS ESTRUCTURAS NECESARIAS PARA REALIZAR LA EJECUCION
  * DEL DASM
@@ -15,6 +16,7 @@ public class EntornoDasm {
     StackAmbito ambitos;
     GestorFunciones gestor;
     Ret posicionRet;
+    HashMap<String, Integer> etiquetas;
     /**
      * Constructor del ambito DASM para el manejo de la ejecucion de todo lo que se necesita
      * @param gestor 
@@ -54,6 +56,21 @@ public class EntornoDasm {
     public Ret getPosicionRet() {
         return posicionRet;
     }
-    
-    
+    /**
+     * SETEA UN NUEVO CONJUNTO DE ETIQUETAS
+     * @param etiquetas 
+     */
+    public void setEtiquetas(HashMap<String, Integer> etiquetas)
+    {
+        this.etiquetas = etiquetas;
+    }
+    /**
+     * Obtiene el indice actual de la etiqueta
+     * @param etiqueta
+     * @return 
+     */
+    public Integer getIndiceDe(String etiqueta)
+    {
+        return this.etiquetas.containsKey(etiqueta)?this.etiquetas.get(etiqueta):-1;
+    }
 }

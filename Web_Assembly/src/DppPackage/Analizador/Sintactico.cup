@@ -10,6 +10,7 @@ import DppPackage.DppAST.Valores.*;
 import DppPackage.DppAST.Declaraciones.*;
 import DppPackage.DppAST.Importaciones.*;
 import DppPackage.DppAST.Sentencias.*;
+import DppPackage.DppAST.Sentencias.IF.*;
 // --------------------------------> CODIGO DEL PARSER
 parser code
 {:
@@ -94,13 +95,14 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar;
-terminal String principal, vacio, retornar;
+terminal String principal, vacio, retornar, si, sino;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR;
+non terminal Object SENT_SI, SINO, SINO_SI;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -258,6 +260,15 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             }
             RESULT = sentencias;
           :}
+          | SENTENCIAS:lista SENT_SI:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
           | DECLARACION_VAR:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
@@ -286,6 +297,15 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             RESULT = sentencias;
           :}
           | RETORNA:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENT_SI:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
             if(nodo!=null)
@@ -414,15 +434,134 @@ FUNCIONES ::= TIPO:tipo identificador:id oParent cParent oKey cKey
         :}
         ;
 /////////////////////////////////////////////////////////////////////////////
-RETORNA ::= retornar ptComa
+RETORNA ::= retornar ptComa:aux
         {:
-            
+            Retornar r = new Retornar(auxright, auxleft, ArchivoOrigen, null);
+            RESULT = r;
         :}
-        | retornar EXP ptComa
+        | retornar:aux EXP:nodo ptComa
         {:
-
+            Expresion exp = (Expresion)nodo;
+            Retornar r = new Retornar(auxright, auxleft, ArchivoOrigen, exp);
+            RESULT = r;
         :}
         ;
+/////////////////////////////////////////////////////////////////////////////
+SENT_SI ::= si:aux oParent EXP:nodo cParent oKey cKey
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = new ArrayList<>();
+            IfSimple i = new IfSimple(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            RESULT = i;
+        :}
+        |   si:aux oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null){sentencias = new ArrayList<>();}
+            IfSimple i = new IfSimple(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            RESULT = i;
+        :}
+
+        |   si:aux oParent EXP:nodo cParent oKey cKey SINO_SI:lista1 SINO:nodoSino
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null){sinos = new ArrayList<>();}
+            NodoAST sino = (NodoAST)nodoSino;
+            ArrayList<Object> sentencias = new ArrayList<>();
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, sino);
+            RESULT = i;
+        :}
+        |   si:aux oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey SINO_SI:lista1 SINO:nodoSino
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null){sinos = new ArrayList<>();}
+            NodoAST sino = (NodoAST)nodoSino;
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null){sentencias = new ArrayList<>();}
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, sino);
+            RESULT = i;
+        :}
+
+        |   si:aux oParent EXP:nodo cParent oKey cKey SINO:nodoSino
+        {:
+            Expresion exp = (Expresion)nodo;
+            NodoAST sino = (NodoAST)nodoSino;
+            ArrayList<Object> sentencias = new ArrayList<>();
+            ArrayList<NodoAST> sinos = new ArrayList<>();
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, sino);
+            RESULT = i;
+        :}
+        |   si:aux oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey SINO:nodoSino
+        {:
+            Expresion exp = (Expresion)nodo;
+            NodoAST sino = (NodoAST)nodoSino;
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null){sentencias = new ArrayList<>();}
+            ArrayList<NodoAST> sinos = new ArrayList<>();
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, sino);
+            RESULT = i;
+        :}
+        ;
+//---------------------------------------------------------------------------
+SINO_SI ::= SINO_SI:lista1 sino:aux si oParent EXP:nodo cParent oKey cKey
+        {:
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null) {sinos = new ArrayList<>();}
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = new ArrayList<>();
+            SinoSi i = new SinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            sinos.add(i);
+            RESULT = sinos;
+        :}
+        |   SINO_SI:lista1 sino:aux si oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey
+        {:
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null) {sinos = new ArrayList<>();}
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null) {sentencias = new ArrayList<>();}
+            SinoSi i = new SinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            sinos.add(i);
+            RESULT = sinos;
+        :}
+        |   sino:aux si oParent EXP:nodo cParent oKey cKey
+        {:
+            ArrayList<NodoAST> sinos = new ArrayList<>();
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = new ArrayList<>();
+            SinoSi i = new SinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            sinos.add(i);
+            RESULT = sinos;
+        :}
+        |   sino:aux si oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey
+        {:
+            ArrayList<NodoAST> sinos = new ArrayList<>();
+            Expresion exp = (Expresion)nodo;
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            SinoSi i = new SinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+            sinos.add(i);
+            RESULT = sinos;
+        :}
+        ;
+//---------------------------------------------------------------------------
+SINO ::=  sino:aux oKey cKey
+       {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            Sino i = new Sino(auxright, auxleft, ArchivoOrigen, sentencias);
+            RESULT = i;
+       :}
+       |  sino:aux oKey SENTENCIAS:lista cKey
+       {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null) {sentencias = new ArrayList<>();}
+            Sino i = new Sino(auxright, auxleft, ArchivoOrigen, sentencias);
+            RESULT = i;
+       :}
+       ;
 /////////////////////////////////////////////////////////////////////////////
 LLAMADA ::= identificador:id oParent cParent ptComa
         {:

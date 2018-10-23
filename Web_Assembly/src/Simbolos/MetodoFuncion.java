@@ -7,6 +7,7 @@ package Simbolos;
 
 import Abstraccion.NodoAST;
 import ErrorManager.TError;
+import Estructuras.Display;
 import ObjsComun.NodoParametro;
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ public class MetodoFuncion extends  NodoAST{
     @Override
     public Object generateByteCode(Ambito ambito) {
         try {
+            InfoEstatica.Estatico.display = new Display();
             String cad = "";
             insertParams(ambito);// INSERTO LOS PARAMETROS SI HAY SOLO PARA EL CONTADOR AUMENTA
             for(Object o : sentencias)

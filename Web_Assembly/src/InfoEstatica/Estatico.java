@@ -7,6 +7,7 @@ package InfoEstatica;
 
 import java.util.ArrayList;
 import ErrorManager.TError;
+import Estructuras.Display;
 import GUI.NavegorWeb.Interfaz.Navegador;
 import GUI.TextEditorPanel.WebAssEditor;
 import ObjsComun.BreakPointNode;
@@ -45,7 +46,9 @@ public class Estatico {
     public static MODALIDAD mod;
     
     public static String proyectPath;
-
+    ////////////////////////////////////////////////////////////////////////////
+    public static String tipoFuncion;
+    ////////////////////////////////////////////////////////////////////////////
     public static HashMap<String, BreakPointNode> breakPoints = new HashMap<>();
     ////////////////////////////////////////////////////////////////////////////
     public static Thread hilo;
@@ -63,6 +66,8 @@ public class Estatico {
     public static JTable pilitaTable;
     public static JTable StackTable;
     ////////////////////////////////////////////////////////////////////////////
+    public static Display display;
+    ////////////////////////////////////////////////////////////////////////////
     public static void setUp(JTextArea consola, JTable tablaErrores, JTable tablaSimbolo) {
         errores = new ArrayList<>();
         console = consola;
@@ -76,6 +81,7 @@ public class Estatico {
         pilaCiclos.push(false);
         resetTablas();
         tabs = new ArrayList<>();
+        display = new Display();
     }
 
     public static void colocaTablaBreaks(JTable Tabla) {

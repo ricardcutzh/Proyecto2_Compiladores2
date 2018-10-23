@@ -223,6 +223,8 @@ Identifier            = (\${IdentifierStart}{IdentifierPart}*)
    "MULT"|
    "DIFF"|
    "MOD"|
+   "BR"|
+   "BR_IF"|
    "LT"|
    "DIV"|
    "LTE"|
@@ -251,7 +253,7 @@ Identifier            = (\${IdentifierStart}{IdentifierPart}*)
 
    /* Operators. */
    "+" | "-" | "*" | "/" | "^" | "%" | "++"|
-   "--"| "==" | "<>" | "<"| ">" "<=" | ">="|
+   "--"| "==" | "<>" | "<"| ">" | "<=" | ">="|
    "&&" | "||" | "!" { addToken(Token.OPERATOR); }
 
    /* Numbers */

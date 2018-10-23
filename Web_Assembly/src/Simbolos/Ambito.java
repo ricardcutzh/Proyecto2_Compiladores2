@@ -168,4 +168,12 @@ public class Ambito {
     {
         return this.tablaFunciones.funciones;
     }
+    
+    public void tomarDatosParaVariables(Ambito ambitoHijo)
+    {
+        for(Map.Entry<String, Simbolo> entry : this.tablaVars.variables.entrySet())
+        {
+            ambitoHijo.tablaVars.agregarVariabe(entry.getKey(), entry.getValue());
+        }
+    }
 }

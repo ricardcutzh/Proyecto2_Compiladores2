@@ -34,8 +34,8 @@ public class DasmExe {
             {
                 inicio.Ejecuta(entorno, null);
             }
-            entorno.getPilita().printPilita();
-            entorno.getAmbitos().printStack();
+            //entorno.getPilita().printPilita();
+            //entorno.getAmbitos().printStack();
         } catch (Exception e) 
         {
             System.err.println(e.getMessage());

@@ -7,8 +7,10 @@ package Estructuras;
 
 import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
+import DasmPackage.DasmAST.Etiqueta;
 import Simbolos.EntornoDasm;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -28,7 +30,8 @@ public class FuncionDasm extends NodoAST implements SentenciaDasm{
 
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
-        instrucctionPointer = this.instrucctionPointer; 
+        instrucctionPointer = this.instrucctionPointer;
+        entorno.setEtiquetas(getEtiquetas());//OBTIENE LAS ETIQUETASS Y LAS SETEA
         try 
         {
             while(this.instrucctionPointer.getIndiceActual() < this.intrucciones.size())
@@ -43,6 +46,19 @@ public class FuncionDasm extends NodoAST implements SentenciaDasm{
         return null;
     }
 
-    
+    private HashMap<String, Integer> getEtiquetas()
+    {
+        HashMap<String, Integer> etiquetas = new HashMap<>();
+        for(int x = 0; x < this.intrucciones.size(); x++)
+        {
+            SentenciaDasm i = this.intrucciones.get(x);
+            if(i instanceof Etiqueta)
+            {
+                Etiqueta aux = (Etiqueta)i;
+                etiquetas.put(aux.getEtiqueta(), x);
+            }
+        }
+        return etiquetas;
+    }
     
 }

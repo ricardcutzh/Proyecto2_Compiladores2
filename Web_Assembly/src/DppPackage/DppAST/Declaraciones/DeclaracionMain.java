@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,6 +7,7 @@ package DppPackage.DppAST.Declaraciones;
 
 import Abstraccion.NodoAST;
 import ErrorManager.TError;
+import Estructuras.Display;
 import Simbolos.Ambito;
 import Simbolos.SimboloTabla;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class DeclaracionMain extends NodoAST{
     public Object generateByteCode(Ambito ambito) {
         try 
         {
+            InfoEstatica.Estatico.display = new Display();
+            InfoEstatica.Estatico.tipoFuncion = "VACIO";
             String cad = "/*METODO PRINCIPAL*/\nFunction $principal\n";
             Ambito local = new Ambito("Local | Principal", ambito, ambito.getArchivo());
             InfoEstatica.Estatico.tabula();
@@ -46,9 +49,11 @@ public class DeclaracionMain extends NodoAST{
                 }
             }
             InfoEstatica.Estatico.destabula();
+            cad += "\n\t$e_retornar";
             cad += "\nEnd\n";
             InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla("Principal", Boolean.FALSE, "VACIO", "Global | Principal",super.getLinea()
                     , super.getColumna(), ambito.getSize() - 1, "Metodo Main"));
+            InfoEstatica.Estatico.tipoFuncion = "";// QUITO EL TIPO DE LA FUNCION QUE SE ESTA TRADUCIENDO
             return cad;
         } catch (Exception e) 
         {

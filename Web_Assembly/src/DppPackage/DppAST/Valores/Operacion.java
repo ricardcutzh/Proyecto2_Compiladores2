@@ -101,6 +101,22 @@ public class Operacion extends NodoAST implements Expresion {
                     {
                         return TraduceDivision(op1, op2, codigo, ambito);
                     }
+                    case MENOR:
+                    {
+                        return TraduceMenorQue(op1, op2, codigo, ambito);
+                    }
+                    case MAYOR:
+                    {
+                        return TraduceMayor(op1, op2, codigo, ambito);
+                    }
+                    case MENORIGUAL:
+                    {
+                        return TraduceMenorIgual(op1, op2, codigo, ambito);
+                    }
+                    case MAYORIGUAL:
+                    {
+                        return TraduceMayorIgual(op1, op2, codigo, ambito);
+                    }
                 }
             }
         } catch (Exception e) 
@@ -671,6 +687,469 @@ public class Operacion extends NodoAST implements Expresion {
         } catch (Exception e) 
         {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir el Negativo: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    //**************************************************************************************
+    //*                                      MENOR                                         *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    00      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    00      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    00      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object TraduceMenorQue(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "13":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "14":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "15":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "31":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "34":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "35":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";                 
+                }
+                case "41":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "43":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "44":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "45":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "51":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "53":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "54":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                case "55":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LT\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"<"+tipo2, "No es posible aplicar la operacion: Menor que", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir Menor que: "+e.getMessage()
+                    , "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    //**************************************************************************************
+    //*                                      MAYOR                                         *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    00      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    00      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    00      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object TraduceMayor(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "13":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "14":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "15":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "31":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "34":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "35":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";                 
+                }
+                case "41":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "43":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "44":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "45":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "51":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "53":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "54":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                case "55":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GT\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+">"+tipo2, "No es posible aplicar la operacion: Mayor que", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir Mayor que: "+e.getMessage()
+                    , "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+        }
+        return "";
+    }
+    //**************************************************************************************
+    //*                                      MAYOR IGUAL                                   *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    00      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    00      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    00      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object TraduceMayorIgual(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "13":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "14":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "15":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "31":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "34":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "35":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";                 
+                }
+                case "41":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "43":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "44":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "45":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "51":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "53":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "54":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                case "55":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"GTE\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+">="+tipo2, "No es posible aplicar la operacion: Mayor Igual que", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir Mayor Igual que: "+e.getMessage()
+                    , "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    //**************************************************************************************
+    //*                                      MAYOR                                         *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    00      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    00      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    00      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object TraduceMenorIgual(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "13":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "14":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "15":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "31":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "34":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "35":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";                 
+                }
+                case "41":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "43":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "44":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "45":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "51":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "53":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "54":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "55":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"<="+tipo2, "No es posible aplicar la operacion: Menor Igual que", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir Menor Igual que: "+e.getMessage()
+                    , "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
         }
         return "";
     }

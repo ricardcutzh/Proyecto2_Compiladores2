@@ -159,11 +159,14 @@ public class DppASTTree extends NodoAST {
             {
                 MetodoFuncion aux = entry.getValue();
                 Clave c = entry.getKey();
+                InfoEstatica.Estatico.tipoFuncion = aux.getTipo(); // SETEO EL TIPO DE LA FUNCION QUE SE ESTA TRADUCIENDO
                 cad = "Function $"+entry.getKey().toString()+"\n";
                 InfoEstatica.Estatico.tabula();
                 cad += InfoEstatica.Estatico.aplicaTabulaciones((String)aux.generateByteCode(new Ambito("Local | "+c.getIdFuncion(), ambito, ambito.getArchivo())));
+                cad += "\n\t$e_retornar\n";
                 InfoEstatica.Estatico.destabula();
                 cad += "\nEnd\n";
+                InfoEstatica.Estatico.tipoFuncion = "";
                 fw.write(cad);
             }
         } catch (Exception e) {
