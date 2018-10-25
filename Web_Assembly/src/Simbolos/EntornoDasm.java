@@ -73,4 +73,14 @@ public class EntornoDasm {
     {
         return this.etiquetas.containsKey(etiqueta)?this.etiquetas.get(etiqueta):-1;
     }
+    
+    /**
+     * Getter de las etiquetas
+     * @return 
+     */
+    public HashMap<String, Integer> getEtiquetas() {
+        return etiquetas;
+    }
+    
+    
 }

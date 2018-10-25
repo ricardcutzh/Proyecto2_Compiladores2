@@ -71,9 +71,12 @@ public class IfSinoSi extends NodoAST{
                     x++;
                 }
                 cad += auxiliar2+"\n";
-                String auxiliar3 ;
-                Sino s = (Sino)sino;
-                auxiliar3 = (String)s.generateByteCode(ambito);
+                String auxiliar3="";
+                if(sino!=null)
+                {
+                    Sino s = (Sino)sino;
+                    auxiliar3 = (String)s.generateByteCode(ambito);
+                }
                 cad += auxiliar3+"\n";
                 cad += "$"+InfoEstatica.Estatico.display.Peek().toString()+"_SALIDA //SALE DEL IF..\n";
                 InfoEstatica.Estatico.display.PopFromDisplay();// SACO DEL DISPLAY

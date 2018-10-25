@@ -7,6 +7,7 @@ package DasmPackage;
 
 import Estructuras.FuncionDasm;
 import Estructuras.GestorFunciones;
+import Estructuras.IP;
 import Simbolos.EntornoDasm;
 
 /**
@@ -32,7 +33,7 @@ public class DasmExe {
             FuncionDasm inicio = entorno.getGestor().getFuncion("$r_global");
             if(inicio!=null)
             {
-                inicio.Ejecuta(entorno, null);
+                inicio.Ejecuta(entorno, new IP(0));
             }
             //entorno.getPilita().printPilita();
             //entorno.getAmbitos().printStack();

@@ -70,6 +70,10 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "$Line"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.line, yycolumn, yyline, yytext());}
 <YYINITIAL> "Call"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.llama, yycolumn, yyline, yytext());}
 <YYINITIAL> "$ret"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.ret, yycolumn, yyline, yytext());}
+<YYINITIAL> "\"%c\""                                        {return new Symbol(DasmPackage.Analizador.Simbolos.prChar, yycolumn, yyline, yytext());}
+<YYINITIAL> "\"%d\""                                        {return new Symbol(DasmPackage.Analizador.Simbolos.prInt, yycolumn, yyline, yytext());}
+<YYINITIAL> "\"%f\""                                        {return new Symbol(DasmPackage.Analizador.Simbolos.prFloat, yycolumn, yyline, yytext());}
+<YYINITIAL> "PRINT"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.print, yycolumn, yyline, yytext());}
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                        {return new Symbol(DasmPackage.Analizador.Simbolos.entero, yycolumn, yyline, yytext());}
 <YYINITIAL> {decimal}                                       {return new Symbol(DasmPackage.Analizador.Simbolos.decimal, yycolumn, yyline, yytext());}

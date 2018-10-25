@@ -11,6 +11,8 @@ import DppPackage.DppAST.Declaraciones.*;
 import DppPackage.DppAST.Importaciones.*;
 import DppPackage.DppAST.Sentencias.*;
 import DppPackage.DppAST.Sentencias.IF.*;
+import DppPackage.DppAST.Sentencias.While.*;
+import DppPackage.DppAST.Sentencias.For.*;
 // --------------------------------> CODIGO DEL PARSER
 parser code
 {:
@@ -94,15 +96,15 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 // ------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
-terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar;
-terminal String principal, vacio, retornar, si, sino;
+terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar, para;
+terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
-non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR;
-non terminal Object SENT_SI, SINO, SINO_SI;
+non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR, FOR_INIT, FOR_ACTUALIZACION;
+non terminal Object SENT_SI, SINO, SINO_SI, SENT_MIENTRAS, SENT_AUM_DEC, SENT_FOR, CONTINUE, BREAK, F_IMPRIMIR;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -113,7 +115,7 @@ precedence left mult, div;
 precedence left pot;
 precedence right inc, dec, not;
 precedence left cParent;
-
+precedence left sino;
 start with INICIO;
 /*                         REGLAS SEMANTICAS                               */
 /////////////////////////////////////////////////////////////////////////////
@@ -269,6 +271,60 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             }
             RESULT = sentencias;
           :}
+          | SENTENCIAS:lista SENT_MIENTRAS:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista SENT_AUM_DEC:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista SENT_FOR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista BREAK:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista CONTINUE:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista F_IMPRIMIR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
           | DECLARACION_VAR:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
@@ -306,6 +362,60 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             RESULT = sentencias;
           :}
           | SENT_SI:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENT_MIENTRAS:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENT_AUM_DEC:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENT_FOR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | BREAK:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | CONTINUE:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | F_IMPRIMIR:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
             if(nodo!=null)
@@ -485,6 +595,26 @@ SENT_SI ::= si:aux oParent EXP:nodo cParent oKey cKey
             RESULT = i;
         :}
 
+        | si:aux oParent EXP:nodo cParent oKey cKey SINO_SI:lista1
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null){sinos = new ArrayList<>();}
+            ArrayList<Object> sentencias = new ArrayList<>();
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, null);
+            RESULT = i;
+        :}
+        | si:aux oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey SINO_SI:lista1
+        {:
+            Expresion exp = (Expresion)nodo;
+            ArrayList<NodoAST> sinos = (ArrayList<NodoAST>)lista1;
+            if(sinos == null){sinos = new ArrayList<>();}
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias == null){sentencias = new ArrayList<>();}
+            IfSinoSi i = new IfSinoSi(auxright, auxleft, ArchivoOrigen, exp, sentencias, sinos, null);
+            RESULT = i;
+        :}
+
         |   si:aux oParent EXP:nodo cParent oKey cKey SINO:nodoSino
         {:
             Expresion exp = (Expresion)nodo;
@@ -563,6 +693,92 @@ SINO ::=  sino:aux oKey cKey
        :}
        ;
 /////////////////////////////////////////////////////////////////////////////
+SENT_MIENTRAS::= mientras:aux oParent EXP:nodo cParent oKey cKey
+              {:
+                    Expresion exp = (Expresion)nodo;
+                    ArrayList<Object> sentencias = new ArrayList<>();
+                    Mientras i = new Mientras(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+                    RESULT = i;
+              :}
+              |  mientras:aux oParent EXP:nodo cParent oKey SENTENCIAS:lista cKey
+              {:
+                    Expresion exp = (Expresion)nodo;
+                    ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+                    if(sentencias == null){sentencias = new ArrayList<>();}
+                    Mientras i = new Mientras(auxright, auxleft, ArchivoOrigen, exp, sentencias);
+                    RESULT = i;
+              :}
+              ;
+/////////////////////////////////////////////////////////////////////////////
+SENT_AUM_DEC ::= identificador:id inc ptComa
+            {:
+                SentInc i = new SentInc(idright, idleft, ArchivoOrigen, id);
+                RESULT = i;
+            :}
+            | identificador:id dec ptComa
+            {:
+                SentDec i = new SentDec(idright, idleft, ArchivoOrigen, id);
+                RESULT = i;
+            :}
+            ;
+/////////////////////////////////////////////////////////////////////////////
+SENT_FOR ::= para:aux FOR_INIT:nodo1 ptComa EXP:nodo2 ptComa FOR_ACTUALIZACION:nodo3 oKey SENTENCIAS:lista cKey
+            {:
+                NodoAST inicializacion = (NodoAST)nodo1;
+                Expresion condicion = (Expresion)nodo2;
+                NodoAST actualizacion = (NodoAST)nodo3;
+                ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+                if(sentencias==null){sentencias = new ArrayList<>();}
+                Para p = new Para(auxright, auxleft, ArchivoOrigen, inicializacion, condicion, actualizacion, sentencias);
+                RESULT = p;
+            :}
+            | para:aux FOR_INIT:nodo1 ptComa EXP:nodo2 ptComa FOR_ACTUALIZACION:nodo3 oKey  cKey
+            {:
+                NodoAST inicializacion = (NodoAST)nodo1;
+                Expresion condicion = (Expresion)nodo2;
+                NodoAST actualizacion = (NodoAST)nodo3;
+                ArrayList<Object> sentencias = new ArrayList<>();
+                Para p = new Para(auxright, auxleft, ArchivoOrigen, inicializacion, condicion, actualizacion, sentencias);
+                RESULT = p;
+            :}
+            ;
+//---------------------------------------------------------------------------
+FOR_INIT ::= oParent TIPO:t identificador:id asigna EXP:nodo
+           {:
+                Expresion exp = (Expresion)nodo;
+                NodoIDValor n = new NodoIDValor(id, exp, idright, idleft, ArchivoOrigen);
+                ArrayList<NodoIDValor> nodos = new ArrayList<>();
+                nodos.add(n);
+                String tipo = (String)t;
+                DeclaracionVar d = new DeclaracionVar(idright, idleft, ArchivoOrigen, nodos,tipo);
+                RESULT = d;
+           :}
+           | oParent identificador:id asigna EXP:nodo
+           {:
+                Expresion e = (Expresion)nodo;
+                AsignacionVar a = new AsignacionVar(idright, idleft, ArchivoOrigen, e, id);
+                RESULT = a;
+           :}
+           ;
+//---------------------------------------------------------------------------
+FOR_ACTUALIZACION ::= identificador:id asigna EXP:nodo cParent
+                {:
+                    Expresion e = (Expresion)nodo;
+                    AsignacionVar a = new AsignacionVar(idright, idleft, ArchivoOrigen, e, id);
+                    RESULT = a;
+                :}
+                | identificador:id inc cParent
+                {:
+                   SentInc i = new SentInc(idright, idleft, ArchivoOrigen, id);
+                   RESULT = i;
+                :}
+                | identificador:id dec cParent
+                {:
+                    SentDec i = new SentDec(idright, idleft, ArchivoOrigen, id);
+                    RESULT = i;
+                :}
+                ;
+/////////////////////////////////////////////////////////////////////////////
 LLAMADA ::= identificador:id oParent cParent ptComa
         {:
             ArrayList<Expresion> exp = new ArrayList<>();
@@ -636,6 +852,28 @@ TIPO ::= entero
        :}
        ;
 //---------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////
+CONTINUE ::= continuar:aux ptComa
+        {:
+            Continuar i = new Continuar(auxright, auxleft, ArchivoOrigen);
+            RESULT = i;
+        :}
+        ;
+BREAK ::= detener:aux ptComa
+        {:
+            Detener i = new Detener(auxright, auxleft, ArchivoOrigen);
+            RESULT = i;
+        :}
+        ;
+/////////////////////////////////////////////////////////////////////////////
+F_IMPRIMIR ::= imprimir:aux oParent EXP:nodo cParent ptComa
+            {:
+                Expresion exp = (Expresion)nodo;
+                Imprimir i = new Imprimir(auxright, auxleft, ArchivoOrigen, exp);
+                RESULT = i;
+            :}
+            ;
+/////////////////////////////////////////////////////////////////////////////
 L_DECLARACION ::= L_DECLARACION:lista coma identificador:id
              {:
                 ArrayList<NodoIDValor> nodos = (ArrayList<NodoIDValor>)lista;
@@ -849,7 +1087,7 @@ E ::= E:val1 mas:aux E:val2
     {:
         //
 
-        Character real = val.charAt(0);
+        Character real = val.charAt(1);
         ValorPrimitivo v = new ValorPrimitivo(valright, valleft, ArchivoOrigen, real);
         RESULT = v;
     :}

@@ -224,6 +224,8 @@ Identifier            = (\${IdentifierStart}{IdentifierPart}*)
    "DIFF"|
    "MOD"|
    "BR"|
+   "PRINT"|
+   "EQZ"|
    "BR_IF"|
    "LT"|
    "DIV"|

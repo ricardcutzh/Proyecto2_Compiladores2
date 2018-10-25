@@ -11,6 +11,7 @@ import ErrorManager.TError;
 import Estructuras.FuncionDasm;
 import Estructuras.IP;
 import Simbolos.EntornoDasm;
+import java.util.HashMap;
 
 /**
  *
@@ -60,7 +61,11 @@ public class Call extends NodoAST implements SentenciaDasm{
             FuncionDasm f = entorno.getGestor().getFuncion(id);
             if(f!=null) 
             {
-                f.Ejecuta(entorno, null);// LE MANDO NULL PORQUE TOMARE EL INSTRUCCTION POINTER DE LA FUNCION QUE SE EJECUTA
+                HashMap<String, Integer> etiquetasaux = entorno.getEtiquetas(); // GUARDO... 
+                IP aux = instrucctionPointer;
+                f.Ejecuta(entorno, new IP(0));// LE MANDO NULL PORQUE TOMARE EL INSTRUCCTION POINTER DE LA FUNCION QUE SE EJECUTA EJECUTO
+                instrucctionPointer = aux;
+                entorno.setEtiquetas(etiquetasaux); // COLOCO
             }
             else
             {

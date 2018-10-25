@@ -173,7 +173,7 @@ public class Ambito {
     {
         for(Map.Entry<String, Simbolo> entry : this.tablaVars.variables.entrySet())
         {
-            ambitoHijo.tablaVars.agregarVariabe(entry.getKey(), entry.getValue());
+            ambitoHijo.addDppSimbol(entry.getKey(), entry.getValue());// SI HUBIESE ERROR EN DRACO... ES POR AQUI
         }
     }
 }

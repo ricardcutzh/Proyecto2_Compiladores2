@@ -30,13 +30,14 @@ public class FuncionDasm extends NodoAST implements SentenciaDasm{
 
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
-        instrucctionPointer = this.instrucctionPointer;
+        //instrucctionPointer = this.instrucctionPointer;
+        //instrucctionPointer = new IP(0);
         entorno.setEtiquetas(getEtiquetas());//OBTIENE LAS ETIQUETASS Y LAS SETEA
         try 
         {
             while(this.instrucctionPointer.getIndiceActual() < this.intrucciones.size())
             {
-                SentenciaDasm i = this.intrucciones.get(this.instrucctionPointer.getIndiceActual());
+                SentenciaDasm i = this.intrucciones.get(instrucctionPointer.indiceActual);
                 i.Ejecuta(entorno, instrucctionPointer);
             }
         } catch (Exception e) 

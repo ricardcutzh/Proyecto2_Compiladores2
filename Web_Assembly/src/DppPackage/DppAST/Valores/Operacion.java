@@ -6,6 +6,7 @@
 package DppPackage.DppAST.Valores;
 import Abstraccion.*;
 import ErrorManager.TError;
+import Estructuras.NodoDisplay;
 import Simbolos.Ambito;
 /**
  *
@@ -63,7 +64,7 @@ public class Operacion extends NodoAST implements Expresion {
                 {
                     case NOT:
                     {
-                        break;
+                        return TraduceNot(op1, codigo, ambito);
                     }
                     case MENOS:
                     {
@@ -116,6 +117,22 @@ public class Operacion extends NodoAST implements Expresion {
                     case MAYORIGUAL:
                     {
                         return TraduceMayorIgual(op1, op2, codigo, ambito);
+                    }
+                    case IGUAL:
+                    {
+                        return traduceIgualDiferente(op1, op2, codigo, ambito);
+                    }
+                    case DIFERENTE:
+                    {
+                        return traduceIgualDiferente(op1, op2, codigo, ambito);
+                    }
+                    case AND:
+                    {
+                        return TraduceAnd(op1, op2, codigo, ambito);
+                    }
+                    case OR:
+                    {
+                        return TraduceOR(op1, op2, codigo, ambito);
                     }
                 }
             }
@@ -1150,6 +1167,223 @@ public class Operacion extends NodoAST implements Expresion {
         {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir Menor Igual que: "+e.getMessage()
                     , "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+        }
+        return "";
+    }
+    //**************************************************************************************
+    //*                                      IGUAL                                         *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    PP      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    PP      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    PP      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object traduceIgualDiferente(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "13":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "14":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "15":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "31":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "33":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "34":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "35":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "41":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "43":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "44":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "45":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "51":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"LTE\n";
+                }
+                case "53":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "54":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                case "55":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\n"+"DIFF\n"+"EQZ";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"=="+tipo2+" | "+tipo1+"!="+tipo2, "No es posible aplicar la operacion: Igual o Diferente", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir la igualdad o Diferencia: "+e.getMessage(),"Ejecucion", super.getLinea(), super.getColumna(),
+                    false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    private Object TraduceNot(Expresion op1,String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "3":
+                {
+                    InfoEstatica.Estatico.display.PushToDisplay("NOT", false);
+                    resultado = "BOOLEAN";
+                    String cad = t1+"\nEQZ\nBR_IF $"+InfoEstatica.Estatico.display.Peek().toString()+"_ESCERO\n1\nDIFF\nBR $"+InfoEstatica.Estatico.display.Peek()+"_SALIR\n";
+                    cad += "\n$"+InfoEstatica.Estatico.display.Peek().toString()+"_ESCERO"+"1\nADD\n$"+InfoEstatica.Estatico.display.Peek().toString()+"_SALIR\n";
+                    InfoEstatica.Estatico.display.PopFromDisplay();
+                    return cad;
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1, "No es posible aplicar la operacion: NOT", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica"
+                    , "Error al traducir el NOT: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna()
+                    , false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    private Object TraduceAnd(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "33":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\nMULT\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"&&"+tipo2, "No es posible aplicar la operacion: AND", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica"
+                    , "Error al traducir el AND: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna()
+                    , false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    private Object TraduceOR(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "33":
+                {
+                    resultado = "BOOLEAN";
+                    return t1+"\n"+t2+"\nADD\n";
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(tipo1+"||"+tipo2, "No es posible aplicar la operacion: OR", "Semantico", 
+                            super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica"
+                    , "Error al traducir el OR: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna()
+                    , false, super.getArchivo()));
         }
         return "";
     }

@@ -79,8 +79,8 @@ action code
 :}
 // CODIGO DE DECLARACIONES
 // ---------------> PALABRAS RESERVADAS
-terminal String add, diff, mult, div, mod, lt, gt, lte, gte, eqz, and, or, not, br, brIf;
-terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc,ret, point;
+terminal String add, diff, mult, div, mod, lt, gt, lte, gte, eqz, and, or, not, br, brIf, prChar, prInt, prFloat;
+terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc,ret, point, print;
 terminal String quadrate, oval, str, line, llama;
 terminal String entero, decimal, identificador;
 ////////////////////////////////////////////////
@@ -221,9 +221,46 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | SENTENCIAS eqz
+           | SENTENCIAS:lista eqz:aux
            {:
-              System.out.println("EQZ");
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Eqz i = new Eqz(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista prChar:val
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+            Entero i = new Entero(valright, valleft, ArchivoOrigen, 10);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista prInt:val
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Entero i = new Entero(valright, valleft, ArchivoOrigen,20);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista prFloat:val
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             Entero i = new Entero(valright, valleft, ArchivoOrigen,30);
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | SENTENCIAS:lista print:aux
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             // AQUI VA LA INSTRUCCION
+             Print i = new Print(auxright, auxleft, ArchivoOrigen);
+             inst.add(i);
+             RESULT = inst;
            :}
            | SENTENCIAS and
            {:
@@ -338,9 +375,41 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
               inst.add(i);
               RESULT = inst;
            :}
-           | eqz
+           | eqz:aux
            {:
-              System.out.println("EQZ");
+              Eqz i = new Eqz(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = inst;
+           :}
+           | prChar:val
+           {:
+             Entero i = new Entero(valright, valleft, ArchivoOrigen, 10);
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | prInt:val
+           {:
+             Entero i = new Entero(valright, valleft, ArchivoOrigen, 20);
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | prFloat:val
+           {:
+             Entero i = new Entero(valright, valleft, ArchivoOrigen, 30);
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
+           | print:aux
+           {:
+             // AQUI VA LA INSTRUCCION
+             Print i = new Print(auxright, auxleft, ArchivoOrigen);
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
            :}
            | and
            {:

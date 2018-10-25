@@ -219,6 +219,11 @@ public class Estatico {
     public static void ImprimeEnConsola(String mensaje) {
         console.append("\n>> " + mensaje);
     }
+    
+    public static void imprimeCaracter(Character caracter)
+    {
+        console.append(caracter.toString());
+    }
 
     public static void ActualizarTablaDeErrores() {
         try {

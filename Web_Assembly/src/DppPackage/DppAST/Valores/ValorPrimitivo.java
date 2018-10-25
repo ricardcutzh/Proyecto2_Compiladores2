@@ -54,7 +54,7 @@ public class ValorPrimitivo extends NodoAST implements Expresion{
                 case "CARACTER":// TAMANO DE 1 BYTE
                 {
                     Character aux = (Character)this.valor;
-                    return String.valueOf(Character.getNumericValue(aux));// DEVUELVO EL VALOR NUMERICO DEL CHARACTER
+                    return String.valueOf((int)aux);// DEVUELVO EL VALOR NUMERICO DEL CHARACTER
                 }
             }
         } catch (Exception e) 

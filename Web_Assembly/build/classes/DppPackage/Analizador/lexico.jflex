@@ -92,12 +92,17 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "retornar"                                    {return new Symbol(DppPackage.Analizador.Simbolos.retornar, yycolumn, yyline, yytext());}
 <YYINITIAL> "si"                                          {return new Symbol(DppPackage.Analizador.Simbolos.si, yycolumn, yyline, yytext());}
 <YYINITIAL> "sino"                                        {return new Symbol(DppPackage.Analizador.Simbolos.sino, yycolumn, yyline, yytext());}
+<YYINITIAL> "mientras"                                    {return new Symbol(DppPackage.Analizador.Simbolos.mientras, yycolumn, yyline, yytext());}
+<YYINITIAL> "para"                                        {return new Symbol(DppPackage.Analizador.Simbolos.para, yycolumn, yyline, yytext());}
+<YYINITIAL> "detener"                                     {return new Symbol(DppPackage.Analizador.Simbolos.detener, yycolumn, yyline, yytext());}
+<YYINITIAL> "continuar"                                   {return new Symbol(DppPackage.Analizador.Simbolos.continuar, yycolumn, yyline, yytext());}
+<YYINITIAL> "imprimir"                                    {return new Symbol(DppPackage.Analizador.Simbolos.imprimir, yycolumn, yyline, yytext());}
  
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                      {return new Symbol(DppPackage.Analizador.Simbolos.numEntero, yycolumn, yyline, yytext());}
 <YYINITIAL> {decimal}                                     {return new Symbol(DppPackage.Analizador.Simbolos.numDecimal, yycolumn, yyline, yytext());}
-<YYINITIAL> {caracter}                                    {return new Symbol(DppPackage.Analizador.Simbolos.dataChar, yycolumn, yyline, quitarDeTexto("\'",yytext()));}
-<YYINITIAL> {identificador}                               {return new Symbol(DppPackage.Analizador.Simbolos.identificador, yycolumn, yyline, yytext());}
+//<YYINITIAL> {caracter}                                    {return new Symbol(DppPackage.Analizador.Simbolos.dataChar, yycolumn, yyline, quitarDeTexto("\'",yytext()));}
+<YYINITIAL> {identificador}                               {return new Symbol(DppPackage.Analizador.Simbolos.identificador, yycolumn, yyline, quitarDeTexto("\'",yytext()));}
 <YYINITIAL> {CharLiteral}                                 {return new Symbol(DppPackage.Analizador.Simbolos.dataChar, yycolumn, yyline, quitarDeTexto("\"",yytext()));}
 <YYINITIAL> {StringLiteral}                               {return new Symbol(DppPackage.Analizador.Simbolos.dataString, yycolumn, yyline, yytext());}
 <YYINITIAL> {inicioComentarioMult}                        {yybegin(MULTICOMMENT);}

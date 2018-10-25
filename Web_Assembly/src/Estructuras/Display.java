@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class Display {
     ArrayList<NodoDisplay> nodos;
+    NodoDisplay ultimoCiclo;
     int counter;
     public Display()
     {
@@ -54,6 +55,18 @@ public class Display {
         if(!this.nodos.isEmpty())
         {
             return this.nodos.get(0);
+        }
+        return null;
+    }
+    
+    public NodoDisplay getLastCicle()
+    {
+        for(NodoDisplay n : this.nodos)
+        {
+            if(n.esCiclo)
+            {
+                return n;
+            }
         }
         return null;
     }
