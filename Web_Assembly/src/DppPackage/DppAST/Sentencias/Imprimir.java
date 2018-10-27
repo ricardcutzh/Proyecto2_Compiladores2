@@ -32,7 +32,24 @@ public class Imprimir extends NodoAST{
             {
                 case "CADENA":
                 {
-                    break;
+                    cad += "// PASANDO EL PUNTERO DEL HEAP A LA FUNCION DE IMPRIMIR\n";
+                    cad += "get_local 0 // PTR VIRTUAL\n";
+                    cad += (ambito.getSize()-1)+" // TAMANIO DEL PUNTERO\n";
+                    cad += "ADD \n";
+                    cad += "1 // ES EL UNICO PARAMETRO QUE RECIBE\n";
+                    cad += "ADD// sumo\n";
+                    cad += expCode +" // EN EL FONDO ESTA EL PUNTERO DEL HEAP QUE ES LO QUE PASARE\n";
+                    cad += "set_local $calc // COLOCO EL PUNTERO EN LA POSICION\n";
+                    cad += "get_local 0 // CAMBIANDO AMBITO\n";
+                    cad += (ambito.getSize()-1)+"\n";
+                    cad += "ADD // SUMANDO\n";
+                    cad += "set_local 0 // ACTUALIZANDO PUNTERO\n";
+                    cad += "Call $_PRINT_STRING\n";
+                    cad += "get_local 0 // REGRESANDO\n";
+                    cad += (ambito.getSize()-1)+"\n";
+                    cad += "DIFF // RESTANDO\n";
+                    cad += "set_local 0 // ACTUALIZANDO PUNTERO\n";
+                    return  cad;
                 }
                 case "":
                 {

@@ -5,6 +5,7 @@
  */
 package Simbolos;
 import Estructuras.*;
+import Estructuras.Global.DasmHeap;
 import java.util.HashMap;
 /**
  * CLASE QUE VA A CONTENER LAS ESTRUCTURAS NECESARIAS PARA REALIZAR LA EJECUCION
@@ -17,6 +18,7 @@ public class EntornoDasm {
     GestorFunciones gestor;
     Ret posicionRet;
     HashMap<String, Integer> etiquetas;
+    DasmHeap Heap;
     /**
      * Constructor del ambito DASM para el manejo de la ejecucion de todo lo que se necesita
      * @param gestor 
@@ -27,6 +29,7 @@ public class EntornoDasm {
         this.ambitos = new StackAmbito();
         this.gestor = gestor;
         posicionRet = new Ret();
+        this.Heap = new DasmHeap();
     }
     
     /**
@@ -80,6 +83,13 @@ public class EntornoDasm {
      */
     public HashMap<String, Integer> getEtiquetas() {
         return etiquetas;
+    }
+    /**
+     * Getter del Heap del entorno de DASM
+     * @return 
+     */
+    public DasmHeap getHeap() {
+        return Heap;
     }
     
     

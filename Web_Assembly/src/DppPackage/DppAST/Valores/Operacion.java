@@ -134,6 +134,10 @@ public class Operacion extends NodoAST implements Expresion {
                     {
                         return TraduceOR(op1, op2, codigo, ambito);
                     }
+                    case POT:
+                    {
+                        return TraducePotencia(op1, op2, codigo, ambito);
+                    }
                 }
             }
         } catch (Exception e) 
@@ -1384,6 +1388,264 @@ public class Operacion extends NodoAST implements Expresion {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica"
                     , "Error al traducir el OR: "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna()
                     , false, super.getArchivo()));
+        }
+        return "";
+    }
+    //**************************************************************************************
+    //*                                      IGUAL                                         *
+    //**************************************************************************************
+    //*               |    ENTERO    |   CADENA   |    BOOLEAN   |   CARACTER  |   DECIMAL *
+    //*-------------------------------------------------------------------------------------
+    //*    ENTERO     |      11      |    pp      |      13      |     14      |     15    *
+    //*------------------------------------------------------------------------------------*
+    //*    CADENA     |      00      |    PP      |      00      |     00      |     00    *
+    //*------------------------------------------------------------------------------------*
+    //*    BOOLEAN    |      31      |    PP      |      00      |     34      |     35    *
+    //*------------------------------------------------------------------------------------*
+    //*    CARACTER   |      41      |    PP      |      43      |     44      |     45    *
+    //*------------------------------------------------------------------------------------*
+    //*    DECIMAL    |      51      |    PP      |      53      |     54      |     55    *
+    //*------------------------------------------------------------------------------------*
+    private Object TraducePotencia(Expresion op1, Expresion op2, String codigo, Ambito ambito)
+    {
+        try 
+        {
+            String tipo1 = op1.getTipo(ambito);
+            String tipo2 = op2.getTipo(ambito);
+            NodoAST valor1 = (NodoAST)op1;
+            String t1 = (String)valor1.generateByteCode(ambito);
+            NodoAST valor2 = (NodoAST)op2;
+            String t2 = (String)valor2.generateByteCode(ambito);
+            switch(codigo)
+            {
+                case "11":
+                {
+                    resultado = "ENTERO";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                    
+                }
+                case "13":
+                {
+                    resultado = "ENTERO";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                }
+                case "14":
+                {
+                    resultado = "ENTERO";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                }
+                case "51":
+                {
+                    resultado = "DECIMAL";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                }
+                case "53":
+                {
+                    resultado = "DECIMAL";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                }
+                case "54":
+                {
+                    resultado = "DECIMAL";
+                    String cad = "// PASANDO PARAMETROS A POTENCIA\n";
+                    cad += "// PRIMER PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // sumando...\n";
+                    cad += "1 // PARAMETRO BASE...\n";
+                    cad += "ADD // POSICION ABSOULTA...\n";
+                    cad += "// BASE.....\n";
+                    cad += t1+"\n";
+                    cad += "// FIN BASE \n";
+                    cad += "set_local $calc\n";
+                    cad += "// SEGUNDO PARAMETRO\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // SUMA....\n";
+                    cad += "2 // PARAMETRO POTENCIADOR\n";
+                    cad += "ADD // POSICION ABSOLUTA DE LA FUNCION\n";
+                    cad += "// POTENCIA\n";
+                    cad += t2+"\n";
+                    cad += "set_local $calc\n";
+                    cad += "// FIN POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "ADD // CAMBIANDO DEL AMBITO\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "Call $_POW // LLAMADA DE POTENCIA\n";
+                    cad += "get_local 0 // PUNTERO DE STACK\n";
+                    cad += (ambito.getSize()-1)+"// TAMANIO DEL AMBITO\n";
+                    cad += "DIFF // RESTA\n";
+                    cad += "set_local 0 // ACTUALIZANDO EL PUNTERO\n";
+                    cad += "get_local $ret// obteniendo el retorno\n";
+                    return cad;
+                }
+                default:
+                {
+                    InfoEstatica.Estatico.agregarError(new TError(t1+"Potencia: "+t2, "La operacion Potencia no se puede aplicar para los tipos indicados"
+                            , "Semantico", super.getLinea(), super.getColumna(), false, super.getArchivo()));
+                }
+            }
+        } catch (Exception e) {
+            InfoEstatica.Estatico.agregarError(new TError(
+                    "No Aplica", "Error al traducir Potencia: "+e.getMessage(), "Ejecucion"
+                    , super.getLinea(), super.getColumna(), false, super.getArchivo()
+            ));
         }
         return "";
     }

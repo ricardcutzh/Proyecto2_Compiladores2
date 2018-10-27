@@ -9,6 +9,7 @@ import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
 import ErrorManager.TError;
 import Estructuras.IP;
+import Estructuras.NodoPilita;
 import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
@@ -35,6 +36,7 @@ public class SetLocal extends NodoAST implements SentenciaDasm{
                     InfoEstatica.Estatico.suspended = true;
                     InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                     InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                    InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                     InfoEstatica.Estatico.hilo.suspend();
                 }
                 else
@@ -46,12 +48,28 @@ public class SetLocal extends NodoAST implements SentenciaDasm{
                         InfoEstatica.Estatico.suspended = true;
                         InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                         InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                        InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                         InfoEstatica.Estatico.hilo.suspend();
                     }
                 }
             }
-            Double valor = entorno.getPilita().pop().getValor();
-            entorno.getAmbitos().set_local(new NodoStack(posicion, valor, 1, "Variable"), posicion);// COLOCANDO EN STACK EL VALOR INDICADO
+            NodoPilita val = entorno.getPilita().pop();
+            if(val !=null)
+            {
+                entorno.getAmbitos().set_local(new NodoStack(posicion, val.getValor(), 1, "Variable"), posicion);
+            }
+            else
+            {
+                InfoEstatica.Estatico.agregarError(new TError("Pila Auxliliar vacia"
+                        , "Error al ejecutar 'set_local "+posicion+"': Valor Nulo"
+                        , "Semantico"
+                        , super.getLinea()
+                        , super.getColumna()
+                        , Boolean.FALSE
+                        , super.getArchivo()));
+            }
+            /*Double valor = entorno.getPilita().pop().getValor();
+            entorno.getAmbitos().set_local(new NodoStack(posicion, valor, 1, "Variable"), posicion);// COLOCANDO EN STACK EL VALOR INDICADO*/
         } catch (Exception e) 
         {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar: setlocal: "+e.getMessage()

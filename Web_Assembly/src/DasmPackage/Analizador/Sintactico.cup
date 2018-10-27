@@ -107,7 +107,14 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              if(inst==null){inst = new ArrayList<>();}
              RESULT = inst;
            :}
-           | SENTENCIAS GET_GLOBAL
+           | SENTENCIAS:lista GET_GLOBAL:ins
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             SentenciaDasm i = (SentenciaDasm)ins;
+             inst.add(i);
+             RESULT = inst;
+           :}
            | SENTENCIAS:lista GET_LOCAL:ins
            {:
              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
@@ -116,7 +123,14 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | SENTENCIAS SET_GLOBAL
+           | SENTENCIAS:lista SET_GLOBAL:ins
+           {:
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             SentenciaDasm i = (SentenciaDasm)ins;
+             inst.add(i);
+             RESULT = inst;
+           :}
            | SENTENCIAS:lista SET_LOCAL:ins
            {:
              ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
@@ -445,7 +459,13 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
               RESULT = inst;
            :}
            | FUNCION
-           | GET_GLOBAL
+           | GET_GLOBAL:ins
+           {:
+             SentenciaDasm i = (SentenciaDasm)ins;
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
            | GET_LOCAL:ins
            {:
               SentenciaDasm i = (SentenciaDasm)ins;
@@ -460,7 +480,13 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | SET_GLOBAL
+           | SET_GLOBAL:ins
+           {:
+             SentenciaDasm i = (SentenciaDasm)ins;
+             ArrayList<SentenciaDasm> inst = new ArrayList<>();
+             inst.add(i);
+             RESULT = inst;
+           :}
            | LLAMADO:ins
            {:
               SentenciaDasm i = (SentenciaDasm)ins;
@@ -503,15 +529,16 @@ SET_LOCAL ::= slocal entero:val
           :}
           ;
 /////////////////////////////////////////////////
-GET_GLOBAL ::= gglobal entero
+GET_GLOBAL ::= gglobal entero:val
           {:
-              System.out.println("get_global entero");
+              GetGlobal i = new GetGlobal(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              RESULT = i;
           :}
-          | gglobal calc
+          | gglobal calc:val
           {:
-            System.out.println("get_global $calc");
+              GetGlobalCalc i = new GetGlobalCalc(valright, valleft, ArchivoOrigen);
+              RESULT = i;
           :}
-          | gglobal ret
           ;
 /////////////////////////////////////////////////
 GET_LOCAL ::= glocal entero:val
@@ -531,15 +558,16 @@ GET_LOCAL ::= glocal entero:val
           :}
           ;
 /////////////////////////////////////////////////
-SET_GLOBAL ::= sglobal entero
+SET_GLOBAL ::= sglobal entero:val
           {:
-            System.out.println("set_global entero");
+              SetGlobal i = new SetGlobal(valright, valleft, ArchivoOrigen, Integer.parseInt(val));
+              RESULT = i;
           :}
-          | sglobal calc
+          | sglobal calc:val
           {:
-            System.out.println("set_global $calc");
+              SetGlobalCalc i = new SetGlobalCalc(valright, valleft, ArchivoOrigen);
+              RESULT = i;
           :}
-          | sglobal ret
           ;
 //////////////////////////////////////////////////
 LLAMADO ::= llama identificador:id

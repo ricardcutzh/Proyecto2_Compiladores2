@@ -65,6 +65,7 @@ public class Estatico {
     ////////////////////////////////////////////////////////////////////////////
     public static JTable pilitaTable;
     public static JTable StackTable;
+    public static JTable HeapTable;
     ////////////////////////////////////////////////////////////////////////////
     public static Display display;
     ////////////////////////////////////////////////////////////////////////////
@@ -387,6 +388,19 @@ public class Estatico {
         } catch (Exception e) 
         {
             
+        }
+    }
+    
+    public static void ActualizaHeap(Estructuras.Global.DasmHeap heap)
+    {
+        try {
+            DefaultTableModel model = (DefaultTableModel)HeapTable.getModel();
+            if(model.getRowCount()>0)
+            {
+                model.setRowCount(0);
+            }
+            heap.graficarHeap(model);
+        } catch (Exception e) {
         }
     }
 }

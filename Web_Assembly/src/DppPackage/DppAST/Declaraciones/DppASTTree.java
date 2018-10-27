@@ -12,8 +12,11 @@ import ErrorManager.TError;
 import ObjsComun.Clave;
 import Simbolos.Ambito;
 import Simbolos.MetodoFuncion;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -102,6 +105,9 @@ public class DppASTTree extends NodoAST {
             // ESCRIBE LOS DEMAS METODOS
             EscribeMetodos(ambito, fw, funcs);
             //////////////////////////////////////////////////////////////////
+            // ESCRIBIR LAS NATIVAS
+            EscribeFuncionesPorDefecto(fw);
+            //////////////////////////////////////////////////////////////////
             fw.close();
             if (InfoEstatica.Estatico.errores.size() > 0) {
                 JOptionPane.showMessageDialog(null, "Existen errores |  SALIDA NO PRODUCIDA!", "Errores Semanticos", JOptionPane.ERROR_MESSAGE);
@@ -172,5 +178,41 @@ public class DppASTTree extends NodoAST {
         } catch (Exception e) {
         }
     }
-
+    
+    
+    private void EscribeFuncionesPorDefecto( FileWriter fw)
+    {
+        try 
+        {
+            String func = readText();
+            func += "\n";
+            fw.write(func);
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("Funciones Custom", "Error en la escritrura de funciones custom: "+e.getMessage()
+                    , "Ejecucion", super.getLinea()
+                    , super.getColumna()
+                    , false, "Functions.txt"));
+        }
+    }
+    
+    private String readText()
+    {
+        try 
+        {
+            String cad = "";
+            InputStream res = getClass().getResourceAsStream("/DppPackage/DppAST/Custom/Functions.txt");
+            BufferedReader buff = new BufferedReader(new InputStreamReader(res));
+            String line = "";
+            while((line = buff.readLine())!=null)
+            {
+                cad += line+"\n";
+            }
+            return cad;
+        } catch (Exception e) 
+        {
+            
+        }
+        return "";
+    }
 }

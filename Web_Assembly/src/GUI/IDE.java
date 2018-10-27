@@ -47,6 +47,7 @@ public class IDE extends javax.swing.JFrame {
         Estatico.setUp(this.Consola, this.TablaError, this.SimbolTable);
         Estatico.pilitaTable = this.PilitaTable;
         Estatico.StackTable = this.StackTable;
+        Estatico.HeapTable = this.HeapTable;
         Estatico.colocaTablaBreaks(TablaBreaks);
     }
 
@@ -100,6 +101,8 @@ public class IDE extends javax.swing.JFrame {
         PilitaTable = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         StackTable = new javax.swing.JTable();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        HeapTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
@@ -413,6 +416,26 @@ public class IDE extends javax.swing.JFrame {
         jScrollPane8.setViewportView(StackTable);
 
         jTabbedPane2.addTab("Stack Ambitos", jScrollPane8);
+
+        HeapTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Valor", "Indice"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane9.setViewportView(HeapTable);
+
+        jTabbedPane2.addTab("Heap", jScrollPane9);
 
         jScrollPane6.setViewportView(jTabbedPane2);
 
@@ -888,6 +911,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JButton DeleteFile;
     private javax.swing.JLabel DirToCreate;
     private javax.swing.JTabbedPane EditorTab;
+    private javax.swing.JTable HeapTable;
     private javax.swing.JMenu HideTabs;
     private javax.swing.JButton NextBreakPoint;
     private javax.swing.JButton NextLine;
@@ -920,6 +944,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;

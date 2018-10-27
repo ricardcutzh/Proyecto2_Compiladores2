@@ -49,7 +49,18 @@ public class AsignacionVar extends NodoAST{
                     {
                         case "CADENA":
                         {
-                            break;
+                            if(tipoObtenido.equals(simbolo.getTipo()))
+                            {
+                                String cad = "\n/**************************************************************************/\n";
+                                cad += "// "+id+" = PUNTERO A CADENA EN EL HEAP \n";
+                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                cad += expCode+"\n";
+                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                cad += "/**************************************************************************/\n";
+                                return cad;
+                            }
                         }
                         case "ENTERO":
                         {

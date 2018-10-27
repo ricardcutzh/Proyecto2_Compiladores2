@@ -75,7 +75,24 @@ public class DeclaracionVar extends NodoAST {
                         {
                             case "CADENA":
                             {
-                                break;
+                                if(tipoObtenido.equals("CADENA"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA \n";
+                                    cad += expCode+"\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                    ambito.addDppSimbol(id, simbolo);
+                                    InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
+                                }
+                                else
+                                {
+                                    InfoEstatica.Estatico.agregarError(new TError("Tipo Obtenido: "+tipoObtenido, "No se puede asignar: "+tipoObtenido+" a una variable de tipo: Entero", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
+                                }
+                                continue;
                             }
                             case "ENTERO":
                             {
@@ -169,7 +186,16 @@ public class DeclaracionVar extends NodoAST {
                         {
                             case "CADENA":
                             {
-                                break;
+                                cad += "\n/**************************************************************************/\n";
+                                cad += "// "+id+"; CADENA SIN ASIGNACION....\n";
+                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO YA QUE EL PUNTERO APUNTA A NULO....\n";
+                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                cad += "/**************************************************************************/\n";
+                                ambito.addDppSimbol(id, simbolo);
+                                continue;
                             }
                             case "ENTERO":
                             {

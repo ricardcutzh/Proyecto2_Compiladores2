@@ -10,6 +10,7 @@ import Abstraccion.SentenciaDasm;
 import ErrorManager.TError;
 import Estructuras.IP;
 import Estructuras.NodoPilita;
+import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
@@ -40,6 +41,7 @@ public class GetLocalCalc extends NodoAST implements SentenciaDasm{
                     InfoEstatica.Estatico.suspended = true;
                     InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                     InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                    InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                     InfoEstatica.Estatico.hilo.suspend();
                 }
                 else
@@ -51,16 +53,46 @@ public class GetLocalCalc extends NodoAST implements SentenciaDasm{
                         InfoEstatica.Estatico.suspended = true;
                         InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                         InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                        InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                         InfoEstatica.Estatico.hilo.suspend();
                     }
                 }
             }
-            Integer posicion = entorno.getPilita().pop().getValor().intValue();// POSICION DE MEMORIA A STACK ---> EN LA CIMA DE LA PILA
+            NodoPilita posion = entorno.getPilita().pop();
+            if(posion!=null)
+            {
+                NodoStack val = entorno.getAmbitos().get_local(posion.getValor().intValue());
+                if(val!=null)
+                {
+                    entorno.getPilita().push(new NodoPilita(1, 0, val.getValorAlamacenado()));
+                }
+                else
+                {
+                    InfoEstatica.Estatico.agregarError(new TError("get_local $calc (Posicion Stack: "+posion.getValor().intValue()+")"
+                            , "La posicion a la que se hace referencia no existe: Nulo"
+                            , "Semantico"
+                            , super.getLinea()
+                            , super.getColumna()
+                            , Boolean.FALSE
+                            , super.getArchivo()));
+                }
+            }
+            else
+            {
+                InfoEstatica.Estatico.agregarError(new TError("get_local $calc"
+                            , "No hay datos en La Pila Auxiliar"
+                            , "Semantico"
+                            , super.getLinea()
+                            , super.getColumna()
+                            , Boolean.FALSE
+                            , super.getArchivo()));
+            }
+            /*Integer posicion = entorno.getPilita().pop().getValor().intValue();// POSICION DE MEMORIA A STACK ---> EN LA CIMA DE LA PILA
             Double valor = entorno.getAmbitos().get_local(posicion).getValorAlamacenado(); // OBTENGO EL VALOR EN LA PILA DE STACK
-            entorno.getPilita().push(new NodoPilita(0, 0, valor)); // LO SETEO EN LA CIMA DE LA PILA
+            entorno.getPilita().push(new NodoPilita(0, 0, valor)); // LO SETEO EN LA CIMA DE LA PILA*/
         } catch (Exception e) 
         {
-            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar 'get_local $calc'", "Ejecucion"
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejecutar 'get_local $calc': "+e.getMessage(), "Ejecucion"
                     , super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
         }
         instrucctionPointer.setIndiceActual(instrucctionPointer.getIndiceActual() + 1);// AUMENTO DEL IP

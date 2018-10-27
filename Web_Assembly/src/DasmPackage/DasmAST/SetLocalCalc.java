@@ -9,6 +9,7 @@ import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
 import ErrorManager.TError;
 import Estructuras.IP;
+import Estructuras.NodoPilita;
 import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
@@ -39,6 +40,7 @@ public class SetLocalCalc extends NodoAST implements SentenciaDasm{
                     InfoEstatica.Estatico.suspended = true;
                     InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                     InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                    InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                     InfoEstatica.Estatico.hilo.suspend();
                 }
                 else
@@ -50,13 +52,31 @@ public class SetLocalCalc extends NodoAST implements SentenciaDasm{
                         InfoEstatica.Estatico.suspended = true;
                         InfoEstatica.Estatico.ActualizaPilita(entorno.getPilita());
                         InfoEstatica.Estatico.ActualizaStack(entorno.getAmbitos());
+                        InfoEstatica.Estatico.ActualizaHeap(entorno.getHeap());
                         InfoEstatica.Estatico.hilo.suspend();
                     }
                 }
             }
-            Double valor = entorno.getPilita().pop().getValor(); // VALOR QUE VOY A ASIGNAR EN LA POSICION ANTERIOR
+            NodoPilita val = entorno.getPilita().pop();
+            NodoPilita pos = entorno.getPilita().pop();
+            if(val !=null && pos != null)
+            {
+                entorno.getAmbitos().set_local(new NodoStack(pos.getValor().intValue(), val.getValor(), 1, "Variable"), pos.getValor().intValue());
+            }
+            else
+            {
+                InfoEstatica.Estatico.agregarError(new TError(
+                    "Posicion o Valor Nulos"
+                    , "Error al ejecutar 'set_local "+"$calc"+"': Referencia a valores que no existen"
+                    , "Semantico"
+                    , super.getLinea()
+                    , super.getColumna()
+                    , Boolean.FALSE
+                    , super.getArchivo()));
+            }
+            /*Double valor = entorno.getPilita().pop().getValor(); // VALOR QUE VOY A ASIGNAR EN LA POSICION ANTERIOR
             Integer posicion = entorno.getPilita().pop().getValor().intValue(); // EN LA CIMA ESTA LA POSICION DE MEMORIA A COLOCAR
-            entorno.getAmbitos().set_local(new NodoStack(posicion, valor, 1, "Variable"), posicion); // ASIGNANDO A LOS AMBITOS LA POSICION 
+            entorno.getAmbitos().set_local(new NodoStack(posicion, valor, 1, "Variable"), posicion); // ASIGNANDO A LOS AMBITOS LA POSICION */
         } catch (Exception e) 
         {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al ejetucar 'set_local $calc': "+e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));

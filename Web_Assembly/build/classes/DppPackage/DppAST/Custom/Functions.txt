@@ -1,0 +1,201 @@
+/***************************************************************************************************/
+// FUNCIONES POR DEFECTO
+// FUNCION DE POTENCIA, RECIBE 2 PARAMETROS PARA EJECUTAR Y ES RECURSIVA
+Function $_POW
+    /**************************************************************************/
+	//*           IF_SINO
+	/**************************************************************************/
+	// CONDICION
+	
+	get_local 0 // OBTENIENDO PUNTERO STACK
+	2 // POSICION DE LA VARIABLE
+	ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+	get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+	
+	0
+	DIFF
+	EQZ
+	// FIN CONDICION
+	BR_IF $IF_0_1_FALSO_0 // SI LA CONDICION ES FALSA...
+			
+			//---------- SENTENCIAS ----------
+			
+			/**************************************************************************/
+			// RETORNO CON VALOR
+			1
+			set_local $ret // PONGO EL RETORNO EN LA POSICION DE RET
+			
+			BR $e_retornar // SALTO A LA ETIQUETA DE RETORNAR
+			/**************************************************************************/
+			
+			//---------- FIN SENTENCIAS ----------
+			BR $IF_0_1_SALIDA // SALIR PARA NO CUMPLOR LAS DEMAS
+	$IF_0_1_FALSO_0 // ETIQUETA DE NO CUMPLIR LA CONDICION
+	/**************************************************************************/
+	
+	// SENTENCIA POR DEFAULT SINO
+			
+			//---------- SENTENCIAS ----------
+			
+			/**************************************************************************/
+			// RETORNO CON VALOR
+			
+			get_local 0 // OBTENIENDO PUNTERO STACK
+			1 // POSICION DE LA VARIABLE
+			ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+			get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+			
+			
+			/**************************************************************************/
+			// PASANDO PARAMETROS..
+			
+			/**************************************************************************/
+			// PARAM: 1 de Tipo Entero 
+			get_local 0 // PUNTERO VIRTUAL
+			2// TAMMANIO DEL AMBITO
+			ADD // SUMO
+			1 // NUMERO DE PARAMETRO A COLOCAR
+			ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+			
+			get_local 0 // OBTENIENDO PUNTERO STACK
+			1 // POSICION DE LA VARIABLE
+			ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+			get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+			
+			set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA
+			/**************************************************************************/
+			
+			/**************************************************************************/
+			// PARAM: 2 de Tipo Entero 
+			get_local 0 // PUNTERO VIRTUAL
+			2// TAMMANIO DEL AMBITO
+			ADD // SUMO
+			2 // NUMERO DE PARAMETRO A COLOCAR
+			ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+			
+			get_local 0 // OBTENIENDO PUNTERO STACK
+			2 // POSICION DE LA VARIABLE
+			ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+			get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+			
+			1
+			DIFF
+			
+			set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA
+			/**************************************************************************/
+			// FIN DE PASO DE PARAEMTROS
+			get_local 0 // CAMBIANDO DE AMBITO
+			2 // SIZE DEL AMBITO PARA AVANZAR
+			ADD // SUMA PARA MOVERME
+			set_local 0 // ACTUALIZA EL PUNTERO
+			
+			Call $_POW// LLAMADO DE FUNCION
+			get_local 0 // REGRESANDO AL AMBITO ANTERIOR
+			2 // SIZE DEL AMBITO PARA REGRESAR
+			DIFF // RESTAR EL AMBITO
+			set_local 0 // ACTUALIZA EL PUNTERO
+			// OBTENIENDO EL RETORNO DE LA FUNCION Y COLOCANDOLO EN LA PILA
+			get_local $ret
+			/**************************************************************************/
+			
+			MULT
+			
+			set_local $ret // PONGO EL RETORNO EN LA POSICION DE RET
+			
+			BR $e_retornar // SALTO A LA ETIQUETA DE RETORNAR
+			/**************************************************************************/
+			
+			//---------- FIN SENTENCIAS ----------
+	/**************************************************************************/
+	
+	$IF_0_1_SALIDA //SALE DEL IF..
+
+	$e_retornar
+End
+/***************************************************************************************************/
+
+/***************************************************************************************************/
+Function $_PRINT_STRING
+
+	// >> 
+	"%c"
+	10 //\n
+	PRINT
+
+	"%c"
+	62 //O
+	PRINT
+
+	"%c"
+	62 //O
+	PRINT
+
+	"%c"
+	32 //O
+	PRINT
+	
+	// BERIFICO SI ES NULO..
+
+	// OBTENGO EL PRIMER PARAMETRO (PUNTERO A HEAP)
+	get_local 0
+	1
+	ADD
+	get_local $calc
+	// YA TENGO EL PUNTERO EN PILITA
+
+	BR_IF $NULO // SI EL PUNTERO ES NULO
+
+	$INICIO
+		get_local 0
+		1
+		ADD
+		get_local $calc // OBTENGO EL PUNTERO A HEAP DE NUEVO
+		get_global $calc // OBTENGO EL VALOR QUE APUNTA EL VALOR ANTERIOR (PILA SE PONE EL VALOR ACTUAL DEL HEAP)
+		BR_IF $SALIR // SI EL CARACTER ES NULO SALE...
+			"%c"     // PARA IMPRIMIR CHAR
+			get_local 0
+			1
+			ADD
+			get_local $calc // OBTENGO EL PUNTERO A HEAP
+
+			get_global $calc // OBTENGO EL CARACTER Y LO PONGO EN LA CIMA DE LA PILA
+
+			PRINT // LO MUESTRO EN PANTALLA
+
+			// AUMENTO EL PUNTERO..
+			get_local 0
+			1
+			ADD
+
+			get_local 0
+			1
+			ADD
+			get_local $calc
+
+			1
+			ADD
+			set_local $calc
+
+			BR $INICIO
+
+	$NULO
+		"%c"
+		78 //N
+		PRINT
+
+		"%c"
+		85 //U
+		PRINT
+
+		"%c"
+		76 //L
+		PRINT
+
+		"%c"
+		79 //O
+		PRINT
+
+	$SALIR
+
+		
+End

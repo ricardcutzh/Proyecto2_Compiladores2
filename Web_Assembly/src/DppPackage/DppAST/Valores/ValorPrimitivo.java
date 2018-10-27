@@ -44,6 +44,7 @@ public class ValorPrimitivo extends NodoAST implements Expresion{
                 case "CADENA":
                 {
                     
+                    return getStringDeclaration((String)this.valor);
                 }
                 case "BOOLEAN":// TAMANO DE 1 BYTE
                 {
@@ -75,6 +76,40 @@ public class ValorPrimitivo extends NodoAST implements Expresion{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    private String getStringDeclaration(String cadena)
+    {
+        try 
+        {
+            cadena = cadena.replace("\"", "");
+            char arr [] = cadena.toCharArray();
+            String cad = "// ASIGNANDO CADENA.....\n";
+            cad += "get_global 0 // METIENDO EL PUNTERO DEL INICIO DE LA CADENA DEL HEAP EN EL FONDO DEL STACK\n";
+            for(char c : arr)
+            {
+                cad += "get_global 0 // PUNTERO HEAP\n";
+                cad += String.valueOf((int)c)+"// '"+c+"' INSERTANDO EL VALOR DEL CARACTER \n";
+                cad += "set_global $calc // COLOCO EL CARACTER EN LA POSICION QUE LE TECOA...\n";
+                cad += "get_global 0 // ACTUALIZANDO PUNTERO..\n";
+                cad += "1 // AUMENTANDO 1\n";
+                cad += "ADD //SUMO\n";
+                cad += "set_global 0 // AUMENTANDO EL PUNTERO EN UNO\n";
+            }
+            cad += "get_global 0 // PUNTERO HEAP\n";
+            cad += "0 // CARACTER NULO\n";
+            cad += "set_global $calc // COLOCANDO CHAR NULO\n";
+            cad += "get_global 0 // ACTUALIZANDO PUNTERO..\n";
+            cad += "1 // AUMENTANDO 1\n";
+            cad += "ADD // SUMANDO\n";
+            cad += "set_global 0 // AUMENTANDO EL PUNTERO EN UNO\n";
+            return cad;
+        } catch (Exception e) 
+        {
+            InfoEstatica.Estatico.agregarError(new TError("No Aplica"
+                    , "Error al traducir la declaracion de una cadena"
+                    , "Ejecucion", super.getLinea(), super.getColumna()
+                    , Boolean.FALSE, super.getArchivo()));
+        }
+        return "";
+    }
     
 }
