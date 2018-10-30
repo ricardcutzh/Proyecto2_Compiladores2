@@ -253,6 +253,7 @@ public class Estatico {
             try {
                 int inicio = punteroText.getLineStartOffset(linea);
                 int fin = punteroText.getLineEndOffset(linea);
+                punteroText.setCaretPosition(inicio);// MUEVE EL CURSOR EN EL DEBUGGER
                 h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY));
 
             } catch (BadLocationException ex) {
@@ -267,7 +268,7 @@ public class Estatico {
             try {
                 int inicio = punteroText.getLineStartOffset(linea);
                 int fin = punteroText.getLineEndOffset(linea);
-                h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.MAGENTA));
+                h.addHighlight(inicio, fin, new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#e60000")));
             } catch (Exception e) {
 
             }

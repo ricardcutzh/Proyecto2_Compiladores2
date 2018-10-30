@@ -39,7 +39,7 @@ public class Imprimir extends NodoAST{
                     cad += "1 // ES EL UNICO PARAMETRO QUE RECIBE\n";
                     cad += "ADD// sumo\n";
                     cad += expCode +" // EN EL FONDO ESTA EL PUNTERO DEL HEAP QUE ES LO QUE PASARE\n";
-                    cad += "set_local $calc // COLOCO EL PUNTERO EN LA POSICION\n";
+                    //cad += "set_local $calc // COLOCO EL PUNTERO EN LA POSICION\n";
                     cad += "get_local 0 // CAMBIANDO AMBITO\n";
                     cad += (ambito.getSize()-1)+"\n";
                     cad += "ADD // SUMANDO\n";

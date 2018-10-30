@@ -3,18 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Sentencias/Imprimir.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/Estructuras/Global/DasmHeap.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/SetGlobalCalc.java</file>
             <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/InfoEstatica/Estatico.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/SetGlobal.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Sentencias/AsignacionVar.java</file>
             <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/GUI/IDE.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/Estructuras/StackAmbito.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/Print.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/GetGlobal.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DasmPackage/DasmAST/GetGlobalCalc.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Valores/Identificador.java</file>
         </group>
     </open-files>
 </project-private>

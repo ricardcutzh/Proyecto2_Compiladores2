@@ -77,14 +77,26 @@ public class DeclaracionVar extends NodoAST {
                             {
                                 if(tipoObtenido.equals("CADENA"))
                                 {
-                                    cad += "\n/**************************************************************************/\n";
-                                    cad += "// "+id+" = "+tipoObtenido+"\n";
-                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA \n";
-                                    cad += expCode+"\n";
-                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                    cad += "/**************************************************************************/\n";
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += expCode+"\n";
+                                        cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                        cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                        cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA \n";
+                                        cad += expCode+"\n";
+                                        cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 }
@@ -98,14 +110,26 @@ public class DeclaracionVar extends NodoAST {
                             {
                                 if(tipoObtenido.equals("ENTERO"))
                                 {
-                                    cad += "\n/**************************************************************************/\n";
-                                    cad += "// "+id+" = "+tipoObtenido+"\n";
-                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA \n";
-                                    cad += expCode+"\n";
-                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                    cad += "/**************************************************************************/\n";
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+" | GUARDANDO GLOBALMENTE \n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += expCode+"\n";
+                                        cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                        cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                        cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA \n";
+                                        cad += expCode+"\n";
+                                        cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 }
@@ -119,14 +143,26 @@ public class DeclaracionVar extends NodoAST {
                             {
                                 if(tipoObtenido.equals("DECIMAL"))
                                 {
-                                    cad += "\n/**************************************************************************/\n";
-                                    cad += "// "+id+" = "+tipoObtenido+"\n";
-                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE DECIMAL \n";
-                                    cad += expCode+"\n";
-                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                    cad += "/**************************************************************************/\n";
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+" | GUARDANDO GLOBALMENTE \n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += expCode+"\n";
+                                        cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                        cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                        cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE DECIMAL \n";
+                                        cad += expCode+"\n";
+                                        cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 }
@@ -140,14 +176,26 @@ public class DeclaracionVar extends NodoAST {
                             {
                                 if(tipoObtenido.equals("BOOLEAN"))
                                 {
-                                    cad += "\n/**************************************************************************/\n";
-                                    cad += "// "+id+" = "+tipoObtenido+"\n";
-                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE BOOLEANA \n";
-                                    cad += expCode+"\n";
-                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                    cad += "/**************************************************************************/\n";
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+" | GUARDANDO GLOBALMENTE \n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += expCode+"\n";
+                                        cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                        cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                        cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE BOOLEANA \n";
+                                        cad += expCode+"\n";
+                                        cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 }
@@ -161,14 +209,26 @@ public class DeclaracionVar extends NodoAST {
                             {
                                 if(tipoObtenido.equals("CARACTER"))
                                 {
-                                    cad += "\n/**************************************************************************/\n";
-                                    cad += "// "+id+" = "+tipoObtenido+"\n";
-                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                    cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                    cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE CARACTER \n";
-                                    cad += expCode+"\n";
-                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                    cad += "/**************************************************************************/\n";
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+" | GUARDANDO GLOBALMENTE \n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += expCode+"\n";
+                                        cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                        cad += simbolo.getPosicionRelativa() + "// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                        cad += "ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE CARACTER \n";
+                                        cad += expCode+"\n";
+                                        cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                        cad += "/**************************************************************************/\n";
+                                    }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 }
@@ -186,69 +246,129 @@ public class DeclaracionVar extends NodoAST {
                         {
                             case "CADENA":
                             {
-                                cad += "\n/**************************************************************************/\n";
-                                cad += "// "+id+"; CADENA SIN ASIGNACION....\n";
-                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
-                                cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO YA QUE EL PUNTERO APUNTA A NULO....\n";
-                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(ambito.getIdAmbito().equals("Global"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = NULO | GUARDANDO GLOBALMENTE \n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "0\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+"; CADENA SIN ASIGNACION....\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                    cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO YA QUE EL PUNTERO APUNTA A NULO....\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 ambito.addDppSimbol(id, simbolo);
                                 continue;
                             }
                             case "ENTERO":
                             {
-                                cad += "\n/**************************************************************************/\n";
-                                cad += "// "+id+"; (Entero sin asignacion)\n";
-                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
-                                cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
-                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(ambito.getIdAmbito().equals("Global"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = 0 | GUARDANDO GLOBALMENTE \n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "0\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+"; (Entero sin asignacion)\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                    cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 ambito.addDppSimbol(id, simbolo);
                                 InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 continue;
                             }
                             case "DECIMAL":
                             {
-                                cad += "\n/**************************************************************************/\n";
-                                cad += "// "+id+"; (Decimal sin asignacion)\n";
-                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
-                                cad += "0.0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
-                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(ambito.getIdAmbito().equals("Global"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = 0.0 | GUARDANDO GLOBALMENTE \n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "0.0\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+"; (Decimal sin asignacion)\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                    cad += "0.0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 ambito.addDppSimbol(id, simbolo);
                                 InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 continue;
                             }
                             case "BOOLEAN":
                             {
-                                cad += "\n/**************************************************************************/\n";
-                                cad += "// "+id+"; (Boolean sin asignacion)\n";
-                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
-                                cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
-                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(ambito.getIdAmbito().equals("Global"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = 0 | GUARDANDO GLOBALMENTE \n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "0.0\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+"; (Boolean sin asignacion)\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                    cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 ambito.addDppSimbol(id, simbolo);
                                 InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 continue;
                             }
                             case "CARACTER":
                             {
-                                cad += "\n/**************************************************************************/\n";
-                                cad += "// "+id+"; (Caracter sin asignacion)\n";
-                                cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
-                                cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
-                                cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
-                                cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(ambito.getIdAmbito().equals("Global"))
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+" = 0  | GUARDANDO GLOBALMENTE \n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "0\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "\n/**************************************************************************/\n";
+                                    cad += "// "+id+"; (Caracter sin asignacion)\n";
+                                    cad += puntero(ambito.getIdAmbito())+" 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA AL 0 DEL AMBITO ACTUAL\n";
+                                    cad += "ADD // SUMO PARA ENCONTRAR SU POSICION REAL \n";
+                                    cad += "0 //ASIGNACION DE VALOR 0 POR DEFECTO\n";
+                                    cad += getSet(ambito.getIdAmbito())+" $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 ambito.addDppSimbol(id, simbolo);
                                 InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 continue;

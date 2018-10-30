@@ -1,0 +1,109 @@
+/*
+/***************************************************************************************/
+// CONCATENAR STRING UTILIZANDO DOS PUNTEROS
+// PARAM 1: PUNTERO STRING 1
+// PARAM 2: PUNTERO STRING 2
+// RETORNAR EL PUNTERO DE LA CADENA RESULTANTE
+/***************************************************************************************/
+Function $_CONCAT_STRING
+
+	get_global 0 // PUNTERO DONDE INICIARA LA CADENA NUEVA
+
+	$CADENA1
+	get_local 0 // PUNTERO DEL STACK
+	1  // LUGAR DEL PUNTERO DEL PRIMER STRING
+	ADD // SUMA PARA ENCONTRAR SU VALOR
+	get_local $calc // PONE EL VALOR EN LA PILITA
+	get_global $calc // PONE EL CARACTER DE QUE ESTA EN LA CIMA
+
+	BR_IF $CADENA2 // SI EL CARACTER ES NULO CONTINUA CON LA SIGUIENTE CADENA
+
+		get_global 0 // PUNTERO DEL HEAP
+		/***********************************************************************/
+		get_local 0 // PUNTERO DE STACK
+		1
+		ADD // SUMO
+		get_local $calc // PONE EL VALOR DEL PUNTERO A HEAP EN LA PILITA
+		get_global $calc // OBTIENE EL CARACTER DEL HEAP
+		/***********************************************************************/
+		set_global $calc // PONE EL CARACTER EN LA SIGUIENTE POSICION DEL HEAP
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DEL HEAP
+		get_global 0
+		1
+		ADD
+		set_global 0
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DE LA CADENA 1
+		get_local 0
+		1
+		ADD
+
+		get_local 0
+		1
+		ADD
+		get_local $calc
+
+		1
+		ADD
+		set_local $calc
+		/***********************************************************************/
+		BR $CADENA1
+	
+	$CADENA2
+	get_local 0 // PUNTERO DEL STACK
+	2    // LUGAR DEL SEGUNDO STRING
+	ADD  // SUMA PARA ENCONTRAR SU VALOR
+	get_local $calc // PONE SU VALOR EN LA PILITA
+	get_global $calc // PONE EL CARACTER EN LA CIMA
+
+	BR_IF $FIN_CONCAT // SI EL CARACTER ES NULO FINALIZA 
+
+		get_global 0 // PUNTERO DEL 
+		/***********************************************************************/
+		get_local 0  // PUNTERO DE STACK
+		2
+		ADD 
+		get_local $calc // TOMO EL VALOR AL HEAP EN LA PILITA 
+		get_global $calc // OBTIENE EL CARACTER DEL HEAP
+		/***********************************************************************/
+		set_global $calc // PONE EL CARACTER EN LA SIGUIENTE POSICION DEL HEAP
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DEL HEAP
+		get_global 0
+		1
+		ADD
+		set_global 0
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DE LA CADENA 2
+		get_local 0
+		2
+		ADD
+
+		get_local 0
+		2
+		ADD
+		get_local $calc
+
+		1
+		ADD
+		set_local $calc
+		/***********************************************************************/
+		BR $CADENA2
+
+	$FIN_CONCAT
+
+	get_global 0 // PUNTERO DEL HEAP
+	0 // COLOCANDO EL CARACTER NULO
+	set_global $calc // COLOCANDO EL CARACTER NULO
+
+	get_global 0 // PUNTERO DEL HEAP
+	1
+	ADD
+	set_global 0 // AUMENTO EL PUNTERO
+
+	set_local $ret // COLOCANDO EL PUNTERO RESULTANTE EN LA POSICION DEL RET
+
+End
+
+*/

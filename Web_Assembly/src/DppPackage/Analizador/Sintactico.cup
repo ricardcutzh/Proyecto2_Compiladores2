@@ -1040,7 +1040,7 @@ E ::= E:val1 mas:aux E:val2
     {:
         //
         Expresion exp = (Expresion)val;
-        Operacion o = new Operacion(auxright, auxleft, ArchivoOrigen, exp, InfoEstatica.Estatico.OPERADORES.DEC);
+        Operacion o = new Operacion(auxright, auxleft, ArchivoOrigen, exp, InfoEstatica.Estatico.OPERADORES.NOT);
         RESULT = o;
     :}
     | menos:aux E:val 

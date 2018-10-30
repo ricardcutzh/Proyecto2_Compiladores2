@@ -1,7 +1,23 @@
 /***************************************************************************************************/
 // FUNCIONES POR DEFECTO
 // FUNCION DE POTENCIA, RECIBE 2 PARAMETROS PARA EJECUTAR Y ES RECURSIVA
+/***************************************************************************************************/
 Function $_POW
+	/*GUARDANDO ESPACIO PARA LOS PARAMETROS*/
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+
+	get_local 0
+	2
+	ADD
+	0
+	set_local $calc
+
+	set_local $calc
+	set_local $calc
     /**************************************************************************/
 	//*           IF_SINO
 	/**************************************************************************/
@@ -62,7 +78,6 @@ Function $_POW
 			ADD // SUMA PARA ENCONTRAR SU POSICION REAL
 			get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
 			
-			set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA
 			/**************************************************************************/
 			
 			/**************************************************************************/
@@ -81,7 +96,6 @@ Function $_POW
 			1
 			DIFF
 			
-			set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA
 			/**************************************************************************/
 			// FIN DE PASO DE PARAEMTROS
 			get_local 0 // CAMBIANDO DE AMBITO
@@ -116,7 +130,14 @@ End
 
 /***************************************************************************************************/
 Function $_PRINT_STRING
-
+	/*******************************************************************************/
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+	set_local $calc // PARAEMTRO 1
+	/*******************************************************************************/
 	// >> 
 	"%c"
 	10 //\n
@@ -198,4 +219,573 @@ Function $_PRINT_STRING
 	$SALIR
 
 		
+End
+/***************************************************************************************************/
+
+/***************************************************************************************************/
+// CONCATENAR STRING UTILIZANDO DOS PUNTEROS Y EL PUNTERO LIBRE DEL HEAP:
+// PARAM 1: PUNTERO STRING 1
+// PARAM 2: PUNTERO STRING 2
+// RETORNAR EL PUNTERO DE LA CADENA RESULTANTE
+/***************************************************************************************************/
+Function $_CONCAT_STRING
+	/*******************************************************************************/
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+
+	get_local 0
+	2
+	ADD
+	0
+	set_local $calc
+
+	set_local $calc // SACANDO PARAEMTRO 2
+	set_local $calc // SACANDO PARAMETRO 1
+	/*******************************************************************************/
+	get_global 0 // PUNTERO DONDE INICIARA LA CADENA NUEVA
+
+	$CADENA1
+	get_local 0 // PUNTERO DEL STACK
+	1  // LUGAR DEL PUNTERO DEL PRIMER STRING
+	ADD // SUMA PARA ENCONTRAR SU VALOR
+	get_local $calc // PONE EL VALOR EN LA PILITA
+	get_global $calc // PONE EL CARACTER DE QUE ESTA EN LA CIMA
+
+	BR_IF $CADENA2 // SI EL CARACTER ES NULO CONTINUA CON LA SIGUIENTE CADENA
+
+		get_global 0 // PUNTERO DEL HEAP
+		/***********************************************************************/
+		get_local 0 // PUNTERO DE STACK
+		1
+		ADD // SUMO
+		get_local $calc // PONE EL VALOR DEL PUNTERO A HEAP EN LA PILITA
+		get_global $calc // OBTIENE EL CARACTER DEL HEAP
+		/***********************************************************************/
+		set_global $calc // PONE EL CARACTER EN LA SIGUIENTE POSICION DEL HEAP
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DEL HEAP
+		get_global 0
+		1
+		ADD
+		set_global 0
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DE LA CADENA 1
+		get_local 0
+		1
+		ADD
+
+		get_local 0
+		1
+		ADD
+		get_local $calc
+
+		1
+		ADD
+		set_local $calc
+		/***********************************************************************/
+		BR $CADENA1
+	
+	$CADENA2
+	get_local 0 // PUNTERO DEL STACK
+	2    // LUGAR DEL SEGUNDO STRING
+	ADD  // SUMA PARA ENCONTRAR SU VALOR
+	get_local $calc // PONE SU VALOR EN LA PILITA
+	get_global $calc // PONE EL CARACTER EN LA CIMA
+
+	BR_IF $FIN_CONCAT // SI EL CARACTER ES NULO FINALIZA 
+
+		get_global 0 // PUNTERO DEL 
+		/***********************************************************************/
+		get_local 0  // PUNTERO DE STACK
+		2
+		ADD 
+		get_local $calc // TOMO EL VALOR AL HEAP EN LA PILITA 
+		get_global $calc // OBTIENE EL CARACTER DEL HEAP
+		/***********************************************************************/
+		set_global $calc // PONE EL CARACTER EN LA SIGUIENTE POSICION DEL HEAP
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DEL HEAP
+		get_global 0
+		1
+		ADD
+		set_global 0
+		/***********************************************************************/
+		// ACTUALIZANDO EL PUNTERO DE LA CADENA 2
+		get_local 0
+		2
+		ADD
+
+		get_local 0
+		2
+		ADD
+		get_local $calc
+
+		1
+		ADD
+		set_local $calc
+		/***********************************************************************/
+		BR $CADENA2
+
+	$FIN_CONCAT
+
+	get_global 0 // PUNTERO DEL HEAP
+	0 // COLOCANDO EL CARACTER NULO
+	set_global $calc // COLOCANDO EL CARACTER NULO
+
+	get_global 0 // PUNTERO DEL HEAP
+	1
+	ADD
+	set_global 0 // AUMENTO EL PUNTERO
+
+	set_local $ret // COLOCANDO EL PUNTERO RESULTANTE EN LA POSICION DEL RET
+
+End
+/***************************************************************************************************/
+
+/***************************************************************************************************/
+// FUNCION QUE CONVERTIRA UN NUMERO ENTERO A STRING
+// PARAM 1: NUMERO ENTERO A CONVERTIR
+/***************************************************************************************************/
+Function $_INT_TO_STRING
+	/*******************************************************************************/
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+	/*******************************************************************************/
+	set_local $calc // OBTENIENDO EL PRIMER PARAMETRO DE QUE ESTA EN LA PILA
+	/*******************************************************************************/
+	get_local 0
+	2
+	ADD
+	0
+	set_local $calc // COLOCANDO ESPACIO DE CARACTER
+	/*******************************************************************************/
+	get_local 0
+	3
+	ADD 
+	1
+	set_local $calc // COLOCANDO EL CONTADOR 1
+	/*******************************************************************************/
+	get_local 0
+	4
+	ADD
+	0
+	set_local $calc // EL COLOCANDO EL CONTADOR 2
+	/*******************************************************************************/
+	$INICIO
+	get_local 0
+	1
+	ADD
+	get_local $calc // OBTENGO EL PRIMERO PARAMETRO
+	10
+	GT // ES PARAM1 > 10?
+	BR_IF $TERMINAR // SINO ES MAYOR A 10 ENTONCES TERMINA
+		// SINO ES MENOR A 10....
+		/*******************************************************************************/
+		// OBTENIENDO EL NUMERO A PARTIR DEL MODULO
+		get_local 0
+		2
+		ADD // POSICION DE AMBITO DONDE GUARDARE EL CARACTER RESULTANTE
+
+		get_local 0
+		1
+		ADD
+		get_local $calc // OBTENGO EL PRIMER PARAMETRO
+
+		10
+		MOD // HAGO EL MODULAR PARAM1 MOD 10
+
+		set_local $calc // LO COLOCO EN LA POSICION QUE CALCULE ANTERIORMENTE
+		/*******************************************************************************/
+		// AUMENTO DEL CONTADOR 1
+		get_local 0
+		3
+		ADD
+
+		get_local 0
+		3
+		ADD
+		get_local $calc
+
+		1
+		ADD
+
+		set_local $calc
+		/*******************************************************************************/
+		// ACTUALIZANDO EL VALOR QUE SE RECALCULARA EN EL INICIO
+		get_local 0
+		1
+		ADD // POSICION DONDE LO COLOCARE
+
+		get_local 0
+		1
+		ADD
+		get_local $calc // PARAM 1
+
+		get_local 0
+		2
+		ADD
+		get_local $calc // PARAM1 2
+
+		DIFF // PARAM1 1 - PARAM2
+
+		set_local $calc // ACTUALIZA EL NUEVO VALOR
+		/*******************************************************************************/
+		// ACTUALIZA EL PARAM 1 PARA TENER EL SIGUIENTE VALOR QUE SE EXTRAERA EL DIGITO
+		get_local 0
+		1
+		ADD // DIRECCION QUE PONDRE EL PARAMETRO
+
+		get_local 0
+		1
+		ADD
+		get_local $calc // PARAM 1
+
+		10
+
+		DIV // DIVISION ENTRE 10
+
+		set_local $calc // COLOCANDO EL RESULTANTE EN PARAM 1 
+		/*******************************************************************************/
+		// PREPARANDO EL CARACTER PARA DESPUES COLOCARLO EN UNA POSICION DE HEAP
+		get_local 0
+		2
+		ADD // COLOCANDO LA DIRECCION DE PARAM 2 AL FONDO
+
+		get_local 0
+		2
+		ADD 
+		get_local $calc // COLOCANDO LUEGO EL DIGITO
+
+		48
+
+		ADD // CONVERTIR A ASCII
+		/*******************************************************************************/
+		BR $INICIO // SALTO AL INICIO		
+	$TERMINAR
+		/*******************************************************************************/
+		// EL ULTIMO CARACTER METERLO A LA PILA
+		get_local 0
+		2
+		ADD // METIENDO SU DIRECCION A COLOCARSE
+
+		get_local 0
+		1
+		ADD
+		get_local $calc // OBTENGO EL ULTIMO VALOR
+		48
+		ADD // LO CONVIERTO A ASCII
+		/*******************************************************************************/
+		// OBTENGO EL PUNTERO AL HEAP
+		get_local 0
+		5
+		ADD 
+
+		get_global 0
+
+		set_local $calc // PONGO EL PUNTERO EN LA POSICION 5
+		/*******************************************************************************/
+		$SIGUIENTE
+		/*******************************************************************************/	
+		//CONT 1
+		get_local 0
+		3
+		ADD
+		get_local $calc
+		//CONT 2
+		get_local 0
+		4
+		ADD
+		get_local $calc
+
+		DIFF // CONT1 - CONT2
+
+		BR_IF $SALIR // SI CONT1 == CONT 2 SALE
+			set_local $calc // COLOCANDO EN POSICION 2 EL CARACTER EN CUESTION
+			/*******************************************************************************/
+			get_global 0 // PUNTERO DE HEAP
+
+			get_local 0
+			2
+			ADD
+			get_local $calc // OBTENGO EL CARACTER
+
+			set_global $calc // LO METO AL HEAP
+			/*******************************************************************************/
+			/*******************************************************************************/
+			// HEAP++
+			get_global 0
+			1
+			ADD
+			set_global 0 // AUMENTO EL HEAP
+			/*******************************************************************************/
+			// AUMENTO DE CONTADOR 2
+			get_local 0
+			4
+			ADD
+
+			get_local 0
+			4
+			ADD
+			get_local $calc
+
+			1
+
+			ADD
+			set_local $calc
+			/*******************************************************************************/
+			BR $SIGUIENTE
+	$SALIR
+	/*******************************************************************************/
+	// COLOCANDO CARACTER DE FINALIZACION
+	get_global 0
+	0
+	set_global $calc
+	//HEAP ++
+	get_global 0
+	1
+	ADD
+	set_global 0
+	/*******************************************************************************/
+	get_local 0
+	5
+	ADD
+	get_local $calc
+	set_local $ret // COLOCO DONDE INICIARA EL NUMERO EN STRING EN EL HEAP 
+End
+
+/***************************************************************************************************/
+// FUNCION QUE CONVERTIRA EL NUMERO DECIMAL DADO A CADENA PARA PODER MOSTRARLO E IMPRIMIRLO
+// PARAM 1: NUMERO DECIMAL A CONVERTIR
+/*
+// PROTOTIPO DE FUNCIONAMIENTO
+cadena _decimalToString(decimal numero)
+{
+    entero entera = numero - (numero % 1);
+    entera puntodec = (numero % 1) * 100;
+
+    cadena return = entera + "." + puntodec;
+
+    retornar return;
+}
+*/
+/***************************************************************************************************/
+Function $_DECIMAL_TO_STRING
+	/*******************************************************************************/
+	// RESERVANDO ESPACIO PARA EL PARAMETRO A RECIBIR
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+	/*******************************************************************************/
+	// RECUPERANDO PARAMETRO EN LA PILA
+	set_local $calc
+	/*******************************************************************************/
+	// TOMANDO PARTE ENTERA DE EL DECIMAL
+	get_local 0
+	2
+	ADD
+
+	get_local 0
+	1
+	ADD
+	get_local $calc
+
+	get_local 0
+	1
+	ADD
+	get_local $calc
+
+	1
+
+	MOD
+
+	DIFF
+
+	set_local $calc
+	/*******************************************************************************/
+	// TOMANDO LA PARTE DECIMAL
+	get_local 0
+	3
+	ADD
+
+	get_local 0
+	1
+	ADD
+	get_local $calc
+
+	1
+
+	MOD
+
+	100
+
+	MULT
+
+	set_local $calc
+	/*******************************************************************************/
+	/**************************************************************************/
+	// return = CADENA
+	get_local 0 // TOMO EL PUNTERO DEL AMBITO ACTUAL
+	4// POSICION RELATIVA AL 0 DEL AMBITO ACTUAL
+	ADD // SUMO PARA ENCONTRAR LA POSICION REAL DE LA VARAIABLE ENTERA 
+	
+	/**************************************************************************/
+	// PARAM: 1 PUNTERO DE CADENA 1 
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	1 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	
+	/**************************************************************************/
+	// PARAM: 1 PUNTERO DE CADENA 1 
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	1 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	
+	/**************************************************************************/
+	// PARAM 1: ENTERO A CONVERTIR
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	1 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	
+	get_local 0 // OBTENIENDO PUNTERO STACK
+	2 // POSICION DE LA VARIABLE
+	ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+	get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+	
+	/**************************************************************************/
+	/**************************************************************************/
+	// LLAMANDO A FUNCION QUE CONTATENA Y DEVUELVE UN PUNTERO AL STRING RESULTADO
+	get_local 0 // INICIO LLAMADO
+	3 // SIZE DEL AMBITO PARA AVANZAR
+	ADD // SUMA PARA MOVERME
+	set_local 0 // ACTUALIZA EL PUNTERO
+	Call $_INT_TO_STRING // CONTANTENANDO STRING
+	get_local 0 // REGRESANDO AL AMBITO ANTERIOR
+	3 // SIZE DEL AMBITO PARA REGRESAR
+	DIFF // RESTAR EL AMBITO
+	set_local 0 // ACTUALIZA EL PUNTERO
+	// OBTENGO EL RETORNO DEL PUNTERO RESULTANTE 
+	get_local $ret //OBTENIENDO EL PUNTERO DE RETORNO EN LA PILITA
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	// PARAM: 2 PUNTERO DE CADENA 2 
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	2 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	// ASIGNANDO CADENA.....
+	get_global 0 // METIENDO EL PUNTERO DEL INICIO DE LA CADENA DEL HEAP EN EL FONDO DEL STACK
+	get_global 0 // PUNTERO HEAP
+	46// '.' INSERTANDO EL VALOR DEL CARACTER 
+	set_global $calc // COLOCO EL CARACTER EN LA POSICION QUE LE TECOA...
+	get_global 0 // ACTUALIZANDO PUNTERO..
+	1 // AUMENTANDO 1
+	ADD //SUMO
+	set_global 0 // AUMENTANDO EL PUNTERO EN UNO
+	get_global 0 // PUNTERO HEAP
+	0 // CARACTER NULO
+	set_global $calc // COLOCANDO CHAR NULO
+	get_global 0 // ACTUALIZANDO PUNTERO..
+	1 // AUMENTANDO 1
+	ADD // SUMANDO
+	set_global 0 // AUMENTANDO EL PUNTERO EN UNO
+	
+	/**************************************************************************/
+	// FIN DE PASO DE PARAMETROS
+	get_local 0 // INICIO LLAMADO
+	3 // SIZE DEL AMBITO PARA AVANZAR
+	ADD // SUMA PARA MOVERME
+	set_local 0 // ACTUALIZA EL PUNTERO
+	Call $_CONCAT_STRING // LLAMADO DE FUNCION
+	get_local 0 // REGRESANDO AL AMBITO ANTERIOR
+	3 // SIZE DEL AMBITO PARA REGRESAR
+	DIFF // RESTAR EL AMBITO
+	set_local 0 // ACTUALIZA EL PUNTERO
+	// OBTENGO EL RETORNO DEL PUNTERO RESULTANTE 
+	get_local $ret //OBTENIENDO EL PUNTERO DE RETORNO EN LA PILITA
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	// PARAM: 2 PUNTERO DE CADENA 2 
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	2 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	
+	/**************************************************************************/
+	// PARAM 1: ENTERO A CONVERTIR
+	get_local 0 // PUNTERO VIRTUAL
+	3// TAMMANIO DEL AMBITO
+	ADD // SUMO
+	1 // NUMERO DE PARAMETRO A COLOCAR
+	ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK
+	
+	get_local 0 // OBTENIENDO PUNTERO STACK
+	3 // POSICION DE LA VARIABLE
+	ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+	get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+	
+	/**************************************************************************/
+	/**************************************************************************/
+	// LLAMANDO A FUNCION QUE CONTATENA Y DEVUELVE UN PUNTERO AL STRING RESULTADO
+	get_local 0 // INICIO LLAMADO
+	3 // SIZE DEL AMBITO PARA AVANZAR
+	ADD // SUMA PARA MOVERME
+	set_local 0 // ACTUALIZA EL PUNTERO
+	Call $_INT_TO_STRING // CONTANTENANDO STRING
+	get_local 0 // REGRESANDO AL AMBITO ANTERIOR
+	3 // SIZE DEL AMBITO PARA REGRESAR
+	DIFF // RESTAR EL AMBITO
+	set_local 0 // ACTUALIZA EL PUNTERO
+	// OBTENGO EL RETORNO DEL PUNTERO RESULTANTE 
+	get_local $ret //OBTENIENDO EL PUNTERO DE RETORNO EN LA PILITA
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	// FIN DE PASO DE PARAMETROS
+	get_local 0 // INICIO LLAMADO
+	3 // SIZE DEL AMBITO PARA AVANZAR
+	ADD // SUMA PARA MOVERME
+	set_local 0 // ACTUALIZA EL PUNTERO
+	Call $_CONCAT_STRING // LLAMADO DE FUNCION
+	get_local 0 // REGRESANDO AL AMBITO ANTERIOR
+	3 // SIZE DEL AMBITO PARA REGRESAR
+	DIFF // RESTAR EL AMBITO
+	set_local 0 // ACTUALIZA EL PUNTERO
+	// OBTENGO EL RETORNO DEL PUNTERO RESULTANTE 
+	get_local $ret //OBTENIENDO EL PUNTERO DE RETORNO EN LA PILITA
+	/**************************************************************************/
+	
+	set_local $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA
+	/**************************************************************************/
+	
+	/**************************************************************************/
+	// RETORNO CON VALOR
+	
+	get_local 0 // OBTENIENDO PUNTERO STACK
+	4 // POSICION DE LA VARIABLE
+	ADD // SUMA PARA ENCONTRAR SU POSICION REAL
+	get_local $calc // OBTENIENDO EL VALOR DE VARIABLE
+	
+	set_local $ret // PONGO EL RETORNO EN LA POSICION DE RET
 End

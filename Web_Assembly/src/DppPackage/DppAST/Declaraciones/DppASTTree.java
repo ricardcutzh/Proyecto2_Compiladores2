@@ -135,7 +135,14 @@ public class DppASTTree extends NodoAST {
         }
         if(huboMain)
         {
+            vars += "\n/**************************************************************************/\n";
+            vars += "// CAMBIANDO A LOS AMBITOS LOCALES....\n";
+            vars += "get_local 0 \n";
+            vars += (ambito.getSize() - 1)+"\n";
+            vars += "ADD \n";
+            vars += "set_local 0\n";
             vars += "\nCall $principal\n";
+            vars += "/**************************************************************************/\n";
         }
         vars += "\n/******************************************************************************************/\n";
 

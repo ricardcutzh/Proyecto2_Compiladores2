@@ -52,14 +52,12 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
                 {
                     if(nodos.get(x).getIdParametro().equals("llama"))
                     {
-                        cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1, "", "");
+                        cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1, "\n", "\n");
+                        
                     }
-                }
-                for(int x = 0; x < codigoParametros.size(); x++)
-                {
-                    if(!nodos.get(x).getIdParametro().equals("llama"))
+                    else
                     {
-                        cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1, "", "");
+                        cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1, "\n", "\n");
                     }
                 }
                 cadena += "// FIN DE PASO DE PARAEMTROS\n";
@@ -143,6 +141,15 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
         {
             case "CADENA":
             {
+                cad += "\n/**************************************************************************/\n";
+                cad += "// PARAM: "+indice+" | PUNTERO A CADENA EN HEAP \n";
+                cad += "get_local 0 // PUNTERO VIRTUAL\n";
+                cad += AmbitoTam+"// TAMMANIO DEL AMBITO\n";
+                cad += "ADD // SUMO\n";
+                cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
+                cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                cad += expcode+"\n";
+                cad += "/**************************************************************************/\n";
                 break;
             }
             case "ENTERO":
@@ -154,8 +161,12 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
                 cad += "ADD // SUMO\n";
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                // AQUI DEBO INSERTAR EL CORRIMIENTO
+                cad += pre;
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                // AQUI DEBO INSERTR EL REGRESO
+                cad += pos;
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -168,8 +179,12 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
                 cad += "ADD // SUMO\n";
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                // AQUI VA POS
+                cad += pre;
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                // AQUI VA POS
+                cad += pos;
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -182,8 +197,12 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
                 cad += "ADD // SUMO\n";
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                // AQUI VA PRE 
+                cad += pre;
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                // AQUI VA POS
+                cad += pos;
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -196,8 +215,12 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
                 cad += "ADD // SUMO\n";
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                // AQUI VA PRE 
+                cad += pre;
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                // AQUI VA POS
+                cad += pos;
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }

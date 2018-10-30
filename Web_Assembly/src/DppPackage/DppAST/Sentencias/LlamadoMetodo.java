@@ -51,11 +51,9 @@ public class LlamadoMetodo extends NodoAST{
                     if(nodos.get(x).getIdParametro().equals("llama"))
                     {
                         cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1);
+                        
                     }
-                }
-                for(int x = 0; x < codigoParametros.size(); x++)
-                {
-                    if(!nodos.get(x).getIdParametro().equals("llama"))
+                    else
                     {
                         cadena += getCadenaParametro(x+1, codigoParametros.get(x), nodos.get(x).getTipo(), ambito.getSize()-1);
                     }
@@ -128,6 +126,15 @@ public class LlamadoMetodo extends NodoAST{
         {
             case "CADENA":
             {
+                cad += "\n/**************************************************************************/\n";
+                cad += "// PARAM: "+indice+" | PUNTERO A CADENA EN HEAP \n";
+                cad += "get_local 0 // PUNTERO VIRTUAL\n";
+                cad += AmbitoTam+"// TAMMANIO DEL AMBITO\n";
+                cad += "ADD // SUMO\n";
+                cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
+                cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                cad += expcode+"\n";
+                cad += "/**************************************************************************/\n";
                 break;
             }
             case "ENTERO":
@@ -140,7 +147,7 @@ public class LlamadoMetodo extends NodoAST{
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -154,7 +161,7 @@ public class LlamadoMetodo extends NodoAST{
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -168,7 +175,7 @@ public class LlamadoMetodo extends NodoAST{
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }
@@ -182,7 +189,7 @@ public class LlamadoMetodo extends NodoAST{
                 cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
                 cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
                 cad += expcode+"\n";
-                cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
                 cad += "/**************************************************************************/\n";
                 break;
             }

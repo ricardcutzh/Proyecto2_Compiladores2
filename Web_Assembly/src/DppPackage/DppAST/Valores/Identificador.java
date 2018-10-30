@@ -56,10 +56,21 @@ public class Identificador extends NodoAST implements Expresion{
                 if(s instanceof DppVar)
                 {
                     DppVar simbolo = (DppVar)s;
-                    String cad = simbolo.getAmbito().equals("Global")?"\nget_global 0 // OBTENIENDO PUNTERO\n":"\nget_local 0 // OBTENIENDO PUNTERO STACK\n";
-                    cad += simbolo.getPosicionRelativa() +" // POSICION DE LA VARIABLE\n";
-                    cad += "ADD // SUMA PARA ENCONTRAR SU POSICION REAL\n";
-                    cad += simbolo.getAmbito().equals("Global")?"get_global $calc //OBTENIENDO EL VALOR \n":"get_local $calc // OBTENIENDO EL VALOR DE VARIABLE\n";
+                    String cad = "";
+                    if(simbolo.getAmbito().equals("Global"))
+                    {
+                        cad += "// OBTENIENDO VARIABLE GLOBAL\n";
+                        cad += "// var: "+identificador+"\n";
+                        cad += simbolo.getPosicionRelativa()+"// POSICION ABSOLUTA DE LA VARIABLE EN EL AMBITO GLOBAL\n";
+                        cad += "get_local $calc\n";
+                    }
+                    else
+                    {
+                        cad = simbolo.getAmbito().equals("Global")?"\nget_global 0 // OBTENIENDO PUNTERO\n":"\nget_local 0 // OBTENIENDO PUNTERO STACK\n";
+                        cad += simbolo.getPosicionRelativa() +" // POSICION DE LA VARIABLE\n";
+                        cad += "ADD // SUMA PARA ENCONTRAR SU POSICION REAL\n";
+                        cad += simbolo.getAmbito().equals("Global")?"get_global $calc //OBTENIENDO EL VALOR \n":"get_local $calc // OBTENIENDO EL VALOR DE VARIABLE\n";
+                    }
                     return cad;
                 }
                 else
