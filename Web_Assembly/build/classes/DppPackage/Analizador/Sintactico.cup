@@ -1067,7 +1067,7 @@ E ::= E:val1 mas:aux E:val2
     | oParent E:e cParent
     {:
         //
-        RESULT = e;
+        RESULT = e; 
     :}
     | numEntero:val
     {:

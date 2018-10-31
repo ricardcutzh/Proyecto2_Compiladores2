@@ -10,6 +10,7 @@ import DracoScriptPackage.DracoAnalizador;
 import GUI.NavegorWeb.Interfaz.Navegador;
 import InfoEstatica.Estatico;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,6 +18,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import javax.swing.JOptionPane;
 import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
+import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
 import org.fife.ui.rtextarea.*;
 
 
@@ -53,19 +56,18 @@ public class WebAssEditor extends javax.swing.JPanel {
         {
             
         }
+        FoldParserManager.get().addFoldParserMapping("text/ds", new CurlyFoldParser());
+        FoldParserManager.get().addFoldParserMapping("text/dpp", new CurlyFoldParser());
+        
         
         
         this.setLayout(new BorderLayout());
         RSyntaxTextArea t = new RSyntaxTextArea();
         this.areaEdicion = t;
+        t.setCodeFoldingEnabled(true);
         colocaColorSyntaxis(t, fileExtension);
-        
-        
-        
         RTextScrollPane sp = new RTextScrollPane(t);
         this.add(sp);
-        
-        ReadFile();
     }
     
     public void ReadFile()
@@ -78,12 +80,31 @@ public class WebAssEditor extends javax.swing.JPanel {
             while(line != null)
             {
                 text += line+"\n";
-                line = reader.readLine();
+                line = reader.readLine();                
             }
             this.areaEdicion.setText(text);
+            reader.close();
         } catch (Exception e) {
             JOptionPane.showConfirmDialog(null, "Error: "+e.getMessage(), "Error Al Abrir el archivo", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public String readText()
+    {
+        try {
+            FileReader file = new FileReader(this.pathArchivo);
+            BufferedReader reader = new BufferedReader(file);
+            String text = "";
+            String line = reader.readLine();
+            while(line != null)
+            {
+                text += line+"\n";
+                line = reader.readLine();
+            }
+            return  text;
+        } catch (Exception e) {
+        }
+        return "";
     }
     
     /**
@@ -118,6 +139,7 @@ public class WebAssEditor extends javax.swing.JPanel {
             {
                 atmf.putMapping("text/ds", "GUI.TextEditorPanel.SyntaxDracoScript.DracoScriptSyntax");
                 editor.setSyntaxEditingStyle("text/ds");
+                
                 try {
                     Theme theme = Theme.load(getClass().getResourceAsStream("/GUI/TextEditorPanel/SyntaxDracoScript/DracoTema.xml"));
                     theme.apply(editor);

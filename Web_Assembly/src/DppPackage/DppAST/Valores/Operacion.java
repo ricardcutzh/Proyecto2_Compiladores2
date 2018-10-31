@@ -829,6 +829,10 @@ public class Operacion extends NodoAST implements Expresion {
                     resultado = "BOOLEAN";
                     return t1 + "\n" + t2 + "\n" + "LT\n";
                 }
+                case "22": {
+                    resultado = "BOOLEAN";
+                    return CadenaComparacion(ambito, t1, t2);
+                }
                 case "31": {
                     resultado = "BOOLEAN";
                     return t1 + "\n" + t2 + "\n" + "LT\n";
@@ -925,6 +929,10 @@ public class Operacion extends NodoAST implements Expresion {
                     resultado = "BOOLEAN";
                     return t1 + "\n" + t2 + "\n" + "GT\n";
                 }
+                case "22": {
+                    resultado = "BOOLEAN";
+                    return CadenaComparacion(ambito, t1, t2);
+                }
                 case "31": {
                     resultado = "BOOLEAN";
                     return t1 + "\n" + t2 + "\n" + "GT\n";
@@ -1020,6 +1028,10 @@ public class Operacion extends NodoAST implements Expresion {
                 case "15": {
                     resultado = "BOOLEAN";
                     return t1 + "\n" + t2 + "\n" + "GTE\n";
+                }
+                case "22":{
+                    resultado = "BOOLEAN";
+                    return CadenaComparacion(ambito, t1, t2);
                 }
                 case "31": {
                     resultado = "BOOLEAN";
@@ -1199,67 +1211,71 @@ public class Operacion extends NodoAST implements Expresion {
             switch (codigo) {
                 case "11": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "13": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "14": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "15": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
+                }
+                case "22": {
+                    resultado = "BOOLEAN";
+                    return  CadenaIgualDiferente(ambito, t1, t2);
                 }
                 case "31": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "33": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "34": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "35": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "41": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "43": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "44": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "45": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "51": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "LTE\n";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "53": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "54": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 case "55": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ";
+                    return t1 + "\n" + t2 + "\n" + "DIFF\n" + "EQZ" + (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"\nEQZ":"");
                 }
                 default: {
                     InfoEstatica.Estatico.agregarError(new TError(tipo1 + "==" + tipo2 + " | " + tipo1 + "!=" + tipo2, "No es posible aplicar la operacion: Igual o Diferente", "Semantico",
@@ -1269,6 +1285,101 @@ public class Operacion extends NodoAST implements Expresion {
         } catch (Exception e) {
             InfoEstatica.Estatico.agregarError(new TError("No Aplica", "Error al traducir la igualdad o Diferencia: " + e.getMessage(), "Ejecucion", super.getLinea(), super.getColumna(),
                     false, super.getArchivo()));
+        }
+        return "";
+    }
+    
+    private String CadenaIgualDiferente(Ambito ambito, String t1, String t2)
+    {
+        try {
+            String cad = "";
+            cad += "// LLAMANDO A FUNCION AUXLIAR QUE RETORNA RESULTADO\n";
+            cad += "get_local 0 \n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "ADD\n";
+            cad += "1\n";
+            cad += "ADD\n";
+            cad += "// EXPRESION 1: PUNTERO 1\n";
+            cad += t1+"\n";
+            cad += "get_local 0\n";
+            cad += (ambito.getSize()-1)+"\n";
+            cad += "ADD\n";
+            cad += "2\n";
+            cad += "ADD\n";
+            cad += "// EXPRESION 2: PUNTERO 2\n";
+            cad += t2+"\n";
+            cad += "// LLMANDO A FUNCION: \n";
+            cad += "get_local 0\n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "ADD\n";
+            cad += "set_local 0\n";
+            cad += "Call $_STRING_EQUAL_DIFF\n";
+            cad += "get_local 0\n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "DIFF\n";
+            cad += "set_local 0\n";
+            cad += "get_local $ret // obteniendo el resultado\n";
+            cad += (this.operador == InfoEstatica.Estatico.OPERADORES.DIFERENTE?"EQZ\n":"");
+            return  cad;
+        } catch (Exception e) {
+        }
+        return "";
+    }
+    
+    private String CadenaComparacion(Ambito ambito, String t1, String t2)
+    {
+        try {
+            String cad = "";
+            cad += "// LLAMANDO A FUNCION AUXLIAR QUE RETORNA RESULTADO\n";
+            cad += "get_local 0 \n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "ADD\n";
+            cad += "1\n";
+            cad += "ADD\n";
+            cad += "// EXPRESION 1: PUNTERO 1\n";
+            cad += t1+"\n";
+            cad += "get_local 0\n";
+            cad += (ambito.getSize()-1)+"\n";
+            cad += "ADD\n";
+            cad += "2\n";
+            cad += "ADD\n";
+            cad += "// EXPRESION 2: PUNTERO 2\n";
+            cad += t2+"\n";
+            cad += "// LLMANDO A FUNCION: \n";
+            cad += "get_local 0\n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "ADD\n";
+            cad += "set_local 0\n";
+            switch(this.operador)
+            {
+                case MAYOR:
+                {
+                    cad += "Call $_STRING_MAYOR\n";
+                    break;
+                }
+                case MAYORIGUAL:
+                {
+                    cad += "Call $_STRING_MAYOR_EQUAL\n";
+                    break;
+                }
+                case MENOR:
+                {
+                    cad += "Call $_STRING_MENOR\n";
+                    break;
+                }
+                case MENORIGUAL:
+                {
+                    cad += "Call $_STRING_MENOR_EQUAL\n";
+                    break;
+                }
+            }
+            cad += "get_local 0\n";
+            cad += (ambito.getSize() - 1)+"\n";
+            cad += "DIFF\n";
+            cad += "set_local 0\n";
+            cad += "get_local $ret // obteniendo el resultado\n";
+            return  cad;
+        } catch (Exception e) {
         }
         return "";
     }
