@@ -97,11 +97,11 @@ terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar, para;
-terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir;
+terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir, estructura;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
-non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR;
+non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR, STRUCT, MIEMBROS;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR, FOR_INIT, FOR_ACTUALIZACION;
 non terminal Object SENT_SI, SINO, SINO_SI, SENT_MIENTRAS, SENT_AUM_DEC, SENT_FOR, CONTINUE, BREAK, F_IMPRIMIR;
@@ -188,6 +188,23 @@ DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
                 NodoAST n = (NodoAST)nodo;
                 if(n!=null)
                 {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACIONES STRUCT:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null)
+                {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | STRUCT:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
                     parser.inicial.addNodo(n);
                 }
                 RESULT = "";
@@ -544,6 +561,33 @@ FUNCIONES ::= TIPO:tipo identificador:id oParent cParent oKey cKey
         :}
         ;
 /////////////////////////////////////////////////////////////////////////////
+STRUCT ::= estructura identificador:id oKey MIEMBROS:lista cKey
+        {:
+            ArrayList<NodoMiembro> nodos = (ArrayList<NodoMiembro>)lista;
+            if(nodos==null){nodos = new ArrayList<>();}
+            DeclaracionStruct n = new DeclaracionStruct(idright, idleft, ArchivoOrigen, nodos, id);
+            RESULT = n;
+        :}
+        ;
+MIEMBROS ::= MIEMBROS:lista TIPO:tipo identificador:id ptComa
+           {:
+                String t = (String)tipo;
+                ArrayList<NodoMiembro> nodos = (ArrayList<NodoMiembro>)lista;
+                if(nodos == null){nodos = new ArrayList<>();}
+                NodoMiembro n = new NodoMiembro(idright, idleft, ArchivoOrigen, t, id, nodos.size()+1);
+                nodos.add(n);
+                RESULT = nodos;
+           :}
+           | TIPO:tipo identificador:id ptComa
+           {:
+                String t = (String)tipo;
+                NodoMiembro n = new NodoMiembro(idright, idleft, ArchivoOrigen,t, id, 1);
+                ArrayList<NodoMiembro> nodos = new ArrayList<>();
+                nodos.add(n);
+                RESULT = nodos;
+           :}
+           ;
+/////////////////////////////////////////////////////////////////////////////
 RETORNA ::= retornar ptComa:aux
         {:
             Retornar r = new Retornar(auxright, auxleft, ArchivoOrigen, null);
@@ -848,7 +892,7 @@ TIPO ::= entero
        :}
        | identificador:id
        {:
-            RESULT = id.toUpperCase();
+            RESULT = id;
        :}
        ;
 //---------------------------------------------------------------------------

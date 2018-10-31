@@ -77,7 +77,7 @@ public class DppASTTree extends NodoAST {
             DeclaracionMain Main = null;
             for (NodoAST n : nodos) // AQUI YA NO DEBERIAN DE HABER NODOS IMPORTACIONES YA DEVERIA IR LIMPIO 
             {
-                if (n instanceof DeclaracionFuncion || n instanceof DeclaracionMetodo) {
+                if (n instanceof DeclaracionFuncion || n instanceof DeclaracionMetodo || n instanceof DeclaracionStruct) {
                     n.generateByteCode(ambito);// SOLO LAS VA ALMECENAR LAS FUNCIONES
                 } else if (n instanceof DeclaracionMain) {
                     if (!huboMain) {

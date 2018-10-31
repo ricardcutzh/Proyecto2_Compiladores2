@@ -20,6 +20,7 @@ public class Ambito {
     TablaFunciones tablaFunciones;
     String Archivo;
     int tamanio;
+    HashMap<String, Struct> Structs;
     /**
      * Constructode del Ambito nuevo
      * @param idAmbito Nombre que se le dara al Ambito
@@ -34,6 +35,7 @@ public class Ambito {
         this.tablaVars = new TablaDeVariables();
         this.tablaFunciones = new TablaFunciones();
         this.tamanio = 1;
+        Structs = new HashMap<>();
     }
     
     /**
@@ -175,5 +177,24 @@ public class Ambito {
         {
             ambitoHijo.addDppSimbol(entry.getKey(), entry.getValue());// SI HUBIESE ERROR EN DRACO... ES POR AQUI
         }
+    }
+    
+    public Boolean existeStruct(String id)
+    {
+        return this.Structs.containsKey(id);
+    }
+    
+    public Struct getStruct(String id)
+    {
+        return this.Structs.get(id);
+    }
+
+    public HashMap<String, Struct> getStructs() {
+        return Structs;
+    }
+    
+    public void AddStruct(String id, Struct s)
+    {
+        this.Structs.put(id, s);
     }
 }

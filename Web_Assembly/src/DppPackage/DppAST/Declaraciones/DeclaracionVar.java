@@ -12,6 +12,7 @@ import ObjsComun.NodoIDValor;
 import Simbolos.Ambito;
 import Simbolos.DppVar;
 import Simbolos.SimboloTabla;
+import Simbolos.Struct;
 import java.util.ArrayList;
 
 /**
@@ -237,6 +238,24 @@ public class DeclaracionVar extends NodoAST {
                                     InfoEstatica.Estatico.agregarError(new TError("Tipo Obtenido: "+tipoObtenido, "No se puede asignar: "+tipoObtenido+" a una variable de tipo: Caracter", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
                                 }
                             }
+                            default:
+                            {
+                                if(tipoObtenido.equals(tipo))
+                                {
+                                    // AQUI SI SE IGUALAN ESTRUCTURAS!
+                                }
+                                else
+                                {
+                                    InfoEstatica.Estatico.agregarError(new TError(
+                                            tipo = tipoObtenido
+                                            , "Los tipos especificados no pueden Igualarse"
+                                            , "Semantico"
+                                            , super.getLinea()
+                                            , super.getColumna()
+                                            , Boolean.FALSE
+                                            , super.getArchivo()));
+                                }
+                            }
                         }
                     }
                     else
@@ -375,7 +394,25 @@ public class DeclaracionVar extends NodoAST {
                             }
                             default:// SON ESTRUCTURAS
                             {
-                                
+                                Ambito global = getGlobal(ambito);
+                                if(global.existeStruct(tipo))
+                                {
+                                    
+                                    Struct estr = global.getStruct(this.tipo);
+                                    cad += estr.declaracionStruct(ambito);
+                                    ambito.addDppSimbol(id, simbolo);
+                                    InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Estructura"));
+                                }
+                                else
+                                {
+                                    InfoEstatica.Estatico.agregarError(new TError(tipo
+                                            , "Se declaron a: "+id+" de tipo: "+tipo+", el cual no esta definido"
+                                            , "Semantico"
+                                            , super.getLinea()
+                                            , super.getColumna()
+                                            , Boolean.FALSE
+                                            , super.getArchivo()));
+                                }
                             }
                         }
                     }
@@ -412,5 +449,15 @@ public class DeclaracionVar extends NodoAST {
             return "set_global";
         }
         return "set_local";
+    }
+    
+    private Ambito getGlobal(Ambito actual)
+    {
+        Ambito aux = actual;
+        while(aux.getAnterior()!=null)
+        {
+            aux = aux.getAnterior();
+        }
+        return aux;
     }
 }

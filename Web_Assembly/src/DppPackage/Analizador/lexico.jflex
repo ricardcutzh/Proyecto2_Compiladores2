@@ -97,6 +97,7 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "detener"                                     {return new Symbol(DppPackage.Analizador.Simbolos.detener, yycolumn, yyline, yytext());}
 <YYINITIAL> "continuar"                                   {return new Symbol(DppPackage.Analizador.Simbolos.continuar, yycolumn, yyline, yytext());}
 <YYINITIAL> "imprimir"                                    {return new Symbol(DppPackage.Analizador.Simbolos.imprimir, yycolumn, yyline, yytext());}
+<YYINITIAL> "estructura"                                  {return new Symbol(DppPackage.Analizador.Simbolos.estructura, yycolumn, yyline, yytext());}
  
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                      {return new Symbol(DppPackage.Analizador.Simbolos.numEntero, yycolumn, yyline, yytext());}
