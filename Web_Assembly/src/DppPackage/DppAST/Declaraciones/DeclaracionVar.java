@@ -76,7 +76,7 @@ public class DeclaracionVar extends NodoAST {
                         {
                             case "CADENA":
                             {
-                                if(tipoObtenido.equals("CADENA"))
+                                if(tipoObtenido.equals("CADENA") || tipoObtenido.equals("NULO"))// PARA QUE SE PUEDA SIGNAR NULO
                                 {
                                     if(ambito.getIdAmbito().equals("Global"))
                                     {

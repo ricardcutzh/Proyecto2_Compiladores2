@@ -49,7 +49,7 @@ public class AsignacionVar extends NodoAST{
                     {
                         case "CADENA":
                         {
-                            if(tipoObtenido.equals(simbolo.getTipo()))
+                            if(tipoObtenido.equals(simbolo.getTipo()) || tipoObtenido.equals("NULO")) //PARA QUE VALGA ASIGNACION NULA
                             {
                                 String cad = "\n/**************************************************************************/\n";
                                 if(simbolo.getAmbito().equals("Global"))

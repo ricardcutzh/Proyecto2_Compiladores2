@@ -276,17 +276,29 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | SENTENCIAS and
+           | SENTENCIAS:lista and:aux
            {:
-              System.out.println("AND");
+             And i = new And(auxright, auxleft, ArchivoOrigen);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS or
+           | SENTENCIAS:lista or:aux
            {:
-              System.out.println("OR");
+             Or i = new Or(auxright, auxleft, ArchivoOrigen);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             inst.add(i);
+             RESULT = inst;
            :}
-           | SENTENCIAS not
+           | SENTENCIAS:lista not:aux
            {:
-              System.out.println("NOT");
+             Not i = new Not(auxright, auxleft, ArchivoOrigen);
+             ArrayList<SentenciaDasm> inst = (ArrayList<SentenciaDasm>)lista;
+             if(inst==null){inst = new ArrayList<>();}
+             inst.add(i);
+             RESULT = inst;
            :}
            | SENTENCIAS:lista br:aux identificador:id
            {:
@@ -425,17 +437,26 @@ SENTENCIAS ::= SENTENCIAS:lista FUNCION
              inst.add(i);
              RESULT = inst;
            :}
-           | and
+           | and:aux
            {:
-              System.out.println("AND");
+              And i = new And(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = i;
            :}
-           | or
+           | or:aux
            {:
-              System.out.println("OR");
+              Or i = new Or(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = i;
            :}
-           | not
+           | not:aux
            {:
-              System.out.println("NOT");
+              Not i = new Not(auxright, auxleft, ArchivoOrigen);
+              ArrayList<SentenciaDasm> inst = new ArrayList<>();
+              inst.add(i);
+              RESULT = i;
            :}
            | br identificador:id
            {:

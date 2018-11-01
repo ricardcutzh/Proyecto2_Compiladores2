@@ -208,6 +208,7 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    "para"|
    "detener"|
    "continuar"|
+   "nulo" |
    "retornar"|
    "estructura"|
    "importar"      { addToken(Token.RESERVED_WORD); }

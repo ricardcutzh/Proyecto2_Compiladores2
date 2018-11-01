@@ -103,6 +103,7 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "cuadrado"                                    {return new Symbol(DppPackage.Analizador.Simbolos.cuadrado, yycolumn, yyline, yytext());}
 <YYINITIAL> "ovalo"                                       {return new Symbol(DppPackage.Analizador.Simbolos.ovalo, yycolumn, yyline, yytext());}
 <YYINITIAL> "linea"                                       {return new Symbol(DppPackage.Analizador.Simbolos.linea, yycolumn, yyline, yytext());}
+<YYINITIAL> "nulo"                                        {return new Symbol(DppPackage.Analizador.Simbolos.nulo, yycolumn, yyline, yytext());}
  
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                      {return new Symbol(DppPackage.Analizador.Simbolos.numEntero, yycolumn, yyline, yytext());}

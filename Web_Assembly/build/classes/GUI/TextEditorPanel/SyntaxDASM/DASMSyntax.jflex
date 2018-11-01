@@ -228,6 +228,9 @@ Identifier            = (\${IdentifierStart}{IdentifierPart}*)
    "EQZ"|
    "BR_IF"|
    "LT"|
+   "AND"|
+   "OR"|
+   "NOT"|
    "DIV"|
    "LTE"|
    "GTE"|

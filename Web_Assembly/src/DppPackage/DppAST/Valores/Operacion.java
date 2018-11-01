@@ -1445,7 +1445,7 @@ public class Operacion extends NodoAST implements Expresion {
             switch (codigo) {
                 case "33": {
                     resultado = "BOOLEAN";
-                    return t1 + "\n" + t2 + "\nADD\n";
+                    return t1 + "\n" + t2 + "\nOR\n";
                 }
                 default: {
                     InfoEstatica.Estatico.agregarError(new TError(tipo1 + "||" + tipo2, "No es posible aplicar la operacion: OR", "Semantico",

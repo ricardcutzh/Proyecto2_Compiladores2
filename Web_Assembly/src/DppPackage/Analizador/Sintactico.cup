@@ -101,7 +101,7 @@ terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar
 terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir, estructura;
 terminal String point, cuadrado, ovalo, linea;
 // ------> VALORES
-terminal String numEntero, numDecimal, dataChar, identificador, dataString;
+terminal String numEntero, numDecimal, dataChar, identificador, dataString,nulo;
 // ------> NO TERMINALES
 non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR, STRUCT, MIEMBROS;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
@@ -1332,6 +1332,11 @@ E ::= E:val1 mas:aux E:val2
     | identificador:id punto identificador:id2
     {:
         AccesoMiembroSimple i = new AccesoMiembroSimple(idright, idleft, ArchivoOrigen, id, id2);
+        RESULT = i;
+    :}
+    | nulo:aux
+    {:
+        ValorNulo i = new ValorNulo(auxright, auxleft, ArchivoOrigen);
         RESULT = i;
     :}
     ;
