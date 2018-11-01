@@ -12,42 +12,48 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * Clase que dibuja un cuadrado en un panel
+ *
  * @author richard
  */
-public class Quadrate implements Figura{
-    
+public class Quadrate implements Figura {
+
     int posx, posy, alto, ancho;
     String color;
+
     /**
      * Constructor del manejador de cuadrado
+     *
      * @param posx
      * @param posy
      * @param alto
      * @param ancho
-     * @param color 
+     * @param color
      */
-    public Quadrate(int posx, int posy, int alto, int ancho, String color)
-    {
+    public Quadrate(int posx, int posy, int alto, int ancho, String color) {
         this.posx = posx;
         this.posy = posy;
         this.alto = alto;
         this.ancho = ancho;
         this.color = color;
     }
-    
+
     @Override
     public void Dibujar(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        
-        Color real = Color.BLACK;
         try {
-            real = Color.decode(color);
+            Graphics2D g2d = (Graphics2D) g;
+
+            Color real = Color.BLACK;
+            try {
+                real = Color.decode(color);
+            } catch (Exception e) {
+            }
+
+            Rectangle2D.Double r = new Rectangle2D.Double(posx, posy, ancho, alto);
+            g2d.setColor(real);
+            g2d.fill(r);
         } catch (Exception e) {
         }
-        
-        Rectangle2D.Double r = new Rectangle2D.Double(posx, posy, ancho, alto);
-        g2d.setColor(real);
-        g2d.fill(r);        
+
     }
-    
+
 }

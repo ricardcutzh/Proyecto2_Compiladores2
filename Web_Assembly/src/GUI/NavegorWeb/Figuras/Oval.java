@@ -12,40 +12,46 @@ import java.awt.geom.Ellipse2D;
 
 /**
  * Clase que maneja el dibujo de un ovalo
+ *
  * @author richard
  */
-public class Oval implements Figura{
-    int posx,posy,alto,ancho;
+public class Oval implements Figura {
+
+    int posx, posy, alto, ancho;
     String color;
+
     /**
      * Constructor del manejador del ovalo
+     *
      * @param posx
      * @param posy
      * @param color
      * @param alto
-     * @param ancho 
+     * @param ancho
      */
-    public Oval(int posx, int posy, String color, int alto, int ancho)
-    {
-        this.posx = posx;
-        this.posy = posy;
+    public Oval(int posx, int posy, String color, int alto, int ancho) {
+        this.posx = posx - (ancho / 2);
+        this.posy = posy - (alto / 2);
         this.color = color;
         this.alto = alto;
         this.ancho = ancho;
     }
-    
+
     @Override
     public void Dibujar(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        Color real;
         try {
-            real = Color.decode(color);
+            Graphics2D g2d = (Graphics2D) g;
+            Color real;
+            try {
+                real = Color.decode(color);
+            } catch (Exception e) {
+                real = Color.BLACK;
+            }
+            Ellipse2D.Double ovalo = new Ellipse2D.Double(posx, posy, ancho, alto);
+            g2d.setColor(real);
+            g2d.fill(ovalo);
         } catch (Exception e) {
-            real = Color.BLACK;
         }
-        Ellipse2D.Double ovalo = new Ellipse2D.Double(posx, posy, ancho, alto);
-        g2d.setColor(real);
-        g2d.fill(ovalo);
     }
-    
+
 }

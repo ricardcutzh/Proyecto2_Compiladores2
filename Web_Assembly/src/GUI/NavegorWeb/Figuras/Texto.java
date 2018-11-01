@@ -13,34 +13,39 @@ import java.awt.Graphics2D;
  *
  * @author richard
  */
-public class Texto implements Figura{
+public class Texto implements Figura {
+
     int posx, posy;
     String color, cadena;
+
     /**
      * Constructor de la figura que pinta un texto en el Panel
+     *
      * @param posx
      * @param posy
      * @param color
-     * @param cadena 
+     * @param cadena
      */
-    public Texto(int posx, int posy, String color, String cadena)
-    {
+    public Texto(int posx, int posy, String color, String cadena) {
         this.posx = posx;
         this.posy = posy;
         this.color = color;
         this.cadena = cadena;
     }
-    
+
     @Override
     public void Dibujar(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        Color real = Color.BLACK;
         try {
-            real = Color.decode(color);
+            Graphics2D g2d = (Graphics2D) g;
+            Color real = Color.BLACK;
+            try {
+                real = Color.decode(color);
+            } catch (Exception e) {
+            }
+            g2d.setColor(real);
+            g2d.drawString(cadena, posx, posy);
         } catch (Exception e) {
         }
-        g2d.setColor(real);
-        g2d.drawString(cadena, posx, posy);
     }
-    
+
 }

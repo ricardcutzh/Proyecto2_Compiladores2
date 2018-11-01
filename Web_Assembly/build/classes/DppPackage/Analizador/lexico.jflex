@@ -61,6 +61,7 @@ inicioComentarioLinea = "//"
 <YYINITIAL> ","                                           {return new Symbol(DppPackage.Analizador.Simbolos.coma, yycolumn, yyline, yytext());}
 <YYINITIAL> "{"                                           {return new Symbol(DppPackage.Analizador.Simbolos.oKey, yycolumn, yyline, yytext());}
 <YYINITIAL> "}"                                           {return new Symbol(DppPackage.Analizador.Simbolos.cKey, yycolumn, yyline, yytext());}
+<YYINITIAL> "."                                           {return new Symbol(DppPackage.Analizador.Simbolos.punto, yycolumn, yyline, yytext());}
 // OPERADORES
 <YYINITIAL> "+"                                           {return new Symbol(DppPackage.Analizador.Simbolos.mas, yycolumn, yyline, yytext());}
 <YYINITIAL> "-"                                           {return new Symbol(DppPackage.Analizador.Simbolos.menos, yycolumn, yyline, yytext());}
@@ -98,6 +99,10 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "continuar"                                   {return new Symbol(DppPackage.Analizador.Simbolos.continuar, yycolumn, yyline, yytext());}
 <YYINITIAL> "imprimir"                                    {return new Symbol(DppPackage.Analizador.Simbolos.imprimir, yycolumn, yyline, yytext());}
 <YYINITIAL> "estructura"                                  {return new Symbol(DppPackage.Analizador.Simbolos.estructura, yycolumn, yyline, yytext());}
+<YYINITIAL> "punto"                                       {return new Symbol(DppPackage.Analizador.Simbolos.point, yycolumn, yyline, yytext());}
+<YYINITIAL> "cuadrado"                                    {return new Symbol(DppPackage.Analizador.Simbolos.cuadrado, yycolumn, yyline, yytext());}
+<YYINITIAL> "ovalo"                                       {return new Symbol(DppPackage.Analizador.Simbolos.ovalo, yycolumn, yyline, yytext());}
+<YYINITIAL> "linea"                                       {return new Symbol(DppPackage.Analizador.Simbolos.linea, yycolumn, yyline, yytext());}
  
 // EXPRESIONES REGULARES
 <YYINITIAL> {entero}                                      {return new Symbol(DppPackage.Analizador.Simbolos.numEntero, yycolumn, yyline, yytext());}

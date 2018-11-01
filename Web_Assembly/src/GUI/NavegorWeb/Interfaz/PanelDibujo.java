@@ -35,11 +35,15 @@ public class PanelDibujo extends JPanel{
     @Override
     public void paintComponent(Graphics g)
     {
-        super.paintComponent(g);
-        for(Figura f:this.figuras)
-        {
-            f.Dibujar(g);
+        try {
+            super.paintComponent(g);
+            for(Figura f:this.figuras)
+            {
+                f.Dibujar(g);
+            }
+        } catch (Exception e) {
         }
+        
     }
     
     /**

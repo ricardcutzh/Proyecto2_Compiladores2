@@ -31,13 +31,23 @@ public class Struct extends Simbolo {
         }
         return null;
     }
+    
+    public Boolean existeMiembro(String id)
+    {
+        return this.miembros.containsKey(id);
+    }
+    
+    public NodoMiembro getByID(String id)
+    {
+        return this.miembros.get(id);
+    }
 
     public String declaracionStruct(Ambito ambito) {
         try {
             if (ambito.getIdAmbito().equals("Global")) {
                 String cad = "// DECLARAION DE ESTRUCTURA: " + idSimbolo + "\n";
                 cad += (ambito.getSize()) + "// POSICION ABSOLUTA EN EL STACK\n";
-                cad += "ADD // POSICION DONDE GUARDARE EL PUNTERO AL INICIO DE LA ESTRUCTURA\n";
+                //cad += "ADD // POSICION DONDE GUARDARE EL PUNTERO AL INICIO DE LA ESTRUCTURA\n";
                 cad += "get_global 0 // PUNTERO AL INICIO DE LA ESTRUCTURA\n";
                 cad += "set_local $calc // GUARDO EL PUNTERO DE LA ESTRUCTURA\n";
                 for (int x = 1; x <= miembros.size(); x++) {

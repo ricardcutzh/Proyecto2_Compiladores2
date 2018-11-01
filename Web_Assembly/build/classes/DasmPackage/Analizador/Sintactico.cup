@@ -80,8 +80,8 @@ action code
 // CODIGO DE DECLARACIONES
 // ---------------> PALABRAS RESERVADAS
 terminal String add, diff, mult, div, mod, lt, gt, lte, gte, eqz, and, or, not, br, brIf, prChar, prInt, prFloat;
-terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc,ret, point, print;
-terminal String quadrate, oval, str, line, llama;
+terminal String glocal, slocal, gglobal, sglobal, tlocal, tglobal, function, end, calc,ret, print;
+terminal String llama;
 terminal String entero, decimal, identificador;
 ////////////////////////////////////////////////
 non terminal Object SENTENCIAS, INICIO, FUNCION, SET_LOCAL, GET_LOCAL, SET_GLOBAL, GET_GLOBAL, LLAMADO;

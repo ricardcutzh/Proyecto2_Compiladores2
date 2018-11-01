@@ -63,11 +63,6 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "Function"                                      {return new Symbol(DasmPackage.Analizador.Simbolos.function, yycolumn, yyline, yytext());}
 <YYINITIAL> "End"                                           {return new Symbol(DasmPackage.Analizador.Simbolos.end, yycolumn, yyline, yytext());}
 <YYINITIAL> "$calc"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.calc, yycolumn, yyline, yytext());}
-<YYINITIAL> "$Point"                                        {return new Symbol(DasmPackage.Analizador.Simbolos.point, yycolumn, yyline, yytext());}
-<YYINITIAL> "$Quadrate"                                     {return new Symbol(DasmPackage.Analizador.Simbolos.quadrate, yycolumn, yyline, yytext());}
-<YYINITIAL> "$Oval"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.oval, yycolumn, yyline, yytext());}
-<YYINITIAL> "$String"                                       {return new Symbol(DasmPackage.Analizador.Simbolos.str, yycolumn, yyline, yytext());}
-<YYINITIAL> "$Line"                                         {return new Symbol(DasmPackage.Analizador.Simbolos.line, yycolumn, yyline, yytext());}
 <YYINITIAL> "Call"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.llama, yycolumn, yyline, yytext());}
 <YYINITIAL> "$ret"                                          {return new Symbol(DasmPackage.Analizador.Simbolos.ret, yycolumn, yyline, yytext());}
 <YYINITIAL> "\"%c\""                                        {return new Symbol(DasmPackage.Analizador.Simbolos.prChar, yycolumn, yyline, yytext());}

@@ -193,6 +193,19 @@ public class LlamadoMetodo extends NodoAST{
                 cad += "/**************************************************************************/\n";
                 break;
             }
+            default:
+            {
+                cad += "\n/**************************************************************************/\n";
+                cad += "// PARAM: "+indice+" de Tipo: "+tipo+"\n";
+                cad += "get_local 0 // PUNTERO VIRTUAL\n";
+                cad += AmbitoTam+"// TAMMANIO DEL AMBITO\n";
+                cad += "ADD // SUMO\n";
+                cad += indice +" // NUMERO DE PARAMETRO A COLOCAR\n";
+                cad += "ADD // SUMA PARA ENCONTRAR SU POSICION ABSOLUTA EN EL STACK\n";
+                cad += expcode+"\n";
+                //cad += "set_local $calc // COLOCAR EN LA POSICION QUE LE TOCA\n";
+                cad += "/**************************************************************************/\n";
+            }
         }
         return cad;
     }

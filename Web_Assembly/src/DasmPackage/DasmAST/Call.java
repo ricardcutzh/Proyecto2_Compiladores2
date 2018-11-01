@@ -7,6 +7,7 @@ package DasmPackage.DasmAST;
 
 import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
+import DasmPackage.DasmAST.Nativas.*;
 import ErrorManager.TError;
 import Estructuras.FuncionDasm;
 import Estructuras.IP;
@@ -71,8 +72,44 @@ public class Call extends NodoAST implements SentenciaDasm{
             }
             else
             {
-                InfoEstatica.Estatico.agregarError(new TError(id, "Funcion no esta definida: "+id, "Semantico", 
+                switch(id)
+                {
+                    case "$Point":
+                    {
+                        Punto p = new Punto(super.getLinea(), super.getColumna(), super.getArchivo());
+                        p.Ejecuta(entorno, instrucctionPointer);
+                        break;
+                    }
+                    case "$Quadrate":
+                    {
+                        Cuadrado c = new Cuadrado(super.getLinea(), super.getColumna(), super.getArchivo());
+                        c.Ejecuta(entorno, instrucctionPointer);
+                        break;
+                    }
+                    case "$Oval":
+                    {
+                        Ovalo o = new Ovalo(super.getLinea(), super.getColumna(), super.getArchivo());
+                        o.Ejecuta(entorno, instrucctionPointer);
+                        break;
+                    }
+                    case "$String":
+                    {
+                        Cadena c = new Cadena(super.getLinea(), super.getColumna(), super.getArchivo());
+                        c.Ejecuta(entorno, instrucctionPointer);
+                        break;
+                    }
+                    case "$Line":
+                    {
+                        Linea l = new Linea(super.getLinea(), super.getColumna(), super.getArchivo());
+                        l.Ejecuta(entorno, instrucctionPointer);
+                        break;
+                    }
+                    default:
+                    {
+                        InfoEstatica.Estatico.agregarError(new TError(id, "Funcion no esta definida: "+id, "Semantico", 
                         super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
+                    }
+                }
             }
             
         } catch (Exception e) 

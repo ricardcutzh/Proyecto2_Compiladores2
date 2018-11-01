@@ -13,6 +13,7 @@ import DppPackage.DppAST.Sentencias.*;
 import DppPackage.DppAST.Sentencias.IF.*;
 import DppPackage.DppAST.Sentencias.While.*;
 import DppPackage.DppAST.Sentencias.For.*;
+import DppPackage.DppAST.Sentencias.Nativas.*;
 // --------------------------------> CODIGO DEL PARSER
 parser code
 {:
@@ -92,12 +93,13 @@ action code
 :}
 // -----------------------------------------------> CODIGO DE DECLARACIONES
 // ------> PUNTUACION
-terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey;
+terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey, punto;
 // ------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar, para;
 terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir, estructura;
+terminal String point, cuadrado, ovalo, linea;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString;
 // ------> NO TERMINALES
@@ -105,6 +107,7 @@ non terminal Object EXP, E, TIPO, L_DECLARACION, L_IMPORTAR, STRUCT, MIEMBROS;
 non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RETORNA;
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR, FOR_INIT, FOR_ACTUALIZACION;
 non terminal Object SENT_SI, SINO, SINO_SI, SENT_MIENTRAS, SENT_AUM_DEC, SENT_FOR, CONTINUE, BREAK, F_IMPRIMIR;
+non terminal Object FUN_PUNTO, FUN_CUADRADO, FUN_OVALO, FUN_LINEA, FUN_CADENA;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -338,6 +341,96 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             ArrayList<Object> sentencias = (ArrayList<Object>)lista;
             if(sentencias==null){sentencias = new ArrayList<>();}
             if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista FUN_PUNTO:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista FUN_CUADRADO:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista FUN_OVALO:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista FUN_CADENA:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista FUN_LINEA:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | FUN_PUNTO:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | FUN_CUADRADO:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | FUN_OVALO:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | FUN_CADENA:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | FUN_LINEA:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
                 sentencias.add(nodo);
             }
             RESULT = sentencias;
@@ -964,11 +1057,76 @@ ASIGNACION_VAR ::= identificador:id asigna EXP:exp ptComa
                     AsignacionVar a = new AsignacionVar(idright, idleft, ArchivoOrigen, e, id);
                     RESULT = a;
                 :}
+                | identificador:id punto identificador:id2 asigna EXP:exp ptComa
+                {:
+                    Expresion e = (Expresion)exp;
+                    AsignacionMiembroSimple i = new AsignacionMiembroSimple(idright, idleft, ArchivoOrigen, id, id2, e);
+                    RESULT = i;
+                :}
                 | identificador asigna error ptComa
                 {:
                     parser.expected.add("'= Expresion'");
                 :}
                 ;
+//////////////////////////////////////////////////////////////////////////////
+FUN_PUNTO ::= point:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:diametro cParent ptComa
+            {:
+                Expresion x = (Expresion)posx;
+                Expresion y = (Expresion)posy;
+                String color = (String)col;
+                Expresion d = (Expresion)diametro;
+                Punto i = new Punto(auxright, auxleft, ArchivoOrigen, x, y, color, d);
+                RESULT = i;
+            :}
+            ;
+//----------------------------------------------------------------------------
+FUN_CUADRADO ::= cuadrado:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:ancho coma EXP:alto cParent ptComa
+            {:
+                Expresion x = (Expresion)posx;
+                Expresion y = (Expresion)posy;
+                String color = (String)col;
+                Expresion width = (Expresion)ancho;
+                Expresion height = (Expresion)alto;
+                Cuadrado i = new Cuadrado(auxright, auxleft, ArchivoOrigen, x, y, color, width, height);
+                RESULT = i;
+            :}
+            ;
+//----------------------------------------------------------------------------
+FUN_OVALO ::= ovalo:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:ancho coma EXP:alto cParent ptComa
+            {:
+                Expresion x = (Expresion)posx;
+                Expresion y = (Expresion)posy;
+                String color = (String)col;
+                Expresion width = (Expresion)ancho;
+                Expresion height = (Expresion)alto;
+                Ovalo i = new Ovalo(auxright, auxleft, ArchivoOrigen, x, y, color, width, height);
+                RESULT = i;
+            :}
+            ;
+//----------------------------------------------------------------------------
+FUN_CADENA ::= cadena:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:str cParent ptComa
+            {:
+                Expresion x = (Expresion)posx;
+                Expresion y = (Expresion)posy;
+                String color = (String)col;
+                Expresion cad = (Expresion)str;
+                Cadena i = new Cadena(auxright, auxleft, ArchivoOrigen, x, y, color, cad);
+                RESULT = i;
+            :}
+            ;
+//----------------------------------------------------------------------------
+FUN_LINEA ::= linea:aux oParent EXP:posx coma EXP:posy coma EXP:posxf coma EXP:posyf coma dataString:col coma EXP:grosor cParent ptComa
+            {:
+                Expresion x = (Expresion)posx;
+                Expresion y = (Expresion)posy;
+                Expresion xf = (Expresion)posxf;
+                Expresion yf = (Expresion)posyf;
+                String color = (String)col;
+                Expresion g = (Expresion)grosor;
+                Linea i = new Linea(auxright, auxleft, ArchivoOrigen, x, y, xf, yf, color, g);
+                RESULT = i;
+            :}
+            ;
 //////////////////////////////////////////////////////////////////////////////
 EXP ::= E:e
       {:
@@ -1170,5 +1328,10 @@ E ::= E:val1 mas:aux E:val2
         ArrayList<Expresion> parametros = new ArrayList<>();
         LlamadoFuncion f = new LlamadoFuncion(idright, idleft, ArchivoOrigen, id, parametros);
         RESULT = f;
+    :}
+    | identificador:id punto identificador:id2
+    {:
+        AccesoMiembroSimple i = new AccesoMiembroSimple(idright, idleft, ArchivoOrigen, id, id2);
+        RESULT = i;
     :}
     ;

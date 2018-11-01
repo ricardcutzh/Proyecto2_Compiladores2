@@ -52,13 +52,24 @@ public class AsignacionVar extends NodoAST{
                             if(tipoObtenido.equals(simbolo.getTipo()))
                             {
                                 String cad = "\n/**************************************************************************/\n";
-                                cad += "// "+id+" = PUNTERO A CADENA EN EL HEAP \n";
-                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
-                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
-                                cad += expCode+"\n";
-                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+id+" = PUNTERO A CADENA EN EL HEAP \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 return cad;
                             }
                         }
@@ -67,13 +78,25 @@ public class AsignacionVar extends NodoAST{
                             if(tipoObtenido.equals(simbolo.getTipo()))
                             {
                                 String cad = "\n/**************************************************************************/\n";
-                                cad += "// "+id+" = ENTERO \n";
-                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
-                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
-                                cad += expCode+"\n";
-                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+id+" = ENTERO \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                
                                 return cad;
                             }
                             break;
@@ -83,13 +106,24 @@ public class AsignacionVar extends NodoAST{
                             if(tipoObtenido.equals(simbolo.getTipo()))
                             {
                                 String cad = "\n/**************************************************************************/\n";
-                                cad += "// "+id+" = DECIMAL \n";
-                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
-                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
-                                cad += expCode+"\n";
-                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+id+" = DECIMAL \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 return cad;
                             }
                             break;
@@ -99,13 +133,24 @@ public class AsignacionVar extends NodoAST{
                             if(tipoObtenido.equals(simbolo.getTipo()))
                             {
                                 String cad = "\n/**************************************************************************/\n";
-                                cad += "// "+id+" = BOOLEAN \n";
-                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
-                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
-                                cad += expCode+"\n";
-                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+id+" = BOOLEAN \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 return cad;
                             }
                             break;
@@ -115,20 +160,53 @@ public class AsignacionVar extends NodoAST{
                             if(tipoObtenido.equals(simbolo.getTipo()))
                             {
                                 String cad = "\n/**************************************************************************/\n";
-                                cad += "// "+id+" = CARACTER \n";
-                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
-                                cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
-                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
-                                cad += expCode+"\n";
-                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
-                                cad += "/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+id+" = CARACTER \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
                                 return cad;
                             }
                             break;
                         }
                         default:
                         {
-                            
+                            if(tipoObtenido.equals(simbolo.getTipo()))// ESTRUCTURAS IGUALANDO
+                            {
+                                String cad = "\n/**************************************************************************/\n";
+                                if(simbolo.getAmbito().equals("Global"))
+                                {
+                                    cad += "// "+id+" = "+tipoObtenido+"\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                else
+                                {
+                                    cad += "// "+simbolo.getTipo()+" = "+tipoObtenido+"\n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa()+" // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += expCode+"\n";
+                                    cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                    cad += "/**************************************************************************/\n";
+                                }
+                                return cad;
+                            }
                         }
                     }
                 }
