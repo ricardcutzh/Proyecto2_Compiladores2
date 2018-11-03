@@ -14,13 +14,22 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import InfoEstatica.Estatico;
 import ObjsComun.BreakPointNode;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 /**
  *
@@ -50,8 +59,29 @@ public class IDE extends javax.swing.JFrame {
         Estatico.StackTable = this.StackTable;
         Estatico.HeapTable = this.HeapTable;
         Estatico.colocaTablaBreaks(TablaBreaks);
+        //Estatico.OutPutCode = this.CodigoSalida;
+        generateOutPutCodeText();
     }
-
+    
+    private void generateOutPutCodeText()
+    {
+        PanelOutPut.setLayout(new BorderLayout());
+        RSyntaxTextArea t = new RSyntaxTextArea();
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+        atmf.putMapping("text/dasm", "GUI.TextEditorPanel.SyntaxDASM.DasmSyntax");
+        t.setSyntaxEditingStyle("text/dasm");
+        Theme theme;
+        try {
+            theme = Theme.load(getClass().getResourceAsStream("/GUI/TextEditorPanel/SyntaxDASM/DasmTheme.xml"));
+            theme.apply(t);
+        } catch (IOException ex) {
+            Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        t.setEditable(false);
+        RTextScrollPane sp = new RTextScrollPane(t);
+        PanelOutPut.add(sp);
+        Estatico.OutPutCode = t;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,6 +134,7 @@ public class IDE extends javax.swing.JFrame {
         StackTable = new javax.swing.JTable();
         jScrollPane9 = new javax.swing.JScrollPane();
         HeapTable = new javax.swing.JTable();
+        PanelOutPut = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         ArbolArchivos = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
@@ -117,6 +148,7 @@ public class IDE extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IDE Web Assembly");
@@ -442,6 +474,19 @@ public class IDE extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Dasm", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/dasm.png")), jScrollPane6); // NOI18N
 
+        javax.swing.GroupLayout PanelOutPutLayout = new javax.swing.GroupLayout(PanelOutPut);
+        PanelOutPut.setLayout(PanelOutPutLayout);
+        PanelOutPutLayout.setHorizontalGroup(
+            PanelOutPutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1290, Short.MAX_VALUE)
+        );
+        PanelOutPutLayout.setVerticalGroup(
+            PanelOutPutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 274, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Codigo Generado", new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/binary-code.png")), PanelOutPut); // NOI18N
+
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("File Explorer"));
 
         ArbolArchivos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -471,7 +516,7 @@ public class IDE extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1294, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jTabbedPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -546,6 +591,15 @@ public class IDE extends javax.swing.JFrame {
             }
         });
         HideTabs.add(jMenuItem5);
+
+        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/binary-code.png"))); // NOI18N
+        jMenuItem6.setText("Limpiar Codigo Generado");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        HideTabs.add(jMenuItem6);
 
         jMenuBar1.add(HideTabs);
 
@@ -867,6 +921,11 @@ public class IDE extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        Estatico.OutPutCode.setText("/*NO HAY CODIGO PARA MOSTRAR*/");
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -920,6 +979,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenu HideTabs;
     private javax.swing.JButton NextBreakPoint;
     private javax.swing.JButton NextLine;
+    private javax.swing.JPanel PanelOutPut;
     private javax.swing.JTable PilitaTable;
     private javax.swing.JTable SimbolTable;
     private javax.swing.JTable StackTable;
@@ -938,6 +998,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;

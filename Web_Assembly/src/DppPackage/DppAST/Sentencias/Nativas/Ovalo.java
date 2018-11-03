@@ -67,6 +67,23 @@ public class Ovalo extends NodoAST{
                 cad += alCode+"\n";
                 cad += "Call $Oval\n";
                 cad += "/*********************************************************/\n";
+                // DETENIENDO DEBUG
+                if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
+                    if (InfoEstatica.Estatico.esLinea) {
+                        InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                        InfoEstatica.Estatico.suspended = true;
+                        InfoEstatica.Estatico.OutPutCode.setText(cad);
+                        InfoEstatica.Estatico.hilo.suspend();
+                    } else {
+                        String key1 = super.getLinea() + "_" + super.getArchivo();
+                        if (InfoEstatica.Estatico.breakPoints.containsKey(key1)) {
+                            InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                            InfoEstatica.Estatico.suspended = true;
+                            InfoEstatica.Estatico.OutPutCode.setText(cad);
+                            InfoEstatica.Estatico.hilo.suspend();
+                        }
+                    }
+                }
                 return cad;
             }
             else
