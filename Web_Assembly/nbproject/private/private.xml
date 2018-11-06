@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Sentencias/IF/IfSimple.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Declaraciones/DeclaracionArrSA.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Declaraciones/DeclaracionVar.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Declaraciones/DeclaracionArrCA.java</file>
             <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/InfoEstatica/Estatico.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Sentencias/IF/IfSinoSi.java</file>
-            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Sentencias/For/Para.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/Simbolos/SimboloTabla.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAST/Declaraciones/DppASTTree.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/DppPackage/DppAnalizador.java</file>
+            <file>file:/home/richard/Documents/Universidad/%5BCompi2%5DProyecto2_201503476/Web_Assembly/src/Simbolos/DppArr.java</file>
         </group>
     </open-files>
 </project-private>

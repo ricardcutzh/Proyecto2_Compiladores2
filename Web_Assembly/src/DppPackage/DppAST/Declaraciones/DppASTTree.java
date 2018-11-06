@@ -129,7 +129,7 @@ public class DppASTTree extends NodoAST {
         // AQUI FALTA LA DECLARACION DE VARIABLES PRIMERO EN EL AMBITO 
         // GLOBAL
         for (NodoAST n : nodos) {
-            if (n instanceof DeclaracionVar) {
+            if (n instanceof DeclaracionVar || n instanceof DeclaracionArrSA || n instanceof DeclaracionArrCA) {
                 vars += n.generateByteCode(ambito);
             }
         }

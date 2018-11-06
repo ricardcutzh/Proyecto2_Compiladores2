@@ -5,7 +5,6 @@
  */
 package DppPackage;
 
-import Abstraccion.NodoAST;
 import DppPackage.Analizador.DPPLex;
 import DppPackage.Analizador.DppParser;
 import DppPackage.DppAST.Declaraciones.DppASTTree;
@@ -13,7 +12,6 @@ import ErrorManager.TError;
 import Simbolos.Ambito;
 import java.io.StringReader;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  * Clase que maneja el Analisis de el Lenguaje D++
@@ -87,7 +85,8 @@ public class DppAnalizador implements Runnable{
                 return null;
             }
         } catch (Exception e) {
-            
+            InfoEstatica.Estatico.agregarError(new TError("FATAL", "No se analizo la cadena: "+e.getMessage(), 
+                    archivo, 0, 0, Boolean.FALSE, archivo));
             return null;
         }
     }

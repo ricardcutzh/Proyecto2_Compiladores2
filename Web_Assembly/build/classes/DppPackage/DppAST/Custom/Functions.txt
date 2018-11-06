@@ -1441,3 +1441,183 @@ Function $_SUMA_CADENA
 	set_local $ret // GUARDANDO EN EL RETORNO EL DATO
 End
 /***************************************************************************************************/
+// FUNCION AUXILIAR PARA LLENAR POSICIONES DEL HEAP
+// PARAM 1: NUMERO DE ELEMENTOS A LLENAR EN EL HEAP
+/***************************************************************************************************/
+Function $_LLENAR_ARR
+  /**************************************/
+  // NUMERO DE ELEMENTOS
+  get_local 0
+  1
+  ADD
+  0
+  set_local $calc
+  /**************************************/
+  set_local $calc
+  /**************************************/
+  // CONTADOR
+  get_local 0
+  2
+  ADD
+  0
+  set_local $calc
+  /**************************************/
+  $CONDICION
+  get_local 0
+  2
+  ADD
+  get_local $calc
+
+  get_local 0
+  1
+  ADD
+  get_local $calc
+
+  LT
+
+  BR_IF $SALIR
+    /**************************************/
+    get_global 0
+    0
+    set_global $calc // METIENDO VALOR POR DEFECTO
+    /**************************************/
+    // AUMENTO DEL HEAP
+    get_global 0
+    1
+    ADD
+    set_global 0
+    /**************************************/
+    // AUMENTANDO CONTADOR
+    get_local 0
+    2
+    ADD
+
+    get_local 0
+    2
+    ADD
+    get_local $calc
+
+    1
+
+    ADD
+
+    set_local $calc
+    /**************************************/
+    BR $CONDICION
+  $SALIR
+End
+/***************************************************************************************************/
+// FUNCION AUXILIAR PARA CALCULAR POSICIONES QUE SE DEBEN DE LLENAR
+// PARAM 1: PUNTERO DONDE INICIA EL ARREGLO
+// PARAM 2: NUMERO DE DIMENSIONES
+/***************************************************************************************************/
+Function $_CALCULA_CANTIDAD
+  /* RESERVANDO ESPACIO PARA PARAMETROS */
+  get_local 0
+  1
+  ADD
+  0
+  set_local $calc
+  /**************************************/
+  get_local 0
+  2
+  ADD
+  0
+  set_local $calc
+  /**************************************/
+  set_local $calc
+  set_local $calc
+  /**************************************/
+  // res = ENTERO
+	get_local 0
+	3
+	ADD
+	1
+	set_local $calc
+  /**************************************/
+  // x = ENTERO
+  get_local 0
+  4
+  ADD
+  0
+  set_local $calc
+  /**************************************/
+  $CONDICION
+
+  get_local 0
+  4
+  ADD
+  get_local $calc
+
+  get_local 0
+  2
+  ADD
+  get_local $calc
+
+  LT
+
+  BR_IF $SALIDA
+    /**************************************/
+    get_local 0
+    3
+    ADD
+
+    get_local 0
+    3
+    ADD
+    get_local $calc
+
+    get_local 0
+    1
+    ADD
+    get_local $calc
+
+    get_global $calc // TOMO EL VALOR DEL HEAP
+
+    MULT // res * heap(puntero)
+
+    set_local $calc
+    /**************************************/
+    // AUMENTANDO PUNTERO
+    get_local 0
+    1
+    ADD
+
+    get_local 0
+    1
+    ADD
+    get_local $calc
+
+    1
+
+    ADD
+
+    set_local $calc
+    /**************************************/
+    // AUMENTANDO X
+    get_local 0
+    4
+    ADD
+
+    get_local 0
+    4
+    ADD
+    get_local $calc
+
+    1
+
+    ADD
+
+    set_local $calc
+    /**************************************/
+    BR $CONDICION
+    /**************************************/
+	$SALIDA
+    get_local 0
+    3
+    ADD
+    get_local $calc
+
+    set_local $ret // RETORNO RES
+End
+/***************************************************************************************************/

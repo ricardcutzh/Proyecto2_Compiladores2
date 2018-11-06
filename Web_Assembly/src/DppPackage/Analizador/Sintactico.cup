@@ -93,7 +93,7 @@ action code
 :}
 // -----------------------------------------------> CODIGO DE DECLARACIONES
 // ------> PUNTUACION
-terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey, punto;
+terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey, punto, oBracket, cBracket;
 // ------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
@@ -108,6 +108,7 @@ non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RE
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR, FOR_INIT, FOR_ACTUALIZACION;
 non terminal Object SENT_SI, SINO, SINO_SI, SENT_MIENTRAS, SENT_AUM_DEC, SENT_FOR, CONTINUE, BREAK, F_IMPRIMIR;
 non terminal Object FUN_PUNTO, FUN_CUADRADO, FUN_OVALO, FUN_LINEA, FUN_CADENA;
+non terminal Object DECLARACION_ARR, DIMENSIONES, VALORES_ARR, LISTA_ARR;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -200,6 +201,23 @@ DECLARACIONES::= DECLARACIONES DECLARACION_VAR:nodo
                 NodoAST n = (NodoAST)nodo;
                 if(n!=null)
                 {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACIONES DECLARACION_ARR:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null)
+                {
+                    parser.inicial.addNodo(n);
+                }
+                RESULT = "";
+            :}
+            | DECLARACION_ARR:nodo
+            {:
+                NodoAST n = (NodoAST)nodo;
+                if(n!=null){
                     parser.inicial.addNodo(n);
                 }
                 RESULT = "";
@@ -386,6 +404,24 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             ArrayList<Object> sentencias = (ArrayList<Object>)lista;
             if(sentencias==null){sentencias = new ArrayList<>();}
             if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | SENTENCIAS:lista DECLARACION_ARR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | DECLARACION_ARR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
                 sentencias.add(nodo);
             }
             RESULT = sentencias;
@@ -962,6 +998,92 @@ DECLARACION_VAR::= TIPO:aux L_DECLARACION:lista ptComa
                     parser.expected.add("'identificador = Expresion'");
                  :}
                  ;
+//---------------------------------------------------------------------------
+DECLARACION_ARR::= TIPO:aux identificador:id DIMENSIONES:lista ptComa
+                {:
+                    String t = (String)aux;
+                    ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                    if(dimensiones==null){dimensiones = new ArrayList<>();}
+                    DeclaracionArrSA i = new DeclaracionArrSA(idright, idleft, ArchivoOrigen, id, t, dimensiones);
+                    RESULT = i;
+                :}
+                | TIPO:aux identificador:id DIMENSIONES:lista asigna VALORES_ARR:lista2 ptComa
+                {:
+                    String t = (String)aux;
+                    ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                    if(dimensiones==null){dimensiones = new ArrayList<>();}
+                    ArrayList<Expresion> valores = (ArrayList<Expresion>)lista2;
+                    if(valores == null){valores = new ArrayList<>();}
+                    DeclaracionArrCA i = new DeclaracionArrCA(auxright, auxleft, ArchivoOrigen, id, t, dimensiones, valores);
+                    RESULT = i;
+                :}
+                ;
+//---------------------------------------------------------------------------
+VALORES_ARR ::= oKey LISTA_ARR:lista cKey
+             {:
+                ArrayList<Expresion> valores = (ArrayList<Expresion>)lista;
+                if(valores == null){valores = new ArrayList<>();}
+                RESULT = valores;
+             :}
+             ;
+//---------------------------------------------------------------------------
+LISTA_ARR ::= LISTA_ARR:lista coma EXP:e
+            {:
+                ArrayList<Expresion> valores = (ArrayList<Expresion>)lista;
+                if(valores == null){valores = new ArrayList<>();}
+                Expresion exp = (Expresion)e;
+                if(exp!=null)
+                {
+                    valores.add(exp);
+                }
+                RESULT = valores;
+            :}
+            | LISTA_ARR:lista1 coma VALORES_ARR:lista2
+            {:
+                ArrayList<Expresion> valores = (ArrayList<Expresion>)lista1;
+                if(valores == null){valores = new ArrayList<>();}
+                ArrayList<Expresion> aux = (ArrayList<Expresion>)lista2;
+                if(aux == null){aux = new ArrayList<>();}
+                for(Expresion e:aux)
+                {
+                    valores.add(e);
+                }
+                RESULT = valores;
+            :}
+            | EXP:e
+            {:
+                ArrayList<Expresion> valores = new ArrayList<>();
+                Expresion exp = (Expresion)e;
+                if(exp!=null)
+                {
+                    valores.add(exp);
+                }
+                RESULT = valores;
+            :}
+            | VALORES_ARR:lista
+            {:
+                ArrayList<Expresion> valores = (ArrayList<Expresion>)lista;
+                if(valores == null){valores = new ArrayList<>();}
+                RESULT = valores;
+            :}
+            ;
+//---------------------------------------------------------------------------
+DIMENSIONES::= DIMENSIONES:lista oBracket EXP:e cBracket
+            {:
+                ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                if(dimensiones==null){dimensiones = new ArrayList<>();}
+                Expresion exp = (Expresion)e;
+                dimensiones.add(exp);
+                RESULT = dimensiones;
+            :}
+            | oBracket EXP:e cBracket
+            {:
+                ArrayList<Expresion> dimensiones = new ArrayList<>();
+                Expresion exp = (Expresion)e;
+                if(exp != null){dimensiones.add(exp);}
+                RESULT = dimensiones;
+            :}
+            ;
 //---------------------------------------------------------------------------
 TIPO ::= entero
        {:
