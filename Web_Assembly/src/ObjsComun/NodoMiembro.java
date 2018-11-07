@@ -50,6 +50,10 @@ public class NodoMiembro extends NodoAST{
         return indiceMiembro;
     }
 
+    public ArrayList<Expresion> getDimensiones() {
+        return dimensiones;
+    }
+
     @Override
     public Object generateByteCode(Ambito ambito) {
         try 

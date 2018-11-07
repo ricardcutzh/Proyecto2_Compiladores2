@@ -9,6 +9,7 @@ import Abstraccion.Expresion;
 import Abstraccion.NodoAST;
 import ErrorManager.TError;
 import Simbolos.Ambito;
+import Simbolos.DppArr;
 import Simbolos.DppVar;
 import Simbolos.Simbolo;
 
@@ -284,7 +285,63 @@ public class AsignacionVar extends NodoAST {
                     }
                 } else // CUANDO SEA ARREGLOS
                 {
-
+                    DppArr simbolo = (DppArr) s;
+                    String expCode = (String) ((NodoAST) exp).generateByteCode(ambito);// GENERO EL CODIGO RELACIONADO A LA EXPRESION
+                    String tipoObtenido = exp.getTipo(ambito);
+                    if (tipoObtenido.equals(simbolo.getTipo())) {
+                        if (InfoEstatica.Estatico.dims == simbolo.getNumDimensiones()) {
+                            String cad = "\n/**************************************************************************/\n";
+                            if (simbolo.getAmbito().equals("Global")) {
+                                cad += "// " + id + " = " + tipoObtenido + "\n";
+                                cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                cad += expCode + "\n";
+                                cad += "set_local $calc // LA POSICIONA AL INICIO DEL STACK \n";
+                                cad += "/**************************************************************************/\n";
+                            } else {
+                                cad += "// " + simbolo.getTipo() + " = " + tipoObtenido + "\n";
+                                cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                cad += simbolo.getPosicionRelativa() + " // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                cad += expCode + "\n";
+                                cad += "set_local $calc // COLOCANDO EL VALOR EN LA POSICION AL FONDO DE LA PILA\n";
+                                cad += "/**************************************************************************/\n";
+                            }
+                            // DETENIENDO DEBUG
+                            if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
+                                if (InfoEstatica.Estatico.esLinea) {
+                                    InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                                    InfoEstatica.Estatico.suspended = true;
+                                    InfoEstatica.Estatico.OutPutCode.setText(cad);
+                                    InfoEstatica.Estatico.hilo.suspend();
+                                } else {
+                                    String key = super.getLinea() + "_" + super.getArchivo();
+                                    if (InfoEstatica.Estatico.breakPoints.containsKey(key)) {
+                                        InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                                        InfoEstatica.Estatico.suspended = true;
+                                        InfoEstatica.Estatico.OutPutCode.setText(cad);
+                                        InfoEstatica.Estatico.hilo.suspend();
+                                    }
+                                }
+                            }
+                            return cad;
+                        } else {
+                            InfoEstatica.Estatico.agregarError(new TError(simbolo.getNumDimensiones() + "=" + InfoEstatica.Estatico.dims,
+                                    "Dimensiones no coinciden",
+                                    "Semantico",
+                                    super.getLinea(),
+                                    super.getColumna(),
+                                    Boolean.FALSE, super.getArchivo()));
+                        }
+                        InfoEstatica.Estatico.dims = 0;
+                        InfoEstatica.Estatico.valorArreglo = false;
+                    } else {
+                        InfoEstatica.Estatico.agregarError(new TError(tipoObtenido + "=" + simbolo.getTipo(),
+                                "Los tipos asignandos no coinciden",
+                                "Semantico",
+                                super.getLinea(),
+                                super.getColumna(),
+                                Boolean.FALSE, super.getArchivo()));
+                    }
                 }
             } else {
                 InfoEstatica.Estatico.agregarError(new TError("Variable: " + id, "No existe el Simbolo en Este contexto", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));

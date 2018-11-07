@@ -1235,6 +1235,13 @@ ASIGNA_ARR ::= identificador:id DIMENSIONES:lista asigna EXP:exp ptComa
                 AsignaArr i = new AsignaArr(idright, idleft, ArchivoOrigen, id, dimensiones, e);
                 RESULT = i;
             :}
+            | identificador:id punto identificador:id2 DIMENSIONES:lista asigna EXP:exp ptComa
+            {:
+                ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                Expresion e = (Expresion)exp;
+                AsignacionMiembroArreglo i = new AsignacionMiembroArreglo(idright, idleft, ArchivoOrigen, id, id2, dimensiones, e);
+                RESULT = i;
+            :}
             ;
 //////////////////////////////////////////////////////////////////////////////
 FUN_PUNTO ::= point:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:diametro cParent ptComa
@@ -1511,6 +1518,12 @@ E ::= E:val1 mas:aux E:val2
     {:
         ArrayList<Expresion> exp = (ArrayList<Expresion>)lista;
         AccesoArreglo i = new AccesoArreglo(idright, idleft, ArchivoOrigen, id, exp);
+        RESULT = i;
+    :}
+    | identificador:id punto identificador:id2 DIMENSIONES:lista
+    {:
+        ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+        AccesoMiembroArreglo i = new AccesoMiembroArreglo(idright, idleft, ArchivoOrigen, id, id2, dimensiones);
         RESULT = i;
     :}
     ;
