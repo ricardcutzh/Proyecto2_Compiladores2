@@ -108,7 +108,7 @@ non terminal Object INICIO, DECLARACIONES, DECLARACION_VAR, LLAMADA, L_EXPRE, RE
 non terminal Object MAIN, METODOS, FUNCIONES, PARAMETROS, SENTENCIAS, ASIGNACION_VAR, FOR_INIT, FOR_ACTUALIZACION;
 non terminal Object SENT_SI, SINO, SINO_SI, SENT_MIENTRAS, SENT_AUM_DEC, SENT_FOR, CONTINUE, BREAK, F_IMPRIMIR;
 non terminal Object FUN_PUNTO, FUN_CUADRADO, FUN_OVALO, FUN_LINEA, FUN_CADENA;
-non terminal Object DECLARACION_ARR, DIMENSIONES, VALORES_ARR, LISTA_ARR;
+non terminal Object DECLARACION_ARR, DIMENSIONES, VALORES_ARR, LISTA_ARR, ASIGNA_ARR;
 // ------> PRECEDENCE
 precedence left or;
 precedence left and;
@@ -417,6 +417,24 @@ SENTENCIAS::= SENTENCIAS:lista DECLARACION_VAR:nodo
             }
             RESULT = sentencias;
           :}
+          | SENTENCIAS:lista ASIGNA_ARR:nodo
+          {:
+            ArrayList<Object> sentencias = (ArrayList<Object>)lista;
+            if(sentencias==null){sentencias = new ArrayList<>();}
+            if(nodo!=null){
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
+          | ASIGNA_ARR:nodo
+          {:
+            ArrayList<Object> sentencias = new ArrayList<>();
+            if(nodo!=null)
+            {
+                sentencias.add(nodo);
+            }
+            RESULT = sentencias;
+          :}
           | DECLARACION_ARR:nodo
           {:
             ArrayList<Object> sentencias = new ArrayList<>();
@@ -707,10 +725,29 @@ MIEMBROS ::= MIEMBROS:lista TIPO:tipo identificador:id ptComa
                 nodos.add(n);
                 RESULT = nodos;
            :}
+           | MIEMBROS:lista TIPO:tipo identificador:id DIMENSIONES:lista2 ptComa
+           {:
+                String t = (String)tipo;
+                ArrayList<NodoMiembro> nodos = (ArrayList<NodoMiembro>)lista;
+                ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista2;
+                NodoMiembro n = new NodoMiembro(idright, idleft, ArchivoOrigen, t, id, nodos.size()+1, dimensiones);
+                nodos.add(n);
+                RESULT = nodos;
+           :}
            | TIPO:tipo identificador:id ptComa
            {:
                 String t = (String)tipo;
                 NodoMiembro n = new NodoMiembro(idright, idleft, ArchivoOrigen,t, id, 1);
+                ArrayList<NodoMiembro> nodos = new ArrayList<>();
+                nodos.add(n);
+                RESULT = nodos;
+           :}
+           | TIPO:tipo identificador:id DIMENSIONES:lista ptComa
+           {:
+                String t = (String)tipo;
+                ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                if(dimensiones == null){dimensiones = new ArrayList<>();}
+                NodoMiembro n = new NodoMiembro(idright, idleft, ArchivoOrigen, t, id, 1, dimensiones);
                 ArrayList<NodoMiembro> nodos = new ArrayList<>();
                 nodos.add(n);
                 RESULT = nodos;
@@ -1190,6 +1227,15 @@ ASIGNACION_VAR ::= identificador:id asigna EXP:exp ptComa
                     parser.expected.add("'= Expresion'");
                 :}
                 ;
+//----------------------------------------------------------------------------
+ASIGNA_ARR ::= identificador:id DIMENSIONES:lista asigna EXP:exp ptComa
+            {:
+                ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
+                Expresion e = (Expresion)exp;
+                AsignaArr i = new AsignaArr(idright, idleft, ArchivoOrigen, id, dimensiones, e);
+                RESULT = i;
+            :}
+            ;
 //////////////////////////////////////////////////////////////////////////////
 FUN_PUNTO ::= point:aux oParent EXP:posx coma EXP:posy coma dataString:col coma EXP:diametro cParent ptComa
             {:
@@ -1459,6 +1505,12 @@ E ::= E:val1 mas:aux E:val2
     | nulo:aux
     {:
         ValorNulo i = new ValorNulo(auxright, auxleft, ArchivoOrigen);
+        RESULT = i;
+    :}
+    | identificador:id DIMENSIONES:lista 
+    {:
+        ArrayList<Expresion> exp = (ArrayList<Expresion>)lista;
+        AccesoArreglo i = new AccesoArreglo(idright, idleft, ArchivoOrigen, id, exp);
         RESULT = i;
     :}
     ;

@@ -47,7 +47,6 @@ public class Struct extends Simbolo {
             if (ambito.getIdAmbito().equals("Global")) {
                 String cad = "// DECLARAION DE ESTRUCTURA: " + idSimbolo + "\n";
                 cad += (ambito.getSize()) + "// POSICION ABSOLUTA EN EL STACK\n";
-                //cad += "ADD // POSICION DONDE GUARDARE EL PUNTERO AL INICIO DE LA ESTRUCTURA\n";
                 cad += "get_global 0 // PUNTERO AL INICIO DE LA ESTRUCTURA\n";
                 cad += "set_local $calc // GUARDO EL PUNTERO DE LA ESTRUCTURA\n";
                 for (int x = 1; x <= miembros.size(); x++) {
@@ -58,8 +57,15 @@ public class Struct extends Simbolo {
                 cad += miembros.size() + "\n";
                 cad += "ADD // sumo\n";
                 cad += "set_global 0\n";
+                for(int x = 1; x<= miembros.size(); x++)
+                {
+                    NodoMiembro n = getByIndex(x);
+                    if(n.isEsArreglo())
+                    {
+                        cad += n.generaCodigoDeArreglo(ambito);
+                    }
+                }
                 return cad;
-
             } else {
                 String cad = "// DECLARAION DE ESTRUCTURA: " + idSimbolo + "\n";
                 cad += "get_local 0 // PUNTERO DEL STACK\n";
@@ -75,6 +81,14 @@ public class Struct extends Simbolo {
                 cad += miembros.size() + "\n";
                 cad += "ADD // sumo\n";
                 cad += "set_global 0\n";
+                for(int x = 1; x<= miembros.size(); x++)
+                {
+                    NodoMiembro n = getByIndex(x);
+                    if(n.isEsArreglo())
+                    {
+                        cad += n.generaCodigoDeArreglo(ambito);
+                    }
+                }
                 return cad;
             }
         } catch (Exception e) {
