@@ -93,7 +93,7 @@ action code
 :}
 // -----------------------------------------------> CODIGO DE DECLARACIONES
 // ------> PUNTUACION
-terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey, punto, oBracket, cBracket;
+terminal String ptComa, asigna, oParent, cParent, coma, oKey, cKey, punto, oBracket, cBracket, qMark, dPuntos;
 // ------> OPERADORES
 terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor, menorigual, mayorigual, and, or, not;
 // ------> PALABRAS RESERVADAS
@@ -118,6 +118,7 @@ precedence left mas, menos;
 precedence left mult, div;
 precedence left pot;
 precedence right inc, dec, not;
+precedence left qMark;
 precedence left cParent;
 precedence left sino;
 start with INICIO;
@@ -1525,5 +1526,13 @@ E ::= E:val1 mas:aux E:val2
         ArrayList<Expresion> dimensiones = (ArrayList<Expresion>)lista;
         AccesoMiembroArreglo i = new AccesoMiembroArreglo(idright, idleft, ArchivoOrigen, id, id2, dimensiones);
         RESULT = i;
+    :}
+    | E:c qMark E:v dPuntos E:f
+    {:
+        Expresion cond = (Expresion)c;
+        Expresion verd = (Expresion)v;
+        Expresion fals = (Expresion)f;
+        Ternario t = new Ternario(cright, cleft, ArchivoOrigen, cond, verd, fals);
+        RESULT = t;
     :}
     ;

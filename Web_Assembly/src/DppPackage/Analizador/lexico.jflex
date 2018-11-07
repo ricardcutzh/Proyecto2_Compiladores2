@@ -64,6 +64,8 @@ inicioComentarioLinea = "//"
 <YYINITIAL> "."                                           {return new Symbol(DppPackage.Analizador.Simbolos.punto, yycolumn, yyline, yytext());}
 <YYINITIAL> "["                                           {return new Symbol(DppPackage.Analizador.Simbolos.oBracket, yycolumn, yyline, yytext());}
 <YYINITIAL> "]"                                           {return new Symbol(DppPackage.Analizador.Simbolos.cBracket, yycolumn, yyline, yytext());}
+<YYINITIAL> "?"                                           {return new Symbol(DppPackage.Analizador.Simbolos.qMark, yycolumn, yyline, yytext());}
+<YYINITIAL> ":"                                           {return new Symbol(DppPackage.Analizador.Simbolos.dPuntos, yycolumn, yyline, yytext());}
 // OPERADORES
 <YYINITIAL> "+"                                           {return new Symbol(DppPackage.Analizador.Simbolos.mas, yycolumn, yyline, yytext());}
 <YYINITIAL> "-"                                           {return new Symbol(DppPackage.Analizador.Simbolos.menos, yycolumn, yyline, yytext());}
