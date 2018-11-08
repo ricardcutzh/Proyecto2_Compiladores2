@@ -116,7 +116,16 @@ public class LlamadoFuncion extends NodoAST implements Expresion{
             }
             else
             {
-                n = new NodoParametro("aux", e.getTipo(ambito), Boolean.FALSE);
+                if(InfoEstatica.Estatico.valorArreglo)
+                {
+                    n = new NodoParametro("aux", e.getTipo(ambito), Boolean.TRUE, InfoEstatica.Estatico.dims);
+                    InfoEstatica.Estatico.dims = 0;
+                    InfoEstatica.Estatico.valorArreglo = false;
+                }
+                else
+                {
+                    n = new NodoParametro("aux", e.getTipo(ambito), Boolean.FALSE);
+                }
             }
             
             nodoParametros.add(n);

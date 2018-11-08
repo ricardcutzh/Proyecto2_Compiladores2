@@ -15,16 +15,22 @@ import javax.swing.JFrame;
 import InfoEstatica.Estatico;
 import ObjsComun.BreakPointNode;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -149,6 +155,7 @@ public class IDE extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IDE Web Assembly");
@@ -601,6 +608,15 @@ public class IDE extends javax.swing.JFrame {
         });
         HideTabs.add(jMenuItem6);
 
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Iconos/musica-searcher.png"))); // NOI18N
+        jMenuItem7.setText("Buscar Palabra");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        HideTabs.add(jMenuItem7);
+
         jMenuBar1.add(HideTabs);
 
         setJMenuBar(jMenuBar1);
@@ -926,6 +942,38 @@ public class IDE extends javax.swing.JFrame {
         Estatico.OutPutCode.setText("/*NO HAY CODIGO PARA MOSTRAR*/");
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        Estatico.Pestanas = EditorTab; // REFERENCIA A LAS PESTANAS
+        Estatico.setUp(Consola, TablaError, SimbolTable);
+        if(EditorTab.getTabCount() > 0)
+        {
+            String palabraBuscar = JOptionPane.showInputDialog(this, "Palabra que deseas buscar:");
+            Object o = EditorTab.getComponentAt(EditorTab.getSelectedIndex());
+            if(o instanceof WebAssEditor)
+            {
+                RSyntaxTextArea aux = ((WebAssEditor)o).areaEdicion;
+                String text = aux.getText();
+                int index = text.indexOf(palabraBuscar);
+                while(index >= 0)
+                {
+                    int len = palabraBuscar.length();
+                    Highlighter h = aux.getHighlighter();
+                    try {
+                        h.addHighlight(index, index+len, new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#b8b894")));
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    index = text.indexOf(palabraBuscar, index+len);
+                }
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No hay Tabs abiertas donde buscar un texto", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -999,6 +1047,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;

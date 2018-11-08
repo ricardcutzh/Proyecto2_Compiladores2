@@ -109,9 +109,17 @@ public class LlamadoMetodo extends NodoAST {
             if (aux instanceof LlamadoFuncion) {
                 n = new NodoParametro("llama", e.getTipo(ambito), Boolean.FALSE);
             } else {
-                n = new NodoParametro("aux", e.getTipo(ambito), Boolean.FALSE);
+                if(InfoEstatica.Estatico.valorArreglo)
+                {
+                    n = new NodoParametro("aux", e.getTipo(ambito), Boolean.TRUE, InfoEstatica.Estatico.dims);
+                    InfoEstatica.Estatico.dims = 0;
+                    InfoEstatica.Estatico.valorArreglo = false;
+                }
+                else
+                {
+                    n = new NodoParametro("aux", e.getTipo(ambito), Boolean.FALSE);
+                }
             }
-
             nodoParametros.add(n);
         }
         return nodoParametros;

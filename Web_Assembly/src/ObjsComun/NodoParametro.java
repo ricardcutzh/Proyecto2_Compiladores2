@@ -14,6 +14,7 @@ public class NodoParametro {
     String idParametro;
     String tipo;
     Boolean soyVector;
+    int dimensiones;
     /**
      * Constructor del Objeto que manejara la diferenciacion de funciones 
      * @param idParametro identificador del parametro
@@ -25,7 +26,18 @@ public class NodoParametro {
         this.idParametro = idParametro;
         this.tipo = tipo;
         this.soyVector = soyVector;
+        this.dimensiones = 0;
     }
+    
+    public NodoParametro(String idParametro, String tipo, Boolean soyVectero, int dimensiones)
+    {
+        this.idParametro = idParametro;
+        this.tipo = tipo;
+        this.soyVector = soyVectero;
+        this.dimensiones = dimensiones;
+        
+    }
+    
     /**
      * Getter del Identificador del Parametro
      * @return el identificador del parametro
@@ -55,7 +67,7 @@ public class NodoParametro {
         if(obj !=null && obj instanceof NodoParametro)
         {
             NodoParametro aux = (NodoParametro)obj;
-            if(aux.tipo.equals(this.tipo))
+            if(aux.tipo.equals(this.tipo) && (aux.soyVector.equals(this.soyVector)) && this.dimensiones == aux.dimensiones)
             {
                 return true;
             }
@@ -63,6 +75,10 @@ public class NodoParametro {
         return false;
     }
 
+    public int getDimensiones() {
+        return dimensiones;
+    }
+    
     @Override
     public int hashCode() {
         return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
