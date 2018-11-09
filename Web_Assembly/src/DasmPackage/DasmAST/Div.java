@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de la instrucción de DIV de DASM    
  * @author richard
  */
 public class Div extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor del nodo que se encarga de la Division
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Div(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que toma dos valores de la pila auxiliar y hace si division
+     * y mete el resultado en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

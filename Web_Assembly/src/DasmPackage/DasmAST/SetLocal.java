@@ -14,16 +14,29 @@ import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion set_local pos
  * @author richard
  */
 public class SetLocal extends NodoAST implements SentenciaDasm{
     Integer posicion;
+    /**
+     * Constructor de la instruccion set_local pos
+     * @param linea
+     * @param columna
+     * @param Archivo
+     * @param posicion indice donde se desa coloar un dato
+     */
     public SetLocal(int linea, int columna, String Archivo, Integer posicion) {
         super(linea, columna, Archivo);
         this.posicion = posicion;
     }
-
+    /**
+     * Metodo que inserta un dato en el stack de ambitos de acuerdo a la posicion
+     * dada
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

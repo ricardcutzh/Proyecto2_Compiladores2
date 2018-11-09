@@ -14,16 +14,29 @@ import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion get_local entero
  * @author richard
  */
 public class GetLocal extends NodoAST implements SentenciaDasm{
     Integer posicion;
+    /**
+     * Constructor de la instruccion get_local pos
+     * @param linea
+     * @param columna
+     * @param Archivo
+     * @param posicion indice que se desea tomar del Stack de Ámbitos
+     */
     public GetLocal(int linea, int columna, String Archivo, Integer posicion) {
         super(linea, columna, Archivo);
         this.posicion = posicion;
     }
-
+    /**
+     * Metodo que toma la posicion descrita y consulta una posicion del stack 
+     * de ámbitos
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

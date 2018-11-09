@@ -103,13 +103,79 @@ public class DeclaracionVar extends NodoAST {
                                     }
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
-                                } else {
+                                }
+                                else if(tipoObtenido.equals("DECIMAL"))
+                                {
+                                    if(ambito.getIdAmbito().equals("Global"))
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// " + id + " = " + tipoObtenido + " | GUARDANDO GLOBALMENTE \n";
+                                        cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                        cad += "// CASTEANDO LA EXPRESION A ENTERO\n";
+                                        cad += "// MANDANDO COMO PARAMETRO A LA FUNCION DE CASTEO\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize() - 1)+"\n";
+                                        cad += "ADD\n";
+                                        cad += "1\n";
+                                        cad += "ADD\n";
+                                        cad += expCode+"\n";
+                                        cad += "// LLAMANDO A LA FUNCION DE CASTEO\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize()-1)+"\n";
+                                        cad += "ADD\n";
+                                        cad += "set_local 0\n";
+                                        cad += "Call $_CAST_TO_INT\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize()-1)+"\n";
+                                        cad += "DIFF\n";
+                                        cad += "set_local 0\n";
+                                        cad += "// OBTENIENDO EL RETORNO\n";
+                                        cad += "get_local $ret\n";
+                                        cad += "//ASIGNANDO VALOR A LA POSICION\n";
+                                        cad += "set_local $calc";
+                                        cad += "\n/**************************************************************************/\n";
+                                    }
+                                    else
+                                    {
+                                        cad += "\n/**************************************************************************/\n";
+                                        cad += "// "+id+" = "+tipoObtenido+"\n";
+                                        cad += "get_local 0 \n";
+                                        cad += simbolo.getPosicionRelativa()+"\n";
+                                        cad += "ADD\n";
+                                        cad += "// CASTEANDO LA EXPRESION A ENTERO\n";
+                                        cad += "// MANDANDO COMO PARAMETRO A LA FUNCION DE CASTEO\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize() - 1)+"\n";
+                                        cad += "ADD\n";
+                                        cad += "1\n";
+                                        cad += "ADD\n";
+                                        cad += expCode+"\n";
+                                        cad += "// LLAMANDO A LA FUNCION DE CASTEO\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize()-1)+"\n";
+                                        cad += "ADD\n";
+                                        cad += "set_local 0\n";
+                                        cad += "Call $_CAST_TO_INT\n";
+                                        cad += "get_local 0\n";
+                                        cad += (ambito.getSize()-1)+"\n";
+                                        cad += "DIFF\n";
+                                        cad += "set_local 0\n";
+                                        cad += "// OBTENIENDO EL RETORNO\n";
+                                        cad += "get_local $ret\n";
+                                        cad += "// ASIGNANDO VALOR A LA POSICION\n";
+                                        cad += "set_local $calc";
+                                        cad += "\n/**************************************************************************/\n";
+                                    }
+                                    ambito.addDppSimbol(id, simbolo);
+                                    InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
+                                }
+                                else {
                                     InfoEstatica.Estatico.agregarError(new TError("Tipo Obtenido: " + tipoObtenido, "No se puede asignar: " + tipoObtenido + " a una variable de tipo: Entero", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
                                 }
                                 continue;
                             }
                             case "DECIMAL": {
-                                if (tipoObtenido.equals("DECIMAL")) {
+                                if (tipoObtenido.equals("DECIMAL")||tipoObtenido.equals("ENTERO")) {
                                     if (ambito.getIdAmbito().equals("Global")) {
                                         cad += "\n/**************************************************************************/\n";
                                         cad += "// " + id + " = " + tipoObtenido + " | GUARDANDO GLOBALMENTE \n";
@@ -179,11 +245,13 @@ public class DeclaracionVar extends NodoAST {
                                         cad += getSet(ambito.getIdAmbito()) + " $calc // PONGO EL VALOR EN LA POSICION QUE ESTA AL FONDO DE LA PILA\n";
                                         cad += "/**************************************************************************/\n";
                                     }
+                                    
                                     ambito.addDppSimbol(id, simbolo);
                                     InfoEstatica.Estatico.AgregarTablaSimbolos(new SimboloTabla(id, Boolean.FALSE, tipo, ambito.getIdAmbito(), super.getLinea(), super.getColumna(), 1, "Variable"));
                                 } else {
                                     InfoEstatica.Estatico.agregarError(new TError("Tipo Obtenido: " + tipoObtenido, "No se puede asignar: " + tipoObtenido + " a una variable de tipo: Caracter", "Semantico", super.getLinea(), super.getColumna(), Boolean.FALSE, super.getArchivo()));
                                 }
+                                continue;
                             }
                             default: {
                                 if (tipoObtenido.equals(tipo)) {

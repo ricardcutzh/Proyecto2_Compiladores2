@@ -257,7 +257,7 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    /* Operators. */
    "+" | "-" | "*" | "/" | "^" | "%" | "++"|
    "--"| "==" | "<>" | "<"| ">" | "<=" | ">="|
-   "&&" | "||" | "=" | "!" { addToken(Token.OPERATOR); }
+   "&&" | "||" | "=" | "!" | "?" | ":" { addToken(Token.OPERATOR); }
 
    /* Numbers */
    {IntegerLiteral}         { addToken(Token.LITERAL_NUMBER_DECIMAL_INT); }

@@ -13,16 +13,25 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion de linea de DASM
  * @author richard
  */
 public class Linea extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion line 
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Linea(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
     
-    
+    /**
+     * Obtniene el color a partir del valor entero dado
+     * @param valor
+     * @return cadena que representa el color
+     */
     private String getColor(int valor)
     {
         try {
@@ -33,7 +42,13 @@ public class Linea extends NodoAST implements SentenciaDasm{
         }
         return "";
     }
-
+    /**
+     * Metodo que se encarga de tomar los parametros de la pila auxiliar y ejecuta
+     * la funcion de linea
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

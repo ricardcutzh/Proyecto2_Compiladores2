@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion PUNTO
  * @author richard
  */
 public class Punto extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion PUNTO
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Punto(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que se encarga de tomar los parametros de la pila auxiliar y ejecuta
+     * la funcion de punto
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

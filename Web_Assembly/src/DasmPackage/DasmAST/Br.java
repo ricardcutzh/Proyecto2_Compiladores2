@@ -12,13 +12,13 @@ import Estructuras.IP;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la ejecucion de la instrucción BR
  * @author richard
  */
 public class Br extends NodoAST implements SentenciaDasm{
     String etiqueta;
     /**
-     * 
+     * Constructor del nodo BR
      * @param linea
      * @param columna
      * @param Archivo
@@ -28,7 +28,14 @@ public class Br extends NodoAST implements SentenciaDasm{
         super(linea, columna, Archivo);
         this.etiqueta = etiqueta;
     }
-
+    
+    /**
+     * Metodo que se encarga de mover el IP a la siguiente instrucción especificada
+     * por la etiqueta
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

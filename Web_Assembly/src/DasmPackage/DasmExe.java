@@ -11,7 +11,8 @@ import Estructuras.IP;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la ejecucion del DASM luego de pasar por el analisisi
+ * Léxico y Sintáctico
  * @author richard
  */
 public class DasmExe {
@@ -25,7 +26,9 @@ public class DasmExe {
         entorno = new EntornoDasm(gestor);
     }
     
-    
+    /**
+     * Es el metodo que inicia la ejecucion del Archivo DASM   
+     */
     public void iniciarDasm()
     {
         try 

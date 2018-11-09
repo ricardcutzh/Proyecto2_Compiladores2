@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de manejar la instrucción GT
  * @author richard
  */
 public class Gt extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instrucción GT
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Gt(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Toma dos valores de la pila auxiliar y luego compara si valor 1 es mayor
+     * a valor 2, de ser asi inserta 1 en la pila auxiliar de lo contrario inserta un 0
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

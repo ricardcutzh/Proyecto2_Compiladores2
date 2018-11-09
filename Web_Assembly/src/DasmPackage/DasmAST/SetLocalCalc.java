@@ -14,7 +14,7 @@ import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion set_local $calc
  * @author richard
  */
 public class SetLocalCalc extends NodoAST implements SentenciaDasm{
@@ -27,7 +27,13 @@ public class SetLocalCalc extends NodoAST implements SentenciaDasm{
     public SetLocalCalc(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que setea un valor en el stack de ambitos de acuerdo a valores
+     * que estan en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

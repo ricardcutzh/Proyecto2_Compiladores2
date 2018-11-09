@@ -14,7 +14,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de insertar un dato entero en la Pila Auxiliar
  * @author richard
  */
 public class Entero extends NodoAST implements SentenciaDasm{
@@ -24,13 +24,19 @@ public class Entero extends NodoAST implements SentenciaDasm{
      * @param linea
      * @param columna
      * @param Archivo
-     * @param valor 
+     * @param valor Dato entero a insertar en la pila auxiliar
      */
     public Entero(int linea, int columna, String Archivo, Integer valor) {
         super(linea, columna, Archivo);
         this.valor = valor;
     }
-
+    
+    /**
+     * Metodo que se encarga de insertar un valor entero en la Pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

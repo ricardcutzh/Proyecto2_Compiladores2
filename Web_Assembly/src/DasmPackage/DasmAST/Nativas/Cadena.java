@@ -15,15 +15,25 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrccion String
  * @author richard
  */
 public class Cadena extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion que maneja la funcion de dibujo string
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Cadena(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Toma los parametros de la pila auxiliar y ejecuta la funcion de dibujo
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

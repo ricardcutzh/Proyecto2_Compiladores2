@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de la instruccion get_local $ret
  * @author richard
  */
 public class GetLocalRet extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Consctructor de la instruccion get_local $ret
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public GetLocalRet(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Método que se encaarga de obtener el resultado que se coloco en la posicion
+     * RET del entorno DASM 
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

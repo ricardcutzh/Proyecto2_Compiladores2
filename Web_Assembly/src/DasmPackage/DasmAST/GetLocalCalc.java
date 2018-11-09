@@ -14,7 +14,7 @@ import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción get_local $calc
  * @author richard
  */
 public class GetLocalCalc extends NodoAST implements SentenciaDasm{
@@ -28,7 +28,14 @@ public class GetLocalCalc extends NodoAST implements SentenciaDasm{
     public GetLocalCalc(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que toma un valor de la pila auxiliar:
+     * pop 1: posicion
+     * luego obtiene del stack de ambitos la posicion anteriormente obtenida
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

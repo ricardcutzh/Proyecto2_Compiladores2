@@ -99,7 +99,7 @@ terminal String mas, menos, mult, div, pot, inc, dec, igual, diff, menor, mayor,
 // ------> PALABRAS RESERVADAS
 terminal entero, decimal, cadena, caracter, booleano, verdadero, falso, importar, para;
 terminal String principal, vacio, retornar, si, sino, mientras, detener, continuar, imprimir, estructura;
-terminal String point, cuadrado, ovalo, linea;
+terminal String point, cuadrado, ovalo, linea, unario;
 // ------> VALORES
 terminal String numEntero, numDecimal, dataChar, identificador, dataString,nulo;
 // ------> NO TERMINALES
@@ -118,6 +118,7 @@ precedence left mas, menos;
 precedence left mult, div;
 precedence left pot;
 precedence right inc, dec, not;
+precedence right unario;
 precedence left qMark;
 precedence left cParent;
 precedence left sino;
@@ -1496,7 +1497,7 @@ E ::= E:val1 mas:aux E:val2
         Expresion exp = (Expresion)val;
         Operacion o = new Operacion(auxright, auxleft, ArchivoOrigen, exp, InfoEstatica.Estatico.OPERADORES.MENOS);
         RESULT = o;
-    :} %prec menos
+    :} %prec unario
     | E:val inc:aux
     {:
         //

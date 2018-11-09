@@ -15,7 +15,7 @@ import Simbolos.EntornoDasm;
 import java.util.HashMap;
 
 /**
- *
+ * Clase que maneja los llamados a instrucciones Call
  * @author richard
  */
 public class Call extends NodoAST implements SentenciaDasm{
@@ -25,13 +25,20 @@ public class Call extends NodoAST implements SentenciaDasm{
      * @param linea
      * @param columna
      * @param Archivo
-     * @param id 
+     * @param id Identificador de la instruccion
      */
     public Call(int linea, int columna, String Archivo, String id) {
         super(linea, columna, Archivo);
         this.id  = id;
     }
-
+    
+    /**
+     * Metodo que realiza la busquedad de la funcion que se necesita y hace 
+     * la ejecucion de la misma
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

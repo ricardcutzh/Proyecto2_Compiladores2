@@ -773,11 +773,13 @@ public class Operacion extends NodoAST implements Expresion {
             switch (codigo) {
                 case "1": {
                     resultado = "ENTERO";
-                    return t1 + "\n-1\nMULT\n";
+                    return "0\n"+t1+"\nDIFF\n";
+                    //return t1 + "\n-1\nMULT\n";
                 }
-                case "2": {
+                case "5": {
                     resultado = "DECIMAL";
-                    return t1 + "\n-1\nMULT\n";
+                    return "0\n"+t1+"\nDIFF\n";
+                    //return t1 + "\n-1\nMULT\n";
                 }
                 default: {
                     InfoEstatica.Estatico.agregarError(new TError("-" + tipo1, "No es posible aplicar Negativo al tipo indicado", "Ejecucion", super.getLinea(), super.getColumna(), false, super.getArchivo()));

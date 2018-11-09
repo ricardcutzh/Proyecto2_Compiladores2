@@ -19,7 +19,7 @@ public class Navegador extends JFrame{
      */
     public Navegador()
     {
-        setSize(800, 800);
+        setSize(500, 500);
         setResizable(false);
         this.panel = new PanelDibujo();
         this.add(panel);

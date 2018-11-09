@@ -33,26 +33,30 @@ public class DasmAnalizador {
     }
     /**
      * Cadena que se va a Leer
-     * @return 
+     * @return retorna la cadena que se va leer por alnalizador
      */
     public String getCadena() {
         return cadena;
     }
     /**
      * Obtener el archivo de entrada de donde se leyo
-     * @return 
+     * @return retorna el archivo que se va leer
      */
     public String getArchivo() {
         return archivo;
     }
     /**
      * Path del proyecto donde se encuentra el archivo
-     * @return 
+     * @return retorna el path del proyecto 
      */
     public String getPathProyecto() {
         return pathProyecto;
     }
     
+    /**
+     * Metodo que inicia el analizador del documento DASM
+     * @return Retorna el gestor de las funciones que existen en el archivo DASM    
+     */
     public Object analizarDasm()
     {
         try 

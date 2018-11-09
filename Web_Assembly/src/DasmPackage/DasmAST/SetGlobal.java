@@ -14,16 +14,28 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción set_global pos
  * @author richard
  */
 public class SetGlobal extends NodoAST implements SentenciaDasm{
     Integer posicion;
+    /**
+     * Constructor de la instruccion set_global pos
+     * @param linea
+     * @param columna
+     * @param Archivo
+     * @param posicion posicion donde quiero posicionar un valor en el HEAP
+     */
     public SetGlobal(int linea, int columna, String Archivo, Integer posicion) {
         super(linea, columna, Archivo);
         this.posicion = posicion;
     }
-
+    /**
+     * Metodo que toma el valor del Heap especificado por la posicion
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

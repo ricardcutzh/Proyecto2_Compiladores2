@@ -13,15 +13,27 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase encargada de la operación AND en DASM  
  * @author richard
  */
 public class And extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor del nodo AND 
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public And(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    
+    /**
+     * Metodo que hace pop a dos valores de la pilita y hace la operacion
+     * bit a bit de los valores (AND)
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

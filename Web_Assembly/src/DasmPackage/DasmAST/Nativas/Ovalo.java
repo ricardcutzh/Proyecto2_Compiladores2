@@ -13,16 +13,25 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion OVAL
  * @author richard
  */
 public class Ovalo extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la funcion Ovalo
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Ovalo(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
     
-    
+    /**
+     * Obtiene el color de cuerdo a un numero entero
+     * @param valor
+     * @return cadena que representa el color
+     */
     private String getColor(int valor)
     {
         try {
@@ -33,7 +42,13 @@ public class Ovalo extends NodoAST implements SentenciaDasm{
         }
         return "";
     }
-
+    /**
+     * Metodo que toma los parametros que existen en la Pila Auxiliar y ejecuta
+     * la instruccion de ovalo
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

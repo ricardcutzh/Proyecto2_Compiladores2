@@ -380,7 +380,7 @@ Function $_INT_TO_STRING
 	ADD
 	get_local $calc // OBTENGO EL PRIMERO PARAMETRO
 	10
-	GT // ES PARAM1 > 10?
+	GTE // ES PARAM1 > 10?
 	BR_IF $TERMINAR // SINO ES MAYOR A 10 ENTONCES TERMINA
 		// SINO ES MENOR A 10....
 		/*******************************************************************************/
@@ -1619,5 +1619,36 @@ Function $_CALCULA_CANTIDAD
     get_local $calc
 
     set_local $ret // RETORNO RES
+End
+/***************************************************************************************************/
+// FUNCION AUXILIAR PARA CASTEAR DECIMAL A ENTERO
+// PARAM 1: NUMERO DECIMAL QUE SE CONVERTIRA EN ENTERO
+Function $_CAST_TO_INT
+	/*******************************************************************************/
+	get_local 0
+	1
+	ADD
+	0
+	set_local $calc
+	/*******************************************************************************/
+	set_local $calc
+	/*******************************************************************************/
+	get_local 0
+	1
+	ADD
+	get_local $calc
+
+	get_local 0
+	1
+	ADD
+	get_local $calc
+
+	1
+
+	MOD
+
+	DIFF
+	/*******************************************************************************/
+	set_local $ret
 End
 /***************************************************************************************************/

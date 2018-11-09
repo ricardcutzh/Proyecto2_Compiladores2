@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de manejar la instrucción LT
  * @author richard
  */
 public class Lt extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instrucción LT
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Lt(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Toma dos valores de la pila auxiliar y luego compara si valor 1 es menor
+     * a valor 2, de ser asi inserta 1 en la pila auxiliar de lo contrario inserta un 0
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

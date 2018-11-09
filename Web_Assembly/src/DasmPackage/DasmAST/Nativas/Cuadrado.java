@@ -13,15 +13,24 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instruccion Quadrate
  * @author richard
  */
 public class Cuadrado extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion Quadrate
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Cuadrado(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-    
+    /**
+     * Metodo que devuelve el color de acuerdo a un numero entero
+     * @param valor
+     * @return cadena que representa el color
+     */
     private String getColor(int valor)
     {
         try {
@@ -32,7 +41,13 @@ public class Cuadrado extends NodoAST implements SentenciaDasm{
         }
         return "";
     }
-
+    /**
+     * Metodo que toma los parametros que existen en la pila auxiliar y ejecuta
+     * la funcion de pintado del cuadrado
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

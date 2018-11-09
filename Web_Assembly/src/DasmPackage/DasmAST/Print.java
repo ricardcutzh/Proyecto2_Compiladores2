@@ -13,15 +13,25 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción PRINT de DASM    
  * @author richard
  */
 public class Print extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instrucción PRINT
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Print(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que ejecuta la impresion de acuerdo a valores existentes en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

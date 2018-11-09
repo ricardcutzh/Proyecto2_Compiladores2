@@ -13,15 +13,27 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción LTE
  * @author richard
  */
 public class Lte extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instrucción LTE
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Lte(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Toma dos valores de la pila auxiliar y los compara, de ser menor o igual 
+     * valor 1 a valor 2, inserta un 1 en la pila auxiliar, de lo contrario
+     * inserta 0
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

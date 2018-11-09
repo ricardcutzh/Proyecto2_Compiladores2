@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la intruccion OR en DASM
  * @author richard
  */
 public class Or extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la intrucción NOT
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Or(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Toma dos valores de la pila auxiliar y luego hace la operacion
+     * bit a bit e inserta el resultado en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

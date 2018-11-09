@@ -13,7 +13,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción de meter un dato a la Pila Auxiliar
  * @author richard
  */
 public class Decimal extends NodoAST implements SentenciaDasm{
@@ -23,13 +23,19 @@ public class Decimal extends NodoAST implements SentenciaDasm{
      * @param linea
      * @param columna
      * @param Archivo
-     * @param valor 
+     * @param valor dato tipo Double que se insertara en la Pila
      */
     public Decimal(int linea, int columna, String Archivo, Double valor) {
         super(linea, columna, Archivo);
         this.valor = valor;
     }
 
+    /**
+     * Metodo encargado de insertar el valor Double en la Pila Auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

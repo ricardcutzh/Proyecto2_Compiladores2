@@ -13,15 +13,28 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se encarga de la instruccion EQZ de DASM  
  * @author richard
  */
 public class Eqz extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion EQZ
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Eqz(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    
+    /**
+     * Metodo que se encarga de sacar la cima de la pila auxiliar y verificar si
+     * es igual a 0, de ser asi inserta un 1 en la pila auxiliar, de lo contrario
+     * inserta un 0.
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

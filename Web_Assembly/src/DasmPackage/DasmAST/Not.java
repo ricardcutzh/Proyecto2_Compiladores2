@@ -13,15 +13,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la intrucción NOT
  * @author richard
  */
 public class Not extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instrucción NOT
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public Not(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que toma dos valores de la pila auxiliar y luego hace la operacion
+     * bit a bit y el resultado lo inserta a la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

@@ -14,15 +14,26 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción Get_global de DASM   
  * @author richard
  */
 public class GetGlobalCalc extends NodoAST implements SentenciaDasm {
-
+    /**
+     * Constructor del nodo get_global $calc
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public GetGlobalCalc(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que toma un valor de la pila auxiliar (representa la posicion)
+     * y luego basado en el valor anterior toma un valor que existe en el HEAP
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try {

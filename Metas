@@ -1,6 +1,7 @@
 /**************************************/
-// META DE MANANA
+// BUGS QUE ARREGLAR
 //**************************************
- *- ESTRUCTURAS
- *- INICIO DE MANEJO DE ARREGLOS
+// PODER IGUALAR UN ENTERO CON VALOR DECIMAL
+// PODER IGUALAR UN DECIMAL A UN VALOR ENTERO
+// ARREGLAR LO DEL BUG DE PRECEDENCIA DEL NEGATIVO
 /**************************************/

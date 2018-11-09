@@ -85,6 +85,16 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(
+                                        simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Los tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                         }
                         case "ENTERO": {
@@ -123,11 +133,96 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else if (tipoObtenido.equals("DECIMAL")) {
+                                String cad = "\n/**************************************************************************/\n";
+                                if (simbolo.getAmbito().equals("Global")) {
+                                    cad += "// " + id + " = ENTERO (CASTEANDO)\n";
+                                    cad += simbolo.getPosicionRelativa() + "// SERA LA POSICION ABSOLUTA DONDE SE ENCONTRARA SIN PUNTERO\n";
+                                    cad += "// CASTEANDO LA EXPRESION A ENTERO\n";
+                                    cad += "// MANDANDO COMO PARAMETRO A LA FUNCION DE CASTEO\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "ADD\n";
+                                    cad += "1\n";
+                                    cad += "ADD\n";
+                                    cad += expCode + "\n";
+                                    cad += "// LLAMANDO A LA FUNCION DE CASTEO\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "ADD\n";
+                                    cad += "set_local 0\n";
+                                    cad += "Call $_CAST_TO_INT\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "DIFF\n";
+                                    cad += "set_local 0\n";
+                                    cad += "// OBTENIENDO EL RETORNO\n";
+                                    cad += "get_local $ret\n";
+                                    cad += "//ASIGNANDO VALOR A LA POSICION\n";
+                                    cad += "set_local $calc";
+                                    cad += "\n/**************************************************************************/\n";
+                                } else {
+                                    cad += "// " + id + " = ENTERO \n";
+                                    cad += "get_local 0 // OBTENIENDO EL PUNTERO DE LA STACK\n";
+                                    cad += simbolo.getPosicionRelativa() + " // POSICION RELATIVA DE LA VARIABLE A ASIGNAR\n";
+                                    cad += "ADD // ENCONTRANDO LA POSICION Y METIENDOLO AL FONDO DEL STACK\n";
+                                    cad += "// CASTEANDO LA EXPRESION A ENTERO\n";
+                                    cad += "// MANDANDO COMO PARAMETRO A LA FUNCION DE CASTEO\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "ADD\n";
+                                    cad += "1\n";
+                                    cad += "ADD\n";
+                                    cad += expCode + "\n";
+                                    cad += "// LLAMANDO A LA FUNCION DE CASTEO\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "ADD\n";
+                                    cad += "set_local 0\n";
+                                    cad += "Call $_CAST_TO_INT\n";
+                                    cad += "get_local 0\n";
+                                    cad += (ambito.getSize() - 1) + "\n";
+                                    cad += "DIFF\n";
+                                    cad += "set_local 0\n";
+                                    cad += "// OBTENIENDO EL RETORNO\n";
+                                    cad += "get_local $ret\n";
+                                    cad += "// ASIGNANDO VALOR A LA POSICION\n";
+                                    cad += "set_local $calc";
+                                    cad += "\n/**************************************************************************/\n";
+                                }
+                                // DETENIENDO DEBUG
+                                if (InfoEstatica.Estatico.mod == InfoEstatica.Estatico.MODALIDAD.DEBUGG_MODE) {
+                                    if (InfoEstatica.Estatico.esLinea) {
+                                        InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                                        InfoEstatica.Estatico.suspended = true;
+                                        InfoEstatica.Estatico.OutPutCode.setText(cad);
+                                        InfoEstatica.Estatico.hilo.suspend();
+                                    } else {
+                                        String key = super.getLinea() + "_" + super.getArchivo();
+                                        if (InfoEstatica.Estatico.breakPoints.containsKey(key)) {
+                                            InfoEstatica.Estatico.MarcarLineaArchivo(super.getArchivo(), super.getLinea());
+                                            InfoEstatica.Estatico.suspended = true;
+                                            InfoEstatica.Estatico.OutPutCode.setText(cad);
+                                            InfoEstatica.Estatico.hilo.suspend();
+                                        }
+                                    }
+                                }
+                                return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(
+                                        simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Los tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                             break;
                         }
                         case "DECIMAL": {
-                            if (tipoObtenido.equals(simbolo.getTipo())) {
+                            if (tipoObtenido.equals(simbolo.getTipo()) || tipoObtenido.equals("ENTERO")) {
                                 String cad = "\n/**************************************************************************/\n";
                                 if (simbolo.getAmbito().equals("Global")) {
                                     cad += "// " + id + " = " + tipoObtenido + "\n";
@@ -162,6 +257,15 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                             break;
                         }
@@ -201,6 +305,16 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(
+                                        simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                             break;
                         }
@@ -240,6 +354,16 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(
+                                        simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                             break;
                         }
@@ -280,6 +404,16 @@ public class AsignacionVar extends NodoAST {
                                     }
                                 }
                                 return cad;
+                            } else {
+                                InfoEstatica.Estatico.agregarError(new TError(
+                                        simbolo.getTipo() + "=" + tipoObtenido,
+                                        "Tipos que se pretende asignar no son compatibles",
+                                        "Semantico",
+                                        super.getLinea(),
+                                        super.getColumna(),
+                                        Boolean.FALSE,
+                                        super.getArchivo()
+                                ));
                             }
                         }
                     }

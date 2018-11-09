@@ -13,7 +13,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * <h1> Clase que se encarga de la instruccion ADD para DASM </h1>
  * @author richard
  */
 public class Add extends NodoAST implements SentenciaDasm{
@@ -26,7 +26,14 @@ public class Add extends NodoAST implements SentenciaDasm{
     public Add(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    
+    /**
+     * Ejecuta la instruccion de suma haciendo Pop 2 veces, sumando el resultado y metiendo
+     * de nuevo a la pila auxiliar
+     * @param entorno <h3> Objeto que contiene la Pila Auxiliar, el Heap y el Stack de Ambitos </h3>
+     * @param instrucctionPointer Puntero de instrucciones
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

@@ -19,7 +19,7 @@ public interface SentenciaDasm {
      * que se ejecutan en DASM
      * @param entorno
      * @param instrucctionPointer
-     * @return 
+     * @return Dependiendo de la instruccion este va retornar algun valor
      */
     Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer);
 }

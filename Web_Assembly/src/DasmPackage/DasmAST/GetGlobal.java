@@ -14,7 +14,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción get_global de DASM   
  * @author richard
  */
 public class GetGlobal extends NodoAST implements SentenciaDasm{
@@ -24,13 +24,18 @@ public class GetGlobal extends NodoAST implements SentenciaDasm{
      * @param linea
      * @param columna
      * @param Archivo
-     * @param indice 
+     * @param indice representa el indice que se quiere obtener del HEAP
      */
     public GetGlobal(int linea, int columna, String Archivo, Integer indice) {
         super(linea, columna, Archivo);
         this.indice = indice;
     }
-
+    /**
+     * Metodo que se encarga de obtener un valor del Heap y meterlo a la pila Auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

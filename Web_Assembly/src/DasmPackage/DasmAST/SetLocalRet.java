@@ -9,20 +9,28 @@ import Abstraccion.NodoAST;
 import Abstraccion.SentenciaDasm;
 import ErrorManager.TError;
 import Estructuras.IP;
-import Estructuras.NodoPilita;
-import Estructuras.NodoStack;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Calse que maneja la instruccion set_local $ret
  * @author richard
  */
 public class SetLocalRet extends NodoAST implements SentenciaDasm{
-
+    /**
+     * Constructor de la instruccion set_local $ret
+     * @param linea
+     * @param columna
+     * @param Archivo 
+     */
     public SetLocalRet(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que se encarga de colocar un valor en la posicion de retorno
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

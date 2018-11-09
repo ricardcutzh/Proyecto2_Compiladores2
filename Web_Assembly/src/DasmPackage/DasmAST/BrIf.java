@@ -13,16 +13,30 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la ejecución de la instrucción BR_IF
  * @author richard
  */
 public class BrIf extends NodoAST implements SentenciaDasm{
     String etiqueta;
+    /**
+     * Constructor del Nodo BR_IF
+     * @param linea
+     * @param columna
+     * @param Archivo
+     * @param etiqueta 
+     */
     public BrIf(int linea, int columna, String Archivo, String etiqueta) {
         super(linea, columna, Archivo);
         this.etiqueta = etiqueta;
     }
-
+    
+    /**
+     * Mueve el IP a la suguiente instruccion si en la Pila auxiliar 
+     * en la cima existe un 0
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

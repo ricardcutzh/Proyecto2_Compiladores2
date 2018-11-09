@@ -13,7 +13,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que maneja la instrucción MULT
  * @author richard
  */
 public class Mult extends NodoAST implements SentenciaDasm{
@@ -26,7 +26,14 @@ public class Mult extends NodoAST implements SentenciaDasm{
     public Mult(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que se encarga de tomar dos valores de la pila auxiliar y 
+     * realiar la operacion de multiplicación entre ellas e inserta el resultado
+     * en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

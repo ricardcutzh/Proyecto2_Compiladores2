@@ -13,7 +13,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que manenja la instrucción MOD
  * @author richard
  */
 public class Mod extends NodoAST implements SentenciaDasm{
@@ -26,7 +26,13 @@ public class Mod extends NodoAST implements SentenciaDasm{
     public Mod(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    /**
+     * Metodo que toma dos valores de la pila auxiliar y realiza la operacion
+     * Modulo entre ellas e inserta el resultado en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 

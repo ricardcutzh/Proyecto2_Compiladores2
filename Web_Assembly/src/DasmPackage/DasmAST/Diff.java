@@ -13,7 +13,7 @@ import Estructuras.NodoPilita;
 import Simbolos.EntornoDasm;
 
 /**
- *
+ * Clase que se hace cargo de la instrucción DIFF
  * @author richard
  */
 public class Diff extends NodoAST implements SentenciaDasm{
@@ -26,7 +26,14 @@ public class Diff extends NodoAST implements SentenciaDasm{
     public Diff(int linea, int columna, String Archivo) {
         super(linea, columna, Archivo);
     }
-
+    
+    /**
+     * Método que se encarga de operar la diferencia entre dos datos que existen
+     * en la pila auxiliar
+     * @param entorno
+     * @param instrucctionPointer
+     * @return 
+     */
     @Override
     public Object Ejecuta(EntornoDasm entorno, IP instrucctionPointer) {
         try 
