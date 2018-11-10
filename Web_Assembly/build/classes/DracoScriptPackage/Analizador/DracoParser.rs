@@ -1,2 +1,0 @@
-DracoScriptPackage.Analizador.CUP$DracoParser$actions
-DracoScriptPackage.Analizador.DracoParser
